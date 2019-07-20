@@ -1,6 +1,5 @@
 package com.ametek_insight;
 
-
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.ReactRootView;
@@ -17,6 +16,7 @@ public class MainActivity extends ReactActivity {
     protected String getMainComponentName() {
         return "ametek_insight";
     }
+
 
    @Override
     protected ReactActivityDelegate createReactActivityDelegate() {

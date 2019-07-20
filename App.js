@@ -9,17 +9,6 @@ import React from 'react';
 import { createAppContainer, createStackNavigator } from 'react-navigation';
 import AppBootstrap from './pages/bootstrap/AppBootstrap';
 import LoginPage from './pages/login/loginPage';
-/*
-const App = () => {
-  return (
-    <Fragment>
-      <StatusBar />
-      <Text> 0.0.7</Text>
-      <LoginPage />
-    </Fragment>
-  );
-};
-*/
 
 //  <AppBootstrap />
 const AppNavigator = createStackNavigator({
@@ -45,6 +34,10 @@ const AppContainer  = createAppContainer(AppNavigator);
 
 
 class App extends React.Component {
+  componentDidMount() {
+   //  SplashScreen.hide();
+   console.log("TEST");
+  }
   render() {
     return <AppContainer />;
   }

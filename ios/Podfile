@@ -29,6 +29,7 @@ target 'ametek_insight' do
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
 
+
   target 'ametek_insightTests' do
     inherit! :search_paths
     # Pods for testing
