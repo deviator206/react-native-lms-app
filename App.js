@@ -5,6 +5,7 @@
  * @format
  * @flow
  */
+import React from 'react';
 import { createAppContainer, createStackNavigator } from 'react-navigation';
 import AppBootstrap from './pages/bootstrap/AppBootstrap';
 import LoginPage from './pages/login/loginPage';
@@ -19,14 +20,35 @@ const App = () => {
   );
 };
 */
+
 //  <AppBootstrap />
 const AppNavigator = createStackNavigator({
-  bootstap: AppBootstrap,
-  login:LoginPage
+  bootstap: {
+    screen:AppBootstrap,
+    navigationOptions: () => ({
+      header: null
+    })
+  },
+  login: {
+    screen:LoginPage,
+    navigationOptions: () => ({
+      header: null
+    })
+  }
 }, {
-  initialRouteName: "bootstap",
+  initialRouteName: "login",
+  mode: 'modal',
+  headerMode: 'none',
   initialRouteParams : { someParam: 'Bonjour' }
 });
-const App  = createAppContainer(AppNavigator);
+const AppContainer  = createAppContainer(AppNavigator);
+
+
+class App extends React.Component {
+  render() {
+    return <AppContainer />;
+  }
+}
 export default  App;
+
 
