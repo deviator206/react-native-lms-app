@@ -1,83 +1,107 @@
-import { Button, Container, Content, Footer, H1, Icon, Input, Item, Text, View } from 'native-base';
+import { Button, Container, Content, Footer, Icon, Input, Item, Text, View } from 'native-base';
 import React, { Component } from 'react';
 import { Image } from "react-native";
 import AuthenticationApi from '../../services/AuthenticationApi';
+import SpinnerComponent from '../common/spinnerComponent';
 import styleContent from './loginStyle';
 
 export default class LoginPage extends Component {
     constructor(props) {
         super(props);
-        this.btnHandler = this.btnHandler.bind(this);
+        this.state = {
+            spinner: false
+        }
+        this.onSignInBtnClicked = this.onSignInBtnClicked.bind(this);
+        this.onLoginSuccess = this.onLoginSuccess.bind(this);
+        this.getSpinnerComponentView = this.getSpinnerComponentView.bind(this);
         this.authenticateApi = new AuthenticationApi();
         this.counter = 0;
     }
 
+    getSpinnerComponentView () {
+        const {spinner} = this.state;
+        console.log(spinner)
+        const loaderView =  (<SpinnerComponent />);
+        const nonLoaderView =  null;
+        if(spinner) {
+            return loaderView;
+        }
+        return nonLoaderView;
+    }
     componentDidMount() {
         this.counter = 0;
-        // alert("TEST ");
+        this.setState({spinner: false});
     }
 
     componentWillUnmount() {
         // alert("bye ");
     }
-    btnHandler() {
+    onSignInBtnClicked() {
         console.log(this.props.navigation);
-        this.counter++;
+        this.setState({spinner: true});
         // this.props.navigation.closeDrawer();
-        this.authenticateApi.proceedLoginApi();
+        this.authenticateApi.proceedLoginApi({
+            successHandler: this.onLoginSuccess
+        });
         //this.props.navigation.navigate('bootstap');
-        /**
-         * 
-         * <View>
-                        <Image source={logoImg} style={styleContent.logo} />
-                    </View>
-                    <Button onPress={()=>{this.btnHandler()}} >
-                        <Text> Go BACK here v - {this.counter}  </Text>
-                    </Button>
-
-
-
-                    <Button style={styleContent.loginBtn}  >
-                    <Text style={styleContent.textFont1} > SIGN IN </Text><Icon name="arrow-forward" />                       
-                    </Button>
-         */
+    }
+    onLoginSuccess() {
+        this.setState({spinner: false});
     }
 
     render() {
         let logoImg = require('../images/ametek_logo@1X.png');
+       
+
         return (
+
+
             <Container style={styleContent.container}>
-                <Content padder style={styleContent.mainContent}>
-                    <View>
+                <Content padder
+                    contentContainerStyle={styleContent.mainContent}
+                    style={styleContent.fullWidth}>
+                    <View style={styleContent.logoWrapper}>
                         <Image source={logoImg} style={styleContent.logo} />
-                        <View style={styleContent.loginTextAndMessage}>
-                            <H1 style={styleContent.h1Login}>Login</H1>
-                            <Text>Welcome message goes hereWelcome mess</Text>
+                    </View>
+                    <View style={styleContent.loginUpperContent}>
+                        <View style={styleContent.loginUpper}>
+                            <Text style={styleContent.h1Login}>LOGIN</Text>
+                            <Text style={styleContent.welcomeMsg}>Welcome message goes here Test the login widow here Welcome mess</Text>
+                        </View>
+                        <View style={styleContent.loginMiddle}>
+                            <Item regular>
+                                <Icon active name='person' />
+                                <Input placeholder='Username'
+                                    returnKeyType="next"
+                                    clearButtonMode="always"
+                                    autoCapitalize="none"
+                                    autoCorrect={false} />
+                            </Item>
+                            <Item regular >
+                                <Icon active name='lock' />
+                                <Input placeholder='Password'
+                                    secureTextEntry={true}
+                                    clearButtonMode="always"
+                                    autoCapitalize="none"
+                                    autoCorrect={false} />
+                            </Item>
+                        </View>
+                        <View style={styleContent.loginMiddle2}>
+                            <Text style={styleContent.forgotPassword} > Forgot Password ? </Text>
                         </View>
                     </View>
-                    <View style={styleContent.loginFormContent}>
-                        <Item regular>
-                            <Icon active name='person' />
-                            <Input placeholder='Username'
-                                returnKeyType="next"
-                                clearButtonMode="always"
-                                autoCapitalize="none"
-                                autoCorrect={false} />
-                        </Item>
-                        <Item regular >
-                            <Icon active name='lock' />
-                            <Input placeholder='Password'
-                                secureTextEntry={true}
-                                clearButtonMode="always"
-                                autoCapitalize="none"
-                                autoCorrect={false} />
-                        </Item>
-                        <Text > Forgot Password </Text><Icon name="arrow-forward" />
-                    </View>
+                    {this.getSpinnerComponentView()}
                 </Content>
-                <Text style={styleContent.versionContent} > v0.0.111 </Text>
+                <View style={styleContent.versionView}>
+                    <Text style={styleContent.versionContent}> v0.0.0.1 </Text>
+                </View>
+
+
+
                 <Footer style={styleContent.footerContent} >
-                    <Button style={styleContent.loginBtn}   >
+                    <Button style={styleContent.loginBtn}
+                        onPress={() => this.onSignInBtnClicked()}
+                    >
                         <View style={styleContent.buttonTextView} >
                             <Text style={styleContent.signInText} > SIGN IN </Text><Icon name="arrow-forward" />
                         </View>

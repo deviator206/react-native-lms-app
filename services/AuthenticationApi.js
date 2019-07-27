@@ -4,9 +4,10 @@ class AuthenticationApi {
     constructor() {
 
     }
-  proceedLoginApi () {
+  proceedLoginApi ({successHandler}) {
       ServiceClass.loginService().then((data)=>{
           console.log(data);
+          successHandler(data);
       }).catch((err)=>{
            console.log(err);
       })

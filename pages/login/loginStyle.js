@@ -18,9 +18,9 @@ const styleContent = StyleSheet.create({
     alignSelf: "center"
   },
   container: {
-  
+    flex: 1,
     flexDirection: "column",
-    justifyContent: "space-evenly",
+    justifyContent: "space-around",
     alignItems: "flex-start",
     backgroundColor: '#eeeeee'
   },
@@ -39,32 +39,59 @@ const styleContent = StyleSheet.create({
   },
   mainContent: {
     flex: 1,
-    top: "5%",
+    justifyContent: "space-around",
+    alignItems: "center"
+  },
+  versionView:{
+    flex: 0.08,
     width: "100%"
   },
   versionContent: {
-    flex: 0.08,
-    width: "100%",
-    alignSelf: 'flex-end'
+    textAlign : 'right'
   },
   footerContent: {
     flex: 0.1,
-    width: "100%",
-    backgroundColor: 'yellow'
-  },
-  loginFormContent:{
-    paddingTop: "5%",
-    flex:1,
-    justifyContent: "center"
-  },
-  loginTextAndMessage :{
-    paddingTop: "5%",
-    flex:1,
-    justifyContent: "center"
+    width: "100%"
   },
   h1Login:{
     fontFamily: 'Montserrat-Bold',
-    fontSize: 30
+    fontSize: 30,
+    fontWeight:"bold"
+  },
+  forgotPassword: {
+    flex: 0.1,
+    textAlign : 'right'
+  },
+  welcomeMsg:{
+    paddingTop: "5%",
+    textAlign : 'left'
+  },
+  loginUpperContent :{
+    flex:1,
+    justifyContent:"space-around",
+    width:"90%",
+    alignItems:"center",
+  },
+  fullWidth : {
+    width:"100%"
+  },
+  logoWrapper:{
+    paddingTop:"5%"
+  },
+  loginUpper:{
+    flex: 0.3,
+    justifyContent:"space-around",
+    width:"100%"
+  },
+  loginMiddle:{
+    flex: 0.4,
+    justifyContent:"space-between",
+    width:"100%"
+  },
+  loginMiddle2:{
+    flex: 0.5,
+    justifyContent:"space-between",
+    width:"100%"
   }
 });
 export default styleContent;

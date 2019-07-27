@@ -9,7 +9,7 @@ import React from 'react';
 import { createAppContainer, createStackNavigator } from 'react-navigation';
 import AppBootstrap from './pages/bootstrap/AppBootstrap';
 import LoginPage from './pages/login/loginPage';
-
+console.disableYellowBox = true;
 //  <AppBootstrap />
 const AppNavigator = createStackNavigator({
   bootstap: {
