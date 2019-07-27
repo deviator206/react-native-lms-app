@@ -80,11 +80,13 @@ const styleContent = StyleSheet.create({
   },
   loginUpper:{
     flex: 0.3,
+    paddingTop: "5%",
     justifyContent:"space-around",
     width:"100%"
   },
   loginMiddle:{
     flex: 0.4,
+    paddingTop: "5%",
     justifyContent:"space-between",
     width:"100%"
   },
