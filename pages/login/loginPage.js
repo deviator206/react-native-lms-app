@@ -5,6 +5,7 @@ import AuthenticationApi from '../../services/AuthenticationApi';
 import SpinnerComponent from '../common/spinnerComponent';
 import styleContent from './loginStyle';
 
+
 export default class LoginPage extends Component {
     constructor(props) {
         super(props);
@@ -33,29 +34,21 @@ export default class LoginPage extends Component {
         this.setState({spinner: false});
     }
 
-    componentWillUnmount() {
-        // alert("bye ");
-    }
     onSignInBtnClicked() {
         console.log(this.props.navigation);
         this.setState({spinner: true});
-        // this.props.navigation.closeDrawer();
         this.authenticateApi.proceedLoginApi({
             successHandler: this.onLoginSuccess
         });
-        //this.props.navigation.navigate('bootstap');
     }
+    
     onLoginSuccess() {
         this.setState({spinner: false});
     }
 
     render() {
         let logoImg = require('../images/ametek_logo@1X.png');
-       
-
         return (
-
-
             <Container style={styleContent.container}>
                 <Content padder
                     contentContainerStyle={styleContent.mainContent}
@@ -90,23 +83,20 @@ export default class LoginPage extends Component {
                             <Text style={styleContent.forgotPassword} > Forgot Password ? </Text>
                         </View>
                     </View>
-                    {this.getSpinnerComponentView()}
-                </Content>
+
                 <View style={styleContent.versionView}>
                     <Text style={styleContent.versionContent}> v0.0.0.1 </Text>
                 </View>
-
-
-
-                <Footer style={styleContent.footerContent} >
+                <View style={styleContent.footerContent} >
                     <Button style={styleContent.loginBtn}
-                        onPress={() => this.onSignInBtnClicked()}
-                    >
+                        onPress={() => this.onSignInBtnClicked()}>
                         <View style={styleContent.buttonTextView} >
                             <Text style={styleContent.signInText} > SIGN IN </Text><Icon name="arrow-forward" />
                         </View>
                     </Button>
-                </Footer>
+                </View>
+                {this.getSpinnerComponentView()}
+                </Content>
             </Container>
         );
     }
