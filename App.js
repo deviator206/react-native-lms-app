@@ -36,7 +36,7 @@ const AppContainer  = createAppContainer(AppNavigator);
 class App extends React.Component {
   componentDidMount() {
    //  SplashScreen.hide();
-   console.log("TEST");
+   console.log("TEST 3");
   }
   render() {
     return <AppContainer />;
