@@ -6,11 +6,52 @@
  * @flow
  */
 import React from 'react';
-import { createAppContainer, createStackNavigator } from 'react-navigation';
+import { Dimensions } from "react-native";
+import { createAppContainer, createDrawerNavigator, createStackNavigator } from 'react-navigation';
 import AppBootstrap from './pages/bootstrap/AppBootstrap';
+import DashboardPage from './pages/dashboard/dashboard';
 import LoginPage from './pages/login/loginPage';
+import SideMenuBar from './pages/sidemenu/sideMenu';
+
+
 console.disableYellowBox = true;
-//  <AppBootstrap />
+const deviceWidth = Dimensions.get("window").width;
+
+
+const SideDrawerNavigator = createDrawerNavigator(
+  {
+    bootstap: {
+      screen:AppBootstrap,
+      navigationOptions: () => ({
+        header: null,
+        drawerLabel: "Demo Screen 1"
+      })
+    },
+    login: {
+      screen:LoginPage,
+      navigationOptions: () => ({
+        header: null,
+        drawerLabel: "Demo Screen 2"
+      })
+    },
+    dashboard: {
+      screen:DashboardPage,
+      drawerLabel: "Demo Screen 3"
+    },
+    drawer:{
+      screen: SideMenuBar 
+    }
+  },
+  {
+    drawerPosition: "left",
+    contentComponent: props => <SideMenuBar {...props} />,
+    initialRouteName: "login",
+    mode: 'modal',
+    headerMode: 'none',
+    initialRouteParams : { someParam: 'Bonjour' }
+  }
+);
+
 const AppNavigator = createStackNavigator({
   bootstap: {
     screen:AppBootstrap,
@@ -23,6 +64,12 @@ const AppNavigator = createStackNavigator({
     navigationOptions: () => ({
       header: null
     })
+  },
+  dashboard: {
+    screen:DashboardPage
+  },
+  drawer:{
+    screen: SideMenuBar 
   }
 }, {
   initialRouteName: "login",
@@ -30,7 +77,7 @@ const AppNavigator = createStackNavigator({
   headerMode: 'none',
   initialRouteParams : { someParam: 'Bonjour' }
 });
-const AppContainer  = createAppContainer(AppNavigator);
+const AppContainer  = createAppContainer(SideDrawerNavigator);
 
 
 class App extends React.Component {

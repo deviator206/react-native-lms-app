@@ -91,7 +91,7 @@ const styleContent = StyleSheet.create({
     width:"100%"
   },
   loginMiddle2:{
-    flex: 0.5,
+    flex: 0.6,
     justifyContent:"space-between",
     width:"100%"
   }

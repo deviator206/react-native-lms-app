@@ -1,4 +1,4 @@
-import { Button, Container, Content, Footer, Icon, Input, Item, Text, View } from 'native-base';
+import { Button, Container, Content, Icon, Input, Item, Text, View } from 'native-base';
 import React, { Component } from 'react';
 import { Image } from "react-native";
 import AuthenticationApi from '../../services/AuthenticationApi';
@@ -44,9 +44,13 @@ export default class LoginPage extends Component {
     
     onLoginSuccess() {
         this.setState({spinner: false});
+        this.props.navigation.navigate('dashboard');
     }
 
     render() {
+        /**
+         * <Text style={styleContent.forgotPassword} > Forgot Password ? </Text> 
+         */
         let logoImg = require('../images/ametek_logo@1X.png');
         return (
             <Container style={styleContent.container}>
@@ -80,7 +84,7 @@ export default class LoginPage extends Component {
                             </Item>
                         </View>
                         <View style={styleContent.loginMiddle2}>
-                            <Text style={styleContent.forgotPassword} > Forgot Password ? </Text>
+                             
                         </View>
                     </View>
 
