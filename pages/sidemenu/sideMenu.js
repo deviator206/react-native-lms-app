@@ -1,19 +1,23 @@
-import { Container, ListItem, Text, View } from 'native-base';
+import { Button, Container, Icon, ListItem, Text, View } from 'native-base';
 import React from 'react';
 import { FlatList, Image } from "react-native";
-import Icon from 'react-native-vector-icons/FontAwesome';
 import styleContent from './sidemenuStyle';
 
 const routes = [
     {
         key: "login",
-        caption: "User",
-        icon: 'user'
+        caption: "Notifications",
+        icon: 'notifications'
     },
     {
         key: "dashboard",
-        caption: "Dashboard",
-        icon: 'account'
+        caption: "Profile Details",
+        icon: 'face-profile'
+    },
+    {
+        key: "login",
+        caption: "Market Intelligence",
+        icon: 'logout'
     },
     {
         key: "login",
@@ -28,6 +32,9 @@ export default class SideMenuBar extends React.Component {
         return (
             <Container style={styleContent.container}>
                 <View style={styleContent.sideMenuSectionOne}>
+                <Button style={styleContent.closeBtnStyling} onPress={() => { this.props.navigation.closeDrawer(); }}>
+                        <Icon name="close" />
+                    </Button >
                     <Image source={require('../images/profile_pic_logo_2.png')} style={styleContent.profilePic} />
                     <Text style={styleContent.profileName}> Sunayna Rao </Text>
                 </View>

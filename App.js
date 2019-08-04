@@ -6,8 +6,8 @@
  * @flow
  */
 import React from 'react';
-import { Dimensions } from "react-native";
 import { createAppContainer, createDrawerNavigator, createStackNavigator } from 'react-navigation';
+import AddLeadPage from './pages/addlead/addLeadPage';
 import AppBootstrap from './pages/bootstrap/AppBootstrap';
 import DashboardPage from './pages/dashboard/dashboard';
 import LoginPage from './pages/login/loginPage';
@@ -15,9 +15,6 @@ import SideMenuBar from './pages/sidemenu/sideMenu';
 
 
 console.disableYellowBox = true;
-const deviceWidth = Dimensions.get("window").width;
-
-
 const SideDrawerNavigator = createDrawerNavigator(
   {
     bootstap: {
@@ -37,6 +34,9 @@ const SideDrawerNavigator = createDrawerNavigator(
     dashboard: {
       screen:DashboardPage,
       drawerLabel: "Demo Screen 3"
+    },
+    addlead: {
+      screen: AddLeadPage
     },
     drawer:{
       screen: SideMenuBar 
@@ -67,6 +67,9 @@ const AppNavigator = createStackNavigator({
   },
   dashboard: {
     screen:DashboardPage
+  },
+  addlead: {
+    screen: AddLeadPage
   },
   drawer:{
     screen: SideMenuBar 

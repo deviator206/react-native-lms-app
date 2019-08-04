@@ -1,4 +1,4 @@
-import { Button, Container, Icon, Picker, Text, View } from 'native-base';
+import { Button, Container, Footer, FooterTab, Icon, Picker, Text, View } from 'native-base';
 import React from 'react';
 import SpinnerComponent from '../common/spinnerComponent';
 import styleContent from './dashboardStyle';
@@ -10,6 +10,8 @@ export default class DashboardPage extends React.Component {
             spinner: false
         }
         this.getSpinnerComponentView = this.getSpinnerComponentView.bind(this);
+        this.getFooterTab = this.getFooterTab.bind(this);
+        
     }
 
     getSpinnerComponentView() {
@@ -21,6 +23,30 @@ export default class DashboardPage extends React.Component {
             return loaderView;
         }
         return nonLoaderView;
+    }
+
+    getFooterTab() {
+        return (<Footer >
+                    <FooterTab style={styleContent.footerSection}>
+                    <Button vertical style={styleContent.footerSingleTab}>
+                        <Icon name="home" style={styleContent.tabIconStyling} />
+                        <Text style={styleContent.tabNameStyling}>Home</Text>
+                    </Button >
+                    <Button vertical style={styleContent.footerSection} >
+                        <Icon name="view-headline" style={styleContent.tabIconStyling} />
+                        <Text style={styleContent.tabNameStyling}>View Lead</Text>
+                    </Button>
+                    <Button  onPress={
+                        () => {
+                            console.log(" menu clicked");
+                            this.props.navigation.navigate("addlead");
+                        }
+                    } vertical style={styleContent.footerSection} >
+                        <Icon name="note-add"  style={styleContent.tabIconStyling} />
+                        <Text style={styleContent.tabNameStyling}>Add Lead</Text>
+                    </Button>
+                    </FooterTab>
+          </Footer>)
     }
 
     componentDidMount() {
@@ -44,13 +70,13 @@ export default class DashboardPage extends React.Component {
                         <Text> 1.2 </Text>
                     </View>
                     <View>
-                        <Text> 1.3 </Text>
+                        <Text> 2.3 </Text>
                         <Picker
                             note
                             mode="dropdown"
                             style={{ width: 120 }}
                             >
-                            <Picker.Item label="Wallet" value="key0" />
+                            <Picker.Item label="TTTT" value="key0" />
                             <Picker.Item label="ATM Card" value="key1" />
                             <Picker.Item label="Debit Card" value="key2" />
                             <Picker.Item label="Credit Card" value="key3" />
@@ -62,9 +88,7 @@ export default class DashboardPage extends React.Component {
                 <View style={styleContent.sectionTwo}>
                     <Text> Section 2 </Text>
                 </View>
-                <View style={styleContent.sectionThree}>
-                    <Text> Section 3 </Text>
-                </View>
+                {this.getFooterTab()}
                 {this.getSpinnerComponentView()}
             </Container>
         );

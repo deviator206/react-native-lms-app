@@ -38,8 +38,11 @@ const styleContent = StyleSheet.create({
     iconStyling: {
         
     },
+    closeBtnStyling: {
+        alignSelf:"flex-end",
+        backgroundColor:"#545454"
+    },
     listItemStyle: {
-        backgroundColor: "red",
         width:"100%",
         flex:1
     }
