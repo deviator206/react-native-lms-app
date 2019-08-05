@@ -1,12 +1,10 @@
-import { Body, Button, Card, CardItem, Col, Container, Content, DatePicker, Footer, Grid, Header, Icon, Input, Item, Label, Left, Picker, Right, Row, Text, Textarea, Title } from 'native-base';
+import { Body, Button, Card, CardItem, CheckBox, Col, Container, Content, DatePicker, Footer, Grid, Header, Icon, Input, Item, Label, Left, ListItem, Picker, Right, Row, Text, Textarea, Title } from 'native-base';
 import React from 'react';
 import appConfig from '../common/config';
 import i18nMessages from '../common/i18n';
 import SpinnerComponent from '../common/spinnerComponent';
 import styleContent from './addLeadStyle';
 import BUListComponent from './BUListComponent';
-
-
 
 
 export default class AddLeadPage extends React.Component {
@@ -17,7 +15,8 @@ export default class AddLeadPage extends React.Component {
       selectedSource: undefined,
       selectedTenure: undefined,
       currentSelectedBU: undefined,
-      selectedBuList:[],
+      selectedBuList: [],
+      isSelfApproved: false,
       leadAddedDate: new Date(2018, 4, 4)
     }
     this.getSpinnerComponentView = this.getSpinnerComponentView.bind(this);
@@ -33,6 +32,7 @@ export default class AddLeadPage extends React.Component {
     this.getUnitAddedList = this.getUnitAddedList.bind(this);
     this.onBuSelectionConfirmed = this.onBuSelectionConfirmed.bind(this);
     this.updateBuRmoval = this.updateBuRmoval.bind(this);
+    this.onSelfApprovedClicked = this.onSelfApprovedClicked.bind(this);
   }
 
   componentDidMount() {
@@ -40,8 +40,9 @@ export default class AddLeadPage extends React.Component {
       spinner: false,
       selectedSource: undefined,
       selectedTenure: undefined,
-      currentSelectedBU:appConfig.BU_LIST[0],
-      selectedBuList:[],
+      currentSelectedBU: appConfig.BU_LIST[0],
+      selectedBuList: [],
+      isSelfApproved: false,
       leadAddedDate: new Date(2018, 4, 4)
     });
   }
@@ -62,7 +63,7 @@ export default class AddLeadPage extends React.Component {
       currentSelectedBU: value
     });
   }
-  
+
   onSourceChanged(value) {
     this.setState({
       selectedSource: value
@@ -158,14 +159,14 @@ export default class AddLeadPage extends React.Component {
 
   getDropdownFor(type) {
     let returnedView = '';
+    const pickerItemArr = [];
     switch (type) {
-      case 'BU_NAME':
-        const pickerItemArr = [];
-        appConfig.BU_LIST.forEach(singleItem => {
+      case 'TENURE':
+        appConfig.LEAD_TENURE.forEach(singleItem => {
           pickerItemArr.push(
-            ( <Picker.Item label={singleItem} style={styleContent.dynamicComponentTextStyle} value={singleItem} />)
+            (<Picker.Item label={singleItem} style={styleContent.dynamicComponentTextStyle} value={singleItem} />)
           )
-        }); 
+        });
         returnedView = (
           <Item picker>
             <Picker
@@ -178,7 +179,118 @@ export default class AddLeadPage extends React.Component {
               placeholderIconColor="#007aff"
             >
               {pickerItemArr}
-              
+
+            </Picker>
+          </Item>);
+        break;
+      case 'SOURCE_TYPE':
+        appConfig.LEAD_SOURCE_TYPE.forEach(singleItem => {
+          pickerItemArr.push(
+            (<Picker.Item label={singleItem} style={styleContent.dynamicComponentTextStyle} value={singleItem} />)
+          )
+        });
+        returnedView = (
+          <Item picker>
+            <Picker
+              mode="dropdown"
+              iosIcon={<Icon name="arrow-down" />}
+              style={styleContent.dynamicComponentTextStyle}
+              selectedValue={this.state.currentSelectedBU}
+              placeholderStyle={styleContent.dynamicComponentTextStyle}
+              onValueChange={this.onBuSelectionChanged.bind(this)}
+              placeholderIconColor="#007aff"
+            >
+              {pickerItemArr}
+
+            </Picker>
+          </Item>);
+        break;
+      case 'SALES_REP':
+        appConfig.SALES_REP_LIST.forEach(singleItem => {
+          pickerItemArr.push(
+            (<Picker.Item label={singleItem} style={styleContent.dynamicComponentTextStyle} value={singleItem} />)
+          )
+        });
+        returnedView = (
+          <Item picker>
+            <Picker
+              mode="dropdown"
+              iosIcon={<Icon name="arrow-down" />}
+              style={styleContent.dynamicComponentTextStyle}
+              selectedValue={this.state.currentSelectedBU}
+              placeholderStyle={styleContent.dynamicComponentTextStyle}
+              onValueChange={this.onBuSelectionChanged.bind(this)}
+              placeholderIconColor="#007aff"
+            >
+              {pickerItemArr}
+
+            </Picker>
+          </Item>);
+        break;
+      case 'CURRENCY':
+        appConfig.SUPPORTED_CURRENCY.forEach(singleItem => {
+          pickerItemArr.push(
+            (<Picker.Item label={singleItem} style={styleContent.dynamicComponentTextStyle} value={singleItem} />)
+          )
+        });
+        returnedView = (
+          <Item picker>
+            <Picker
+              mode="dropdown"
+              iosIcon={<Icon name="arrow-down" />}
+              style={styleContent.dynamicComponentTextStyle}
+              selectedValue={this.state.currentSelectedBU}
+              placeholderStyle={styleContent.dynamicComponentTextStyle}
+              onValueChange={this.onBuSelectionChanged.bind(this)}
+              placeholderIconColor="#007aff"
+            >
+              {pickerItemArr}
+
+            </Picker>
+          </Item>);
+
+        break;
+      case 'INDUSTRY':
+        appConfig.INDUSTRY_LIST.forEach(singleItem => {
+          pickerItemArr.push(
+            (<Picker.Item label={singleItem} style={styleContent.dynamicComponentTextStyle} value={singleItem} />)
+          )
+        });
+        returnedView = (
+          <Item picker>
+            <Picker
+              mode="dropdown"
+              iosIcon={<Icon name="arrow-down" />}
+              style={styleContent.dynamicComponentTextStyle}
+              selectedValue={this.state.currentSelectedBU}
+              placeholderStyle={styleContent.dynamicComponentTextStyle}
+              onValueChange={this.onBuSelectionChanged.bind(this)}
+              placeholderIconColor="#007aff"
+            >
+              {pickerItemArr}
+
+            </Picker>
+          </Item>);
+        break;
+      case 'BU_NAME':
+        appConfig.BU_LIST.forEach(singleItem => {
+          pickerItemArr.push(
+            (<Picker.Item label={singleItem} style={styleContent.dynamicComponentTextStyle} value={singleItem} />)
+          )
+        });
+        returnedView = (
+          <Item picker>
+            <Picker
+              mode="dropdown"
+              iosIcon={<Icon name="arrow-down" />}
+              style={styleContent.dynamicComponentTextStyle}
+              selectedValue={this.state.currentSelectedBU}
+              placeholderStyle={styleContent.dynamicComponentTextStyle}
+              onValueChange={this.onBuSelectionChanged.bind(this)}
+              placeholderIconColor="#007aff"
+            >
+              {pickerItemArr}
+
             </Picker>
           </Item>);
         break;
@@ -240,9 +352,9 @@ export default class AddLeadPage extends React.Component {
     return returnedView;
   }
 
-  onBuSelectionConfirmed () {
-    const {currentSelectedBU, selectedBuList=[]} = this.state;
-    if(currentSelectedBU && selectedBuList.indexOf(currentSelectedBU) === -1) {
+  onBuSelectionConfirmed() {
+    const { currentSelectedBU, selectedBuList = [] } = this.state;
+    if (currentSelectedBU && selectedBuList.indexOf(currentSelectedBU) === -1) {
       selectedBuList.push(currentSelectedBU)
     }
     this.setState({
@@ -251,24 +363,74 @@ export default class AddLeadPage extends React.Component {
   }
 
   updateBuRmoval(value) {
-    const { selectedBuList=[]} = this.state;
+    const { selectedBuList = [] } = this.state;
     const indexOfElement = selectedBuList.indexOf(value);
-    if(indexOfElement !== -1) {
+    if (indexOfElement !== -1) {
       selectedBuList.splice(indexOfElement, 1)
     }
     this.setState({
       selectedBuList: selectedBuList
     });
-    
+
   }
-  getUnitAddedList(){
-    const { selectedBuList=[]} = this.state;
-    return(
-      <BUListComponent  businessUnitList={selectedBuList} onBuRemoval={this.updateBuRmoval}/>
+  getUnitAddedList() {
+    const { selectedBuList = [] } = this.state;
+    return (
+      <BUListComponent businessUnitList={selectedBuList} onBuRemoval={this.updateBuRmoval} />
+    )
+  }
+
+  onSelfApprovedClicked() {
+    const { isSelfApproved } = this.state;
+    this.setState({
+      isSelfApproved: !isSelfApproved
+    });
+    console.log(isSelfApproved)
+  }
+
+  getViewForSelfApproval() {
+    const { isSelfApproved } = this.state;
+    const selfApprovalCheckbox = (
+      <Col>
+        <ListItem
+          button
+          onPress={() => {
+            this.onSelfApprovedClicked();
+          }}
+        >
+          <CheckBox checked={isSelfApproved} />
+          <Body>
+            <Text>{i18nMessages.lbl_self_approved} </Text>
+          </Body>
+        </ListItem>
+      </Col>
+
+    );
+    const saleRepSelection = (
+      <Col>
+        <Text note style={styleContent.labelStyling} >{i18nMessages.lbl_select_rep} </Text>
+        <Item >
+          {this.getDropdownFor('SALES_REP')}
+        </Item>
+      </Col>
+    )
+    if (isSelfApproved) {
+      return (
+        <Row>
+          {selfApprovalCheckbox}
+          {saleRepSelection}
+        </Row>
+      )
+    }
+    return (
+      <Row>
+        {selfApprovalCheckbox}
+      </Row>
     )
   }
 
   render() {
+    const { isSelfApproved } = this.state;
     return (
       <Container style={styleContent.container}>
         {this.getHeaderSection()}
@@ -289,7 +451,7 @@ export default class AddLeadPage extends React.Component {
                     {this.getDatePickerView()}
                   </Col>
                   <Col>
-                    {this.getLeadSourceTypes()}
+                    {this.getDropdownFor("SOURCE_TYPE")}
                   </Col>
                 </Row>
                 <Row>
@@ -326,7 +488,7 @@ export default class AddLeadPage extends React.Component {
                   <Col>
                     <Text note style={styleContent.labelStyling} >{i18nMessages.tenure_lbl} </Text>
                     <Item >
-                      {this.getDropdownForTenure()}
+                      {this.getDropdownFor('TENURE')}
 
                     </Item>
                   </Col>
@@ -413,7 +575,7 @@ export default class AddLeadPage extends React.Component {
                     </Item>
                   </Col>
                   <Col>
-                    <Button style={styleContent.addBUStyling} onPress={()=> {this.onBuSelectionConfirmed()}} >
+                    <Button style={styleContent.addBUStyling} onPress={() => { this.onBuSelectionConfirmed() }} >
                       <Icon name="plus" /><Text style={{ fontSize: 16 }}>{i18nMessages.lbl_add_bu} </Text>
                     </Button>
                   </Col>
@@ -421,10 +583,41 @@ export default class AddLeadPage extends React.Component {
                 <Row>
                   <Col>
                     {this.getUnitAddedList()}
-
                   </Col>
-
                 </Row>
+                <Row>
+                  <Col>
+                    <Text note style={styleContent.labelStyling} >{i18nMessages.lbl_industry} </Text>
+                    <Item >
+                      {this.getDropdownFor('INDUSTRY')}
+                    </Item>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <Text note style={styleContent.labelStyling} >{i18nMessages.lbl_estimated_budget} </Text>
+                    <Item >
+
+                      <Input
+                        style={styleContent.dynamicComponentTextStyle}
+                        returnKeyType="next"
+                        clearButtonMode="always"
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                      />
+
+                    </Item>
+                  </Col>
+                  <Col>
+                    <Text note style={styleContent.labelStyling} >{i18nMessages.lbl_currency} </Text>
+                    <Item >
+                      {this.getDropdownFor('CURRENCY')}
+                    </Item>
+                  </Col>
+                </Row>
+                {this.getViewForSelfApproval()}
+
+
               </Grid>
 
             </CardItem>
@@ -435,6 +628,7 @@ export default class AddLeadPage extends React.Component {
         <Footer>
           <Button style={styleContent.addLeadFooter}>
             <Text style={styleContent.addLeadFooterText}>ADD LEAD </Text>
+            <Icon name="arrow-left" />
           </Button >
         </Footer>
         {this.getSpinnerComponentView()}

@@ -7,7 +7,7 @@ const styleContent = StyleSheet.create({
         alignItems: "flex-start"
     },
     sectionOne: {
-        flex: 0.5,
+        flex: 1.4,
         width:"100%",
         paddingTop: "4%",
         flexDirection:"row",
@@ -20,7 +20,7 @@ const styleContent = StyleSheet.create({
         backgroundColor: "#F3F3F3"
     },
     sideMenu: {
-        paddingLeft: "2%"
+        color:"white"
     },
     footerSection:{
         backgroundColor: "#FFFFFF",
@@ -35,6 +35,51 @@ const styleContent = StyleSheet.create({
     },
     footerSingleTab:{
         
+    },
+    headerSection:{
+        backgroundColor:"#0E0D0D",
+        width:"100%",
+        alignItems:"center"
+    },
+    headerSection1:{
+        flex:1,
+        flexDirection:"row",
+        justifyContent:"space-between",
+        backgroundColor:"red",
+        alignItems:"center"
+    },
+    overlapSection:{
+        position:"absolute",
+        width:"100%",
+        color:"white"
+      
+    },
+    gridSection:{
+        paddingLeft:"3%",
+        paddingRight:"3%"
+    },
+    whiteColor:{
+        color:"white"
+    },
+    dashboardText:{
+        color:"white",
+        fontSize:20,
+        fontFamily: 'Montserrat-Bold'
+    },
+    labelStyling:{
+        fontSize:14,
+        fontFamily: 'Montserrat-Bold',
+        color:"#AEAEAE",
+        lineHeight:35
+    },
+    cardStyling:{
+        marginTop: "2%",
+        alignItems:"center",
+        height:112,
+        paddingBottom:"4%",
+        paddingTop:"4%",
+        backgroundColor: "#FCFCFC",
+        borderRadius: 5,
     }
 });
 export default styleContent;

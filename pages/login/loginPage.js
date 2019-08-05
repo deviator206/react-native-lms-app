@@ -14,6 +14,7 @@ export default class LoginPage extends Component {
         }
         this.onSignInBtnClicked = this.onSignInBtnClicked.bind(this);
         this.onLoginSuccess = this.onLoginSuccess.bind(this);
+        this.errorHandler = this.errorHandler.bind(this);
         this.getSpinnerComponentView = this.getSpinnerComponentView.bind(this);
         this.authenticateApi = new AuthenticationApi();
         this.counter = 0;
@@ -34,11 +35,16 @@ export default class LoginPage extends Component {
         this.setState({spinner: false});
     }
 
+    errorHandler(err) {
+        alert('ERROR HANDLER', err);
+        this.onLoginSuccess();
+    }
     onSignInBtnClicked() {
         console.log(this.props.navigation);
         this.setState({spinner: true});
         this.authenticateApi.proceedLoginApi({
-            successHandler: this.onLoginSuccess
+            successHandler: this.onLoginSuccess,
+            errorHandler: this.errorHandler
         });
     }
     
