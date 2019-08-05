@@ -1,5 +1,6 @@
-import { Body, Button, Card, Col, Container, Content, Footer, FooterTab, Grid, Header, Icon, Item, Left, Picker, Right, Row, Text, Title, View } from 'native-base';
+import { Body, Button, Card, Col, Container, Content, Footer, FooterTab, Grid, Header, Item, Left, Picker, Right, Row, Text, Title, View } from 'native-base';
 import React from 'react';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import appConfig from '../common/config';
 import SpinnerComponent from '../common/spinnerComponent';
 import styleContent from './dashboardStyle';
@@ -35,8 +36,8 @@ export default class DashboardPage extends React.Component {
                     <Text style={styleContent.tabNameStyling}>Home</Text>
                 </Button >
                 <Button vertical style={styleContent.footerSection} >
-                    <Icon name="view-headline" style={styleContent.tabIconStyling} />
-                    <Text style={styleContent.tabNameStyling}>View Lead</Text>
+                    <Icon name="view-list" style={styleContent.tabIconStyling} />
+                    <Text style={styleContent.tabNameStyling}> View Lead</Text>
                 </Button>
                 <Button onPress={
                     () => {
@@ -110,7 +111,7 @@ export default class DashboardPage extends React.Component {
                         onPress={() => {
                             this.props.navigation.openDrawer();
                         }}>
-                        <Icon name='ios-menu' style={{ color: "white" }} />
+                        <Icon name='menu' style={{ color: "white",  fontSize:25 }} />
                     </Button>
                 </Left>
                 <Body>

@@ -31,7 +31,8 @@ const styleContent = StyleSheet.create({
         color:"#616161"
     },
     tabIconStyling: {
-       color:"black"
+       color:"black",
+       fontSize:25
     },
     footerSingleTab:{
         

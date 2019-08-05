@@ -1,5 +1,5 @@
 const i18nMessages = {
-    'date_label':"DATE :HHH",
+    'date_label':"DATE ",
     "select_date_lbl": "Select Date ",
     "source_type":"SOURCE",
     "customer_name_lbl":"Customer Name",

@@ -1,6 +1,7 @@
-import { Button, Container, Icon, ListItem, Text, View } from 'native-base';
+import { Button, Container, ListItem, Text, View } from 'native-base';
 import React from 'react';
-import { FlatList, Image, Picker } from "react-native";
+import { FlatList, Image } from "react-native";
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import styleContent from './sidemenuStyle';
 
 const routes = [
@@ -12,17 +13,17 @@ const routes = [
     {
         key: "dashboard",
         caption: "Profile Details",
-        icon: 'face-profile'
+        icon: 'person-outline'
     },
     {
         key: "login",
         caption: "Market Intelligence",
-        icon: 'logout'
+        icon: 'local-atm'
     },
     {
         key: "login",
         caption: "Logout",
-        icon: 'logout'
+        icon: 'exit-to-app'
     }
 ];
 
@@ -43,20 +44,6 @@ export default class SideMenuBar extends React.Component {
                     <Image source={require('../images/profile_pic_logo_2.png')} style={styleContent.profilePic} />
                     <Text style={styleContent.profileName}> Sunayna Rao </Text>
                 </View>
-                <Picker
-                    selectedValue='TEST'
-                    style={{ 
-                        height: 50, 
-                        width: 100 ,
-                        backgroundColor: "red",
-                        borderRadius: 60
-                    }}
-                    onValueChange={(itemValue, itemIndex) =>
-                        console.log("aaa ")
-                    }>
-                    <Picker.Item label="Java" value="java" />
-                    <Picker.Item label="JavaScript" value="js" />
-                </Picker>
                 <FlatList
                     style={styleContent.sideMenuSectionTwo}
                     data={routes}

@@ -1,5 +1,6 @@
-import { Body, Button, Card, CardItem, CheckBox, Col, Container, Content, DatePicker, Footer, Grid, Header, Icon, Input, Item, Label, Left, ListItem, Picker, Right, Row, Text, Textarea, Title } from 'native-base';
+import { Body, Button, Card, CardItem, CheckBox, Col, Container, Content, DatePicker, Footer, Grid, Header, Input, Item, Label, Left, ListItem, Picker, Right, Row, Text, Textarea, Title } from 'native-base';
 import React from 'react';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import appConfig from '../common/config';
 import i18nMessages from '../common/i18n';
 import SpinnerComponent from '../common/spinnerComponent';
@@ -74,8 +75,8 @@ export default class AddLeadPage extends React.Component {
     return (
       <Header style={styleContent.headerSection}>
         <Left>
-          <Button transparent onPress={() => this.goBack()}>
-            <Icon name="arrow-left" />
+          <Button transparent onPress={() => this.props.navigation.goBack()}>
+            <Icon name="arrow-back" style={{color:"white", fontSize:35}} />
           </Button>
         </Left>
         <Body>
@@ -116,7 +117,7 @@ export default class AddLeadPage extends React.Component {
       <Item picker>
         <Picker
           mode="dropdown"
-          iosIcon={<Icon name="arrow-down" />}
+          iosIcon={<Icon name="keyboard-arrow-down" />}
           style={styleContent.dynamicComponentTextStyle}
           selectedValue={this.state.selectedSource}
           placeholderStyle={styleContent.dynamicComponentTextStyle}
@@ -576,7 +577,7 @@ export default class AddLeadPage extends React.Component {
                   </Col>
                   <Col>
                     <Button style={styleContent.addBUStyling} onPress={() => { this.onBuSelectionConfirmed() }} >
-                      <Icon name="plus" /><Text style={{ fontSize: 16 }}>{i18nMessages.lbl_add_bu} </Text>
+                      <Icon name="add"  /><Text style={{ fontSize: 16 }}>{i18nMessages.lbl_add_bu} </Text>
                     </Button>
                   </Col>
                 </Row>
@@ -628,7 +629,7 @@ export default class AddLeadPage extends React.Component {
         <Footer>
           <Button style={styleContent.addLeadFooter}>
             <Text style={styleContent.addLeadFooterText}>ADD LEAD </Text>
-            <Icon name="arrow-left" />
+            <Icon name="arrow-forward" style={{color:"white", fontSize:20}} />
           </Button >
         </Footer>
         {this.getSpinnerComponentView()}
