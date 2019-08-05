@@ -1,132 +1,445 @@
-import { Body, Button, Card, CardItem, Col, Container, Content, Footer, Grid, Header, Icon, Input, Item, Label, Left, Right, Row, Text, Textarea, Title } from 'native-base';
+import { Body, Button, Card, CardItem, Col, Container, Content, DatePicker, Footer, Grid, Header, Icon, Input, Item, Label, Left, Picker, Right, Row, Text, Textarea, Title } from 'native-base';
 import React from 'react';
+import appConfig from '../common/config';
+import i18nMessages from '../common/i18n';
 import SpinnerComponent from '../common/spinnerComponent';
 import styleContent from './addLeadStyle';
+import BUListComponent from './BUListComponent';
+
+
 
 
 export default class AddLeadPage extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            spinner: false
-        }
-        this.getSpinnerComponentView = this.getSpinnerComponentView.bind(this);
-        this.getHeaderSection = this.getHeaderSection.bind(this);
+  constructor(props) {
+    super(props);
+    this.state = {
+      spinner: false,
+      selectedSource: undefined,
+      selectedTenure: undefined,
+      currentSelectedBU: undefined,
+      selectedBuList:[],
+      leadAddedDate: new Date(2018, 4, 4)
+    }
+    this.getSpinnerComponentView = this.getSpinnerComponentView.bind(this);
+    this.getHeaderSection = this.getHeaderSection.bind(this);
+    this.onSourceChanged = this.onSourceChanged.bind(this);
+    this.onBuSelectionChanged = this.onBuSelectionChanged.bind(this);
+    this.onLeadAddDateSelected = this.onLeadAddDateSelected.bind(this);
+    this.getLeadSourceTypes = this.getLeadSourceTypes.bind(this);
+    this.getDatePickerView = this.getDatePickerView.bind(this);
+    this.getDropdownForTenure = this.getDropdownForTenure.bind(this);
+    this.onTenureChanged = this.onTenureChanged.bind(this);
+    this.getDropdownFor = this.getDropdownFor.bind(this);
+    this.getUnitAddedList = this.getUnitAddedList.bind(this);
+    this.onBuSelectionConfirmed = this.onBuSelectionConfirmed.bind(this);
+    this.updateBuRmoval = this.updateBuRmoval.bind(this);
+  }
+
+  componentDidMount() {
+    this.setState({
+      spinner: false,
+      selectedSource: undefined,
+      selectedTenure: undefined,
+      currentSelectedBU:appConfig.BU_LIST[0],
+      selectedBuList:[],
+      leadAddedDate: new Date(2018, 4, 4)
+    });
+  }
+
+  onLeadAddDateSelected(newDate) {
+    // this.setState({ leadAddedDate: newDate });
+    console.log(newDate);
+  }
+
+  onTenureChanged(value) {
+    this.setState({
+      selectedTenure: value
+    });
+  }
+
+  onBuSelectionChanged(value) {
+    this.setState({
+      currentSelectedBU: value
+    });
+  }
+  
+  onSourceChanged(value) {
+    this.setState({
+      selectedSource: value
+    });
+  }
+
+  getHeaderSection() {
+    return (
+      <Header style={styleContent.headerSection}>
+        <Left>
+          <Button transparent onPress={() => this.goBack()}>
+            <Icon name="arrow-left" />
+          </Button>
+        </Left>
+        <Body>
+          <Title>Add Lead</Title>
+        </Body>
+        <Right />
+      </Header>
+
+    )
+  }
+
+
+  getDatePickerView() {
+    return (
+      <DatePicker
+        defaultDate={this.state.leadAddedDate}
+        textStyle={styleContent.datePickerStyle}
+        placeHolderTextStyle={styleContent.datePickerStyle}
+        animationType={"fade"}
+        placeHolderText={i18nMessages.select_date_lbl}
+        onDateChange={this.onLeadAddDateSelected}
+      />
+    )
+  }
+  getSpinnerComponentView() {
+    const { spinner } = this.state;
+    console.log(spinner)
+    const loaderView = (<SpinnerComponent />);
+    const nonLoaderView = null;
+    if (spinner) {
+      return loaderView;
+    }
+    return nonLoaderView;
+  }
+
+  getLeadSourceTypes() {
+    return (
+      <Item picker>
+        <Picker
+          mode="dropdown"
+          iosIcon={<Icon name="arrow-down" />}
+          style={styleContent.dynamicComponentTextStyle}
+          selectedValue={this.state.selectedSource}
+          placeholderStyle={styleContent.dynamicComponentTextStyle}
+          onValueChange={this.onSourceChanged.bind(this)}
+          placeholderIconColor="#007aff"
+        >
+          <Picker.Item label="Wallet" style={styleContent.dynamicComponentTextStyle} value="key0" />
+          <Picker.Item label="ATM Card" value="key1" />
+          <Picker.Item label="Debit Card" value="key2" />
+          <Picker.Item label="Credit Card" value="key3" />
+          <Picker.Item label="Net Banking" value="key4" />
+        </Picker>
+      </Item>
+
+    )
+  }
+
+  getDropdownForTenure() {
+    return (
+      <Item picker>
+        <Picker
+          mode="dropdown"
+          iosIcon={<Icon name="arrow-down" />}
+          style={styleContent.dynamicComponentTextStyle}
+          selectedValue={this.state.selectedSource}
+          placeholderStyle={styleContent.dynamicComponentTextStyle}
+          onValueChange={this.onSourceChanged.bind(this)}
+          placeholderIconColor="#007aff"
+        >
+          <Picker.Item label="Wallet" style={styleContent.dynamicComponentTextStyle} value="key0" />
+          <Picker.Item label="ATM Card" value="key1" />
+          <Picker.Item label="Debit Card" value="key2" />
+          <Picker.Item label="Credit Card" value="key3" />
+          <Picker.Item label="Net Banking" value="key4" />
+        </Picker>
+      </Item>
+    );
+  }
+
+
+  getDropdownFor(type) {
+    let returnedView = '';
+    switch (type) {
+      case 'BU_NAME':
+        const pickerItemArr = [];
+        appConfig.BU_LIST.forEach(singleItem => {
+          pickerItemArr.push(
+            ( <Picker.Item label={singleItem} style={styleContent.dynamicComponentTextStyle} value={singleItem} />)
+          )
+        }); 
+        returnedView = (
+          <Item picker>
+            <Picker
+              mode="dropdown"
+              iosIcon={<Icon name="arrow-down" />}
+              style={styleContent.dynamicComponentTextStyle}
+              selectedValue={this.state.currentSelectedBU}
+              placeholderStyle={styleContent.dynamicComponentTextStyle}
+              onValueChange={this.onBuSelectionChanged.bind(this)}
+              placeholderIconColor="#007aff"
+            >
+              {pickerItemArr}
+              
+            </Picker>
+          </Item>);
+        break;
+      case 'COUNTRY':
+        returnedView = (
+          <Item picker>
+            <Picker
+              mode="dropdown"
+              iosIcon={<Icon name="arrow-down" />}
+              style={styleContent.dynamicComponentTextStyle}
+              selectedValue={this.state.selectedSource}
+              placeholderStyle={styleContent.dynamicComponentTextStyle}
+              onValueChange={this.onSourceChanged.bind(this)}
+              placeholderIconColor="#007aff"
+            >
+              <Picker.Item label="India" style={styleContent.dynamicComponentTextStyle} value="key0" />
+              <Picker.Item label="Chine" value="key1" />
+              <Picker.Item label="Pakistan" value="key2" />
+            </Picker>
+          </Item>);
+        break;
+      case 'STATE':
+        returnedView = (
+          <Item picker>
+            <Picker
+              mode="dropdown"
+              iosIcon={<Icon name="arrow-down" />}
+              style={styleContent.dynamicComponentTextStyle}
+              selectedValue={this.state.selectedSource}
+              placeholderStyle={styleContent.dynamicComponentTextStyle}
+              onValueChange={this.onSourceChanged.bind(this)}
+              placeholderIconColor="#007aff"
+            >
+              <Picker.Item label="Maharashtra" style={styleContent.dynamicComponentTextStyle} value="key0" />
+              <Picker.Item label="Karnataka" value="key1" />
+              <Picker.Item label="Punjab" value="key2" />
+            </Picker>
+          </Item>);
+        break;
+      default:
+        returnedView = (
+          <Item picker>
+            <Picker
+              mode="dropdown"
+              iosIcon={<Icon name="arrow-down" />}
+              style={styleContent.dynamicComponentTextStyle}
+              selectedValue={this.state.selectedSource}
+              placeholderStyle={styleContent.dynamicComponentTextStyle}
+              onValueChange={this.onSourceChanged.bind(this)}
+              placeholderIconColor="#007aff"
+            >
+              <Picker.Item label="RANDOM" style={styleContent.dynamicComponentTextStyle} value="key0" />
+              <Picker.Item label="CHECK THIS" value="key1" />
+            </Picker>
+          </Item>);
+        break;
     }
 
-    getHeaderSection () {
-        return (
-            <Header style={styleContent.headerSection}>
-              <Left>
-                <Button transparent onPress={() => this.goBack()}>
-                  <Icon name="arrow-left" />
-                </Button>
-              </Left>
-              <Body>
-                <Title>Add Lead</Title>
-              </Body>
-              <Right/>
-            </Header>
+    return returnedView;
+  }
 
-        )
+  onBuSelectionConfirmed () {
+    const {currentSelectedBU, selectedBuList=[]} = this.state;
+    if(currentSelectedBU && selectedBuList.indexOf(currentSelectedBU) === -1) {
+      selectedBuList.push(currentSelectedBU)
     }
+    this.setState({
+      selectedBuList: selectedBuList
+    });
+  }
 
-    getSpinnerComponentView() {
-        const { spinner } = this.state;
-        console.log(spinner)
-        const loaderView = (<SpinnerComponent />);
-        const nonLoaderView = null;
-        if (spinner) {
-            return loaderView;
-        }
-        return nonLoaderView;
+  updateBuRmoval(value) {
+    const { selectedBuList=[]} = this.state;
+    const indexOfElement = selectedBuList.indexOf(value);
+    if(indexOfElement !== -1) {
+      selectedBuList.splice(indexOfElement, 1)
     }
+    this.setState({
+      selectedBuList: selectedBuList
+    });
+    
+  }
+  getUnitAddedList(){
+    const { selectedBuList=[]} = this.state;
+    return(
+      <BUListComponent  businessUnitList={selectedBuList} onBuRemoval={this.updateBuRmoval}/>
+    )
+  }
 
-    render() {
-        return (
-            <Container style={styleContent.container}>
-                {this.getHeaderSection()}
-                <Content style={styleContent.mainContent}>
-                    <Card style={{width:'96%',alignSelf:'center'}}>
-                        <CardItem>
-                            <Grid>
-                              <Row><Col><Text note>Date</Text></Col><Col><Text note>Source</Text></Col></Row>  
-                              <Row><Col><Text note>Customer Name</Text></Col></Row>
-                              <Row>
-                                <Col>
-                                        <Input returnKeyType="next"
-                                            clearButtonMode="always"
-                                            autoCapitalize="none"
-                                            autoCorrect={false}/>
-                                    
-                                </Col>
-                            </Row>  
-                            <Row><Col><Text note>Requirement</Text></Col></Row>
-                            <Row>
-                        <Col>
-                          <Item>
-                            <Textarea rowSpan={2} style={{width:'99%'}} bordered 
-                               />
+  render() {
+    return (
+      <Container style={styleContent.container}>
+        {this.getHeaderSection()}
+        <Content style={styleContent.mainContent}>
+          <Card style={styleContent.gridWrapper}>
+            <CardItem>
+              <Grid >
+                <Row>
+                  <Col >
+                    <Text note style={styleContent.labelStyling}>{i18nMessages.date_label}</Text>
+                  </Col>
+                  <Col>
+                    <Text note style={styleContent.labelStyling} >{i18nMessages.source_type}</Text>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    {this.getDatePickerView()}
+                  </Col>
+                  <Col>
+                    {this.getLeadSourceTypes()}
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <Label style={styleContent.labelStyling}>{i18nMessages.customer_name_lbl}</Label>
+                    <Item >
+                      <Input
+                        style={styleContent.dynamicComponentTextStyle}
+                        returnKeyType="next"
+                        clearButtonMode="always"
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                      />
+                    </Item>
+                  </Col>
+                </Row>
 
-                         </Item>
-                        </Col>
-                      </Row>
-                      <Row><Col><Text note>Contact Information</Text></Col></Row>
-                      <Row>
-                        <Col>
-                          <Item floatingLabel>
-                            <Label style={{fontSize:14}}>Name</Label>
-                            <Input returnKeyType="next"
-                                clearButtonMode="always"
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                />
-                         </Item>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col>
-                          <Item floatingLabel>
-                            <Label style={{fontSize:14}}>Email</Label>
-                            <Input returnKeyType="next"
-                                clearButtonMode="always"
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                />
-                         </Item>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col>
-                          <Item floatingLabel>
-                            <Label style={{fontSize:14}}>Phone</Label>
-                            <Input returnKeyType="next"
-                                clearButtonMode="always"
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                               />
-                         </Item>
-                        </Col>
-                      </Row>
+                <Row><Col><Text note style={styleContent.labelStyling} >{i18nMessages.requirement_project_lbl} </Text></Col></Row>
 
-                      <Row><Col><Text note>Country</Text></Col><Col><Text note>State</Text></Col></Row>
-                      
+                <Row>
+                  <Col>
+                    <Item>
+                      <Textarea
+                        style={styleContent.dynamicComponentTextStyle}
+                        rowSpan={4} style={styleContent.textAreaStyling}
+                        bordered
+                      />
 
-                            </Grid>
+                    </Item>
+                  </Col>
+                </Row>
 
-                        </CardItem>
-                    </Card>
-                    
-                </Content>
-                
-                <Footer>
-                        <Button  style={styleContent.addLeadFooter}>
-                            <Text style={styleContent.addLeadFooterText}>ADD LEAD </Text>
-                        </Button >
-                </Footer>
-                {this.getSpinnerComponentView()}
-                
-            </Container>
-        );
-    }
+                <Row>
+                  <Col>
+                    <Text note style={styleContent.labelStyling} >{i18nMessages.tenure_lbl} </Text>
+                    <Item >
+                      {this.getDropdownForTenure()}
+
+                    </Item>
+                  </Col>
+                </Row>
+
+                <Row><Col><Text note style={styleContent.labelStylingSection} >{i18nMessages.lbl_contact_info}</Text></Col></Row>
+                <Row>
+                  <Col>
+                    <Item floatingLabel>
+                      <Label style={styleContent.labelStyling} >
+                        {i18nMessages.lbl_contact_name}
+                      </Label>
+                      <Input
+                        style={styleContent.dynamicComponentTextStyle}
+                        returnKeyType="next"
+                        clearButtonMode="always"
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                      />
+
+                    </Item>
+                  </Col>
+                </Row>
+
+                <Row>
+                  <Col>
+                    <Item floatingLabel>
+                      <Label style={styleContent.labelStyling} >
+                        {i18nMessages.lbl_contact_email}
+                      </Label>
+                      <Input
+                        style={styleContent.dynamicComponentTextStyle}
+                        returnKeyType="next"
+                        clearButtonMode="always"
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                      />
+
+                    </Item>
+                  </Col>
+                </Row>
+
+                <Row>
+                  <Col>
+                    <Item floatingLabel>
+                      <Label style={styleContent.labelStyling} >
+                        {i18nMessages.lbl_contact_phone}
+                      </Label>
+                      <Input
+                        style={styleContent.dynamicComponentTextStyle}
+                        returnKeyType="next"
+                        clearButtonMode="always"
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                      />
+
+                    </Item>
+                  </Col>
+                </Row>
+
+                <Row>
+                  <Col>
+                    <Text note style={styleContent.labelStyling} >{i18nMessages.lbl_contact_country} </Text>
+                    <Item >
+                      {this.getDropdownFor('COUNTRY')}
+                    </Item>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <Text note style={styleContent.labelStyling} >{i18nMessages.lbl_contact_state} </Text>
+                    <Item >
+                      {this.getDropdownFor('STATE')}
+                    </Item>
+                  </Col>
+                </Row>
+
+                <Row><Col><Text note style={styleContent.labelStylingSection} >{i18nMessages.lbl_business_unit_info}</Text></Col></Row>
+                <Row>
+                  <Col>
+                    <Text note style={styleContent.labelStyling} >{i18nMessages.lbl_business_unit_name} </Text>
+                    <Item >
+                      {this.getDropdownFor('BU_NAME')}
+                    </Item>
+                  </Col>
+                  <Col>
+                    <Button style={styleContent.addBUStyling} onPress={()=> {this.onBuSelectionConfirmed()}} >
+                      <Icon name="plus" /><Text style={{ fontSize: 16 }}>{i18nMessages.lbl_add_bu} </Text>
+                    </Button>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    {this.getUnitAddedList()}
+
+                  </Col>
+
+                </Row>
+              </Grid>
+
+            </CardItem>
+          </Card>
+
+        </Content>
+
+        <Footer>
+          <Button style={styleContent.addLeadFooter}>
+            <Text style={styleContent.addLeadFooterText}>ADD LEAD </Text>
+          </Button >
+        </Footer>
+        {this.getSpinnerComponentView()}
+
+      </Container>
+    );
+  }
 }
