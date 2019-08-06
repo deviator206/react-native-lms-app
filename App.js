@@ -12,6 +12,7 @@ import AppBootstrap from './pages/bootstrap/AppBootstrap';
 import DashboardPage from './pages/dashboard/dashboard';
 import LoginPage from './pages/login/loginPage';
 import SideMenuBar from './pages/sidemenu/sideMenu';
+import ViewLeadPage from './pages/viewlead/viewLeadPage';
 
 
 console.disableYellowBox = true;
@@ -34,6 +35,10 @@ const SideDrawerNavigator = createDrawerNavigator(
     dashboard: {
       screen:DashboardPage,
       drawerLabel: "Demo Screen 3"
+    },
+    
+    viewlead: {
+      screen: ViewLeadPage
     },
     addlead: {
       screen: AddLeadPage
@@ -67,6 +72,9 @@ const AppNavigator = createStackNavigator({
   },
   dashboard: {
     screen:DashboardPage
+  },
+  viewlead: {
+    screen: ViewLeadPage
   },
   addlead: {
     screen: AddLeadPage

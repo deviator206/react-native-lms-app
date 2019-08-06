@@ -35,7 +35,14 @@ export default class DashboardPage extends React.Component {
                     <Icon name="home" style={styleContent.tabIconStyling} />
                     <Text style={styleContent.tabNameStyling}>Home</Text>
                 </Button >
-                <Button vertical style={styleContent.footerSection} >
+                <Button vertical 
+                onPress={
+                    () => {
+                        this.props.navigation.navigate("viewlead");
+                    }
+                }
+                
+                style={styleContent.footerSection} >
                     <Icon name="view-list" style={styleContent.tabIconStyling} />
                     <Text style={styleContent.tabNameStyling}> View Lead</Text>
                 </Button>
