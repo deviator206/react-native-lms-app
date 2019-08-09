@@ -10,10 +10,13 @@ import { createAppContainer, createDrawerNavigator, createStackNavigator } from 
 import AddLeadPage from './pages/addlead/addLeadPage';
 import AppBootstrap from './pages/bootstrap/AppBootstrap';
 import DashboardPage from './pages/dashboard/dashboard';
+import LeadDetailsPage from './pages/leaddetails/leadDetailsPage';
 import LoginPage from './pages/login/loginPage';
+import MiAddPage from './pages/marketadd/miAddPage';
+import MiListPage from './pages/marketlist/miListPage';
+import NotificationListPage from './pages/notifications/notificationListPage';
 import SideMenuBar from './pages/sidemenu/sideMenu';
 import ViewLeadPage from './pages/viewlead/viewLeadPage';
-
 
 console.disableYellowBox = true;
 const SideDrawerNavigator = createDrawerNavigator(
@@ -43,6 +46,19 @@ const SideDrawerNavigator = createDrawerNavigator(
     addlead: {
       screen: AddLeadPage
     },
+    milist: {
+      screen: MiListPage
+    },
+    notificationlist: {
+      screen: NotificationListPage
+    },
+    miadd:{
+      screen: MiAddPage
+    },
+    leaddetails:{
+      screen: LeadDetailsPage
+    },
+    
     drawer:{
       screen: SideMenuBar 
     }
@@ -76,9 +92,22 @@ const AppNavigator = createStackNavigator({
   viewlead: {
     screen: ViewLeadPage
   },
+  miadd:{
+    screen: MiAddPage
+  },
+  leaddetails:{
+    screen: LeadDetailsPage
+  },
   addlead: {
     screen: AddLeadPage
   },
+  notificationlist: {
+    screen: NotificationListPage
+  },
+  milist: {
+    screen: MiListPage
+  },
+  
   drawer:{
     screen: SideMenuBar 
   }

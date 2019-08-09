@@ -3,17 +3,24 @@ import React from 'react';
 import { Alert, FlatList, Modal, TouchableHighlight, View } from 'react-native';
 import { default as FilterIcon } from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import FooterComponent from '../common/footerComponent';
 import HeaderComponent from '../common/headerComponent';
-import styleContent from './viewLeadStyle';
+import styleContent from './miListPageStyle';
 
 
-export default class ViewLeadPage extends React.Component {
+
+export default class MiListPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             filterVisible: false
         };
         this.filerBtnToggled = this.filerBtnToggled.bind(this);
+        this.sideMenuClickHandler = this.sideMenuClickHandler.bind(this);
+    }
+
+    sideMenuClickHandler() {
+        alert("clicked side panel")
     }
 
     filerBtnToggled() {
@@ -32,80 +39,71 @@ export default class ViewLeadPage extends React.Component {
     getViewLeads() {
         const dataR = [
             {
-                companyName: "CM Tek-3",
+                miId: "MI#779",
+                type: "New Item",
                 description: "This is likely happening when upgrading React Native from below 0.60 to 0.60 or above. Going forward",
-                contact: "RK Sharma",
-                status: "CLOSED",
-                salesRep: "Samir",
-                businessUnit: "Atlas",
-                lastUpdated: "12/4/2019",
-                inactiveDays: "129"
+                status: "CLOSED"
+
             }, {
-                companyName: 'BM Sigma',
+                miId: "MI#779",
+                type: "New Item",
                 description: "This is likely happening when upgrading React Native from below 0.60 to 0.60 or above. Going forward",
-                contact: "Shrivastava",
-                status: "PENDING",
-                salesRep: "Sunayna",
-                businessUnit: "Spectro",
-                lastUpdated: "12/4/2019",
-                inactiveDays: "29"
+                status: "CLOSED"
 
             },
             {
-                companyName: 'Suraj Ent',
+                miId: "MI#779",
+                type: "New Item",
                 description: "This is likely happening when upgrading React Native from below 0.60 to 0.60 or above. Going forward",
-                contact: "Shrivastava",
-                status: "PENDING",
-                salesRep: "Sunayna",
-                businessUnit: "Spectro",
-                lastUpdated: "12/4/2019",
-                inactiveDays: "29"
+                status: "CLOSED"
 
             },
             {
-                companyName: 'IT Stick',
+                miId: "MI#779",
+                type: "New Item",
                 description: "This is likely happening when upgrading React Native from below 0.60 to 0.60 or above. Going forward",
-                contact: "Shrivastava",
-                status: "PENDING",
-                salesRep: "Sunayna",
-                businessUnit: "Spectro",
-                lastUpdated: "12/4/2019",
-                inactiveDays: "29"
-
+                status: "CLOSED"
+            },
+            {
+                miId: "MI#779",
+                type: "New Item",
+                description: "This is likely happening when upgrading React Native from below 0.60 to 0.60 or above. Going forward",
+                status: "CLOSED"
+            },
+            {
+                miId: "MI#779",
+                type: "New Item",
+                description: "This is likely happening when upgrading React Native from below 0.60 to 0.60 or above. Going forward",
+                status: "CLOSED"
+            },
+            {
+                miId: "MI#779",
+                type: "New Item",
+                description: "This is likely happening when upgrading React Native from below 0.60 to 0.60 or above. Going forward",
+                status: "CLOSED"
             }];
 
         const returnedView = (
             <FlatList
                 data={dataR}
                 renderItem={({ item }) =>
-                    <Row 
-                    button 
-                              onPress={()=>{
-                                this.props.navigation.navigate("leaddetails");
-                              }}
-                    > 
-                        <Card style={styleContent.gridCardWrapper}
-                               >
+                    <Row>
+                        <Card style={styleContent.gridCardWrapper} >
                             <CardItem>
                                 <Col>
                                     <Grid>
                                         <Row>
                                             <Col>
-                                                <Text style={styleContent.cardViewMainTitle} > {item.companyName} </Text>
+                                                <Text style={styleContent.cardViewMainTitle} > {item.miId} </Text>
+                                            </Col>
+                                            <Col style={{ flexDirection: "row" }}>
+                                                <Text style={styleContent.cardViewSecondaryInfo}  > Type:  </Text>
+                                                <Text style={styleContent.cardViewPrimaryValue}  >  {item.type} </Text>
                                             </Col>
                                         </Row>
                                         <Row>
                                             <Col>
                                                 <Text style={styleContent.cardViewSecondaryInfo}  > {item.description} </Text>
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            <Col style={styleContent.colLabelOnly} >
-                                                <Text style={styleContent.cardViewPrimaryLabel}  > Contact </Text>
-
-                                            </Col>
-                                            <Col style={styleContent.colValue} >
-                                                <Text style={styleContent.cardViewPrimaryValue} >: {item.contact}  </Text>
                                             </Col>
                                         </Row>
                                         <Row>
@@ -117,44 +115,6 @@ export default class ViewLeadPage extends React.Component {
                                                 <Text style={styleContent.cardViewPrimaryValue} >: {item.status}  </Text>
                                             </Col>
 
-                                        </Row>
-                                        <Row>
-
-                                            <Col style={styleContent.colLabelOnly} >
-                                                <Text style={styleContent.cardViewPrimaryLabel}  > Sales Rep </Text>
-
-                                            </Col>
-                                            <Col style={styleContent.colValue} >
-                                                <Text style={styleContent.cardViewPrimaryValue} >: {item.salesRep}  </Text>
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            <Col style={styleContent.colLabelOnly} >
-                                                <Text style={styleContent.cardViewPrimaryLabel}  > Unit </Text>
-
-                                            </Col>
-                                            <Col style={styleContent.colValue} >
-                                                <Text style={styleContent.cardViewPrimaryValue} >: {item.businessUnit}  </Text>
-                                            </Col>
-
-                                        </Row>
-                                        <Row>
-                                            <Col style={styleContent.colLabelOnly} >
-                                                <Text style={styleContent.cardViewPrimaryLabel}  > Last Updated </Text>
-
-                                            </Col>
-                                            <Col style={styleContent.colValue} >
-                                                <Text style={styleContent.cardViewPrimaryValue} >: {item.lastUpdated}  </Text>
-                                            </Col>
-
-                                        </Row>
-                                        <Row>
-                                            <Col style={styleContent.colLabelOnly} >
-                                                <Text style={styleContent.cardViewPrimaryLabel}  > Inactive Days </Text>
-                                            </Col>
-                                            <Col style={styleContent.colValue} >
-                                                <Text style={styleContent.cardViewPrimaryValue} >: {item.inactiveDays}  </Text>
-                                            </Col>
                                         </Row>
                                     </Grid>
 
@@ -171,15 +131,16 @@ export default class ViewLeadPage extends React.Component {
         return returnedView;
     }
     render() {
+        const uri = "https://facebook.github.io/react-native/docs/assets/favicon.png";
         return (
             <Container>
-                <HeaderComponent title="View Leads" />
+                <HeaderComponent title="Market Intelligence" showSideMenuBtn={true} sideMenuClickHandler={ this.sideMenuClickHandler} />
                 <Content style={styleContent.mainContent}>
                     <Grid >
                         <Row style={styleContent.searchAndFilterWrapper}>
                             <Col style={styleContent.searchBarWrapper} >
                                 <Item searchBar rounded style={styleContent.searchBarStyling}>
-                                    <Input placeholder="Search" />
+                                    <Input placeholder="Search"  />
                                     <Icon name="search" style={styleContent.iconStyling} />
                                 </Item>
                             </Col>
@@ -203,6 +164,15 @@ export default class ViewLeadPage extends React.Component {
                         {this.getViewLeads()}
                     </Grid>
                 </Content>
+                <Button 
+                    style={styleContent.circular} 
+                    button
+                    onPress={()=>{
+                        this.props.navigation.navigate('miadd');
+                    }} >
+                            <Icon name="add" style={{ color: "white", fontSize: 50 }} />
+                </Button>
+               <FooterComponent />
 
                 <Modal
                     animationType="slide"
@@ -215,18 +185,18 @@ export default class ViewLeadPage extends React.Component {
                         <Grid style={{ width: '96%', backgroundColor: 'white', marginTop: 10, padding: 10 }}>
                             <Row><Col><Text note>Status</Text></Col><Col><Text note>Tenure</Text></Col></Row>
                             <Row>
-                                <Col> 
-                                <Text>Hello World!</Text>
-                                 </Col>
-                                <Col> 
-                                <Text>Hello World!</Text> 
+                                <Col>
+                                    <Text>Hello World!</Text>
+                                </Col>
+                                <Col>
+                                    <Text>Hello World!</Text>
                                 </Col>
                             </Row>
                         </Grid>
                         <View style={{ marginTop: 22 }}>
 
                             <View>
-                                
+
 
                                 <TouchableHighlight
                                     onPress={() => {
@@ -239,6 +209,7 @@ export default class ViewLeadPage extends React.Component {
                     </Content>
 
                 </Modal>
+
             </Container>
         )
     }

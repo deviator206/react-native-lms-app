@@ -18,7 +18,10 @@ const i18nMessages = {
     "lbl_currency":"Currency",
     "lbl_estimated_budget":" Estimated Budget",
     "lbl_self_approved":" Self Approved",
-    "lbl_select_rep":" Select Rep"
+    "lbl_select_rep":" Select Rep",
+    "lbl_assign_rep":"Assign Rep",
+    "lbl_modify_bu":"Modify BU",
+    "lbl_notify_bu":"Notify BU"
 
 }
 

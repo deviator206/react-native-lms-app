@@ -6,7 +6,7 @@ import styleContent from './sidemenuStyle';
 
 const routes = [
     {
-        key: "login",
+        key: "notificationlist",
         caption: "Notifications",
         icon: 'notifications'
     },
@@ -16,7 +16,7 @@ const routes = [
         icon: 'person-outline'
     },
     {
-        key: "login",
+        key: "milist",
         caption: "Market Intelligence",
         icon: 'local-atm'
     },
@@ -51,7 +51,9 @@ export default class SideMenuBar extends React.Component {
                         return (<ListItem
                             style={styleContent.listItemStyle}
                             button
-                            onPress={() => { this.props.navigation.navigate(item.key); }}
+                            onPress={() => { 
+                                console.log(item.key);
+                                this.props.navigation.navigate(item.key); }}
                         >
 
                             <Icon size={20} style={styleContent.iconStyling} name={item.icon} />
