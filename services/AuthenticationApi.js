@@ -5,17 +5,36 @@ class AuthenticationApi {
 
     }
 
-  proceedLoginApi ({successHandler, errorHandler }) {
-      ServiceClass.loginService().then((data)=>{
-          console.log(data);
-          successHandler(data);
-      }).catch((err)=>{
-           console.log(err);
-           if(errorHandler) {
-            errorHandler(err)
-           }
-      })
-  }
+    forgotPasswordApi({ params={userName:"test01",password:"abc"}, successHandler, errorHandler }) {
+        ServiceClass.loginService(params).then((resp) => {
+            if (resp && resp.data && successHandler) {
+                ServiceClass.updateHeaderInformation(resp.data);
+                successHandler(resp.data);
+            } else {
+                alert("VALIDATE THE RESPONSE")
+            }
+        }).catch((err) => {
+            if (errorHandler) {
+                errorHandler(err.response.data)
+            }
+        })
+    }
+
+
+    proceedLoginApi({ params, successHandler, errorHandler }) {
+        ServiceClass.loginService(params).then((resp) => {
+            if (resp && resp.data && successHandler) {
+                ServiceClass.updateHeaderInformation(resp.data);
+                successHandler(resp.data);
+            } else {
+                alert("VALIDATE THE RESPONSE")
+            }
+        }).catch((err) => {
+            if (errorHandler) {
+                errorHandler(err.response.data)
+            }
+        })
+    }
 }
 
 export default AuthenticationApi;

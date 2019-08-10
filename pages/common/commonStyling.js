@@ -1,6 +1,12 @@
 
 import { StyleSheet } from 'react-native';
 const styleContent = StyleSheet.create({
+    fontMediumLabel: {
+        backgroundColor: '#fff',
+        borderRadius: 6,
+        marginBottom: 10,
+        height: 56
+    },
     headerSection: {
         backgroundColor: "#0E0D0D",
         width: "100%"
@@ -20,5 +26,9 @@ const styleContent = StyleSheet.create({
     dynamicComponentTextStyle: {
         color: "#616161"
     },
+    errorMessageText: {
+        color: "red",
+        fontSize: 18
+    }
 });
 export default styleContent;

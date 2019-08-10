@@ -21,7 +21,9 @@ const i18nMessages = {
     "lbl_select_rep":" Select Rep",
     "lbl_assign_rep":"Assign Rep",
     "lbl_modify_bu":"Modify BU",
-    "lbl_notify_bu":"Notify BU"
+    "lbl_notify_bu":"Notify BU",
+    "ERROR_MSG_FORBIDDEN":" Invalid credentials, Please try with correct ones.",
+    "ERROR_MSG_CREDENTIALS_MISSING": "Please enter Username and Password"
 
 }
 

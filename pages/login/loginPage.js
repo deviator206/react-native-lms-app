@@ -2,54 +2,139 @@ import { Button, Container, Content, Icon, Input, Item, Text, View } from 'nativ
 import React, { Component } from 'react';
 import { Image } from "react-native";
 import AuthenticationApi from '../../services/AuthenticationApi';
+import { default as commonStyling } from '../common/commonStyling';
+import i18nMessages from '../common/i18n';
+import ModalComponent from '../common/modalComponent';
 import SpinnerComponent from '../common/spinnerComponent';
 import styleContent from './loginStyle';
+
 
 
 export default class LoginPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            spinner: false
+            spinner: false,
+            showError: true,
+            showForgotPasswordModal: false,
+            errMsg: '',
+            userName: '',
+            password: ''
         }
         this.onSignInBtnClicked = this.onSignInBtnClicked.bind(this);
         this.onLoginSuccess = this.onLoginSuccess.bind(this);
         this.errorHandler = this.errorHandler.bind(this);
         this.getSpinnerComponentView = this.getSpinnerComponentView.bind(this);
+        this.onUserNameChanged = this.onUserNameChanged.bind(this);
+        this.onPasswordChanged = this.onPasswordChanged.bind(this);
+        this.getErrorView = this.getErrorView.bind(this);
+        this.getForgotPasswordModalView = this.getForgotPasswordModalView.bind(this);
+        this.toggleForgotPassword = this.toggleForgotPassword.bind(this);
+        this.onFPModalClosed = this.onFPModalClosed.bind(this);
         this.authenticateApi = new AuthenticationApi();
-        this.counter = 0;
     }
 
-    getSpinnerComponentView () {
-        const {spinner} = this.state;
-        console.log(spinner)
-        const loaderView =  (<SpinnerComponent />);
-        const nonLoaderView =  null;
-        if(spinner) {
+    getSpinnerComponentView() {
+        const { spinner } = this.state;
+        const loaderView = (<SpinnerComponent />);
+        const nonLoaderView = null;
+        if (spinner) {
             return loaderView;
         }
         return nonLoaderView;
     }
-    componentDidMount() {
-        this.counter = 0;
-        this.setState({spinner: false});
+
+
+    toggleForgotPassword() {
+        const { showForgotPasswordModal } = this.state;
+        this.setState({
+            showForgotPasswordModal: !showForgotPasswordModal
+        })
     }
 
-    errorHandler(err) {
-        alert('ERROR HANDLER', err);
-        this.onLoginSuccess();
+    onFPModalClosed() {
+        this.toggleForgotPassword();
+
     }
-    onSignInBtnClicked() {
-        console.log(this.props.navigation);
-        this.setState({spinner: true});
-        this.authenticateApi.proceedLoginApi({
-            successHandler: this.onLoginSuccess,
-            errorHandler: this.errorHandler
+
+    getForgotPasswordModalView() {
+        const { showForgotPasswordModal } = this.state;
+        if (showForgotPasswordModal) {
+            return (
+                <ModalComponent showModal={showForgotPasswordModal} onCloseCallBackhandler={this.onFPModalClosed} />
+            )
+        }
+    }
+
+    getErrorView() {
+        const { showError = false, errMsg } = this.state;
+        if (showError) {
+            return (
+                <View >
+                    <Text style={commonStyling.errorMessageText}>{errMsg}</Text>
+                </View>
+            )
+        }
+    }
+
+    componentDidMount() {
+        this.setState({
+            spinner: false,
+            errMsg: '',
+            showForgotPasswordModal: false,
+            userName: '',
+            password: '',
+            showError: false
         });
     }
-    
-    onLoginSuccess() {
-        this.setState({spinner: false});
+
+    onPasswordChanged(val) {
+        this.setState({ password: val });
+    }
+    onUserNameChanged(val) {
+        this.setState({ userName: val });
+    }
+    errorHandler(resp) {
+        console.log('ERROR HANDLER ::: ', resp.message);
+        this.setState({
+            spinner: false,
+            showError: true,
+            showForgotPasswordModal: false,
+            errMsg: i18nMessages['ERROR_MSG_' + (resp.error).toUpperCase()]
+        });
+    }
+    onSignInBtnClicked() {
+        const { userName, password } = this.state;
+        console.log(userName ,"&&", password);
+        if(userName && password && userName !== "" && password !== "") {
+            console.log("------66666666--------");
+            this.setState({
+                spinner: true,
+                showError: false,
+                showForgotPasswordModal: false,
+                errMsg: '',
+            });
+            this.authenticateApi.proceedLoginApi({
+                params: {
+                    userName,
+                    password
+                },
+                successHandler: this.onLoginSuccess,
+                errorHandler: this.errorHandler
+            }); 
+        }else {
+            console.log("##############" , i18nMessages['ERROR_MSG_CREDENTIALS_MISSING']);
+            this.setState({
+                showError: true,
+                errMsg: i18nMessages['ERROR_MSG_CREDENTIALS_MISSING'],
+            });
+        }
+        
+    }
+
+    onLoginSuccess(data) {
+        console.log("RESP:", data);
+        this.setState({ spinner: false });
         this.props.navigation.navigate('dashboard');
     }
 
@@ -74,11 +159,14 @@ export default class LoginPage extends Component {
                         <View style={styleContent.loginMiddle}>
                             <Item regular>
                                 <Icon active name='person' />
-                                <Input placeholder='Username'
+                                <Input 
+                                    containerStyle={commonStyling.fontMediumLabel}
+                                    placeholder='Username'
                                     returnKeyType="next"
                                     clearButtonMode="always"
                                     autoCapitalize="none"
-                                    autoCorrect={false} />
+                                    autoCorrect={false}
+                                    onChangeText={(val) => { this.onUserNameChanged(val) }} />
                             </Item>
                             <Item regular >
                                 <Icon active name='lock' />
@@ -86,26 +174,39 @@ export default class LoginPage extends Component {
                                     secureTextEntry={true}
                                     clearButtonMode="always"
                                     autoCapitalize="none"
-                                    autoCorrect={false} />
+                                    autoCorrect={false}
+                                    onChangeText={(val) => { this.onPasswordChanged(val) }} />
                             </Item>
                         </View>
-                        <View style={styleContent.loginMiddle2}>
-                             
-                        </View>
+                        {this.getErrorView()}
+
+                        <Button style={{
+                            backgroundColor: "red"
+                        }}
+                            transparent
+                            onPress={
+                                () => {
+                                    this.toggleForgotPassword()
+                                }
+                            }>
+                            <Text >forgot password</Text>
+                        </Button>
                     </View>
 
-                <View style={styleContent.versionView}>
-                    <Text style={styleContent.versionContent}> v0.0.0.1 </Text>
-                </View>
-                <View style={styleContent.footerContent} >
-                    <Button style={styleContent.loginBtn}
-                        onPress={() => this.onSignInBtnClicked()}>
-                        <View style={styleContent.buttonTextView} >
-                            <Text style={styleContent.signInText} > SIGN IN </Text><Icon name="arrow-forward" />
-                        </View>
-                    </Button>
-                </View>
-                {this.getSpinnerComponentView()}
+                    <View style={styleContent.versionView}>
+                        <Text style={styleContent.versionContent}> v0.0.0.2 </Text>
+                    </View>
+
+                    <View style={styleContent.footerContent} >
+                        <Button style={styleContent.loginBtn}
+                            onPress={() => this.onSignInBtnClicked()}>
+                            <View style={styleContent.buttonTextView} >
+                                <Text style={styleContent.signInText} > SIGN IN </Text><Icon name="arrow-forward" />
+                            </View>
+                        </Button>
+                    </View>
+                    {this.getForgotPasswordModalView()}
+                    {this.getSpinnerComponentView()}
                 </Content>
             </Container>
         );
