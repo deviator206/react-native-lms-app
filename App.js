@@ -19,6 +19,7 @@ import SideMenuBar from './pages/sidemenu/sideMenu';
 import ViewLeadPage from './pages/viewlead/viewLeadPage';
 
 console.disableYellowBox = true;
+
 const SideDrawerNavigator = createDrawerNavigator(
   {
     bootstap: {

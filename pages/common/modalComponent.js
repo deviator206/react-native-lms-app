@@ -12,6 +12,8 @@ export default class ModalComponent extends BaseComponent {
     super(props);
     this.state = {
       modalVisible: false,
+      emailAdded: '',
+      showInlineError: false
     };
     this.authenticateApi = new AuthenticationApi();
     this.setModalVisible = this.setModalVisible.bind(this);
@@ -25,10 +27,12 @@ export default class ModalComponent extends BaseComponent {
   componentDidMount() {
     this.setState({
       spinner: false,
-      modalVisible: true
+      modalVisible: true,
+      emailAdded: '',
+      showInlineError: false
     });
   }
-  
+
   onEmailAdded(val) {
     this.setState({ emailAdded: val });
   }
@@ -37,7 +41,8 @@ export default class ModalComponent extends BaseComponent {
     const { modalVisible } = this.state;
     this.setState({
       spinner: false,
-      modalVisible: !modalVisible
+      modalVisible: !modalVisible,
+      showInlineError: false
     });
   }
 
@@ -45,20 +50,28 @@ export default class ModalComponent extends BaseComponent {
     const { modalVisible } = this.state;
     this.setState({
       spinner: false,
-      modalVisible: !modalVisible
+      modalVisible: !modalVisible,
+      showInlineError: false
     });
   }
 
   onEmailSubmit() {
     const { emailAdded, modalVisible } = this.state;
     console.log(emailAdded);
-    this.setState({
-      spinner: true,
-    })
-    this.authenticateApi.forgotPasswordApi({
-      successHandler: this.onSuccessHandler,
-      errorHandler: this.onErrorHandler
-    });
+    if (emailAdded && emailAdded !== '') {
+      this.setState({
+        spinner: true,
+        showInlineError: false
+      });
+      this.authenticateApi.forgotPasswordApi({
+        successHandler: this.onSuccessHandler,
+        errorHandler: this.onErrorHandler
+      });
+    } else {
+      this.setState({
+        showInlineError: true,
+      })
+    }
     //  this.props.parentDataHandler(emailAdded);
   }
 
@@ -67,7 +80,12 @@ export default class ModalComponent extends BaseComponent {
     this.setState({ modalVisible: visible });
   }
 
+  getStyleForInputBorder() {
+
+  }
+
   render() {
+    const { showInlineError } = this.state;
     return (
       <Modal
         animationType="slide"
@@ -86,9 +104,14 @@ export default class ModalComponent extends BaseComponent {
               <Icon name="close" style={{ fontSize: 55 }} />
             </TouchableHighlight>
 
-            <Text> Enter Your EMAIL ID -1 </Text>
-            <Item >
+            <Text style={{
+              fontSize: 14,
+              fontFamily: "Montserrat-SemiBoldItalic"
+
+            }}> Enter Your Email -1  </Text>
+            <Item regular error={showInlineError} >
               <Input
+
                 style={styleContent.dynamicComponentTextStyle}
                 returnKeyType="next"
                 clearButtonMode="always"
@@ -96,17 +119,28 @@ export default class ModalComponent extends BaseComponent {
                 autoCorrect={false}
                 onChangeText={(val) => { this.onEmailAdded(val) }}
               />
+              {
+                showInlineError == true &&
+                <Icon name='close' style={{ color: "red", fontWeight: "bold", fontSize: 21 }} />
+              }
+
+
             </Item>
 
-            <Button onPress={() => {
-              this.onEmailSubmit()
-            }}>
+            <Button
+              style={{
+                marginTop: 5,
+                backgroundColor: "red"
+              }}
+              onPress={() => {
+                this.onEmailSubmit()
+              }}>
               <Text> RESET PASSWORD </Text>
             </Button>
           </View>
         </View>
-     
-           {this.getSpinnerComponentView(this.state.spinner)} 
+
+        {this.getSpinnerComponentView(this.state.spinner)}
       </Modal>
     );
   }

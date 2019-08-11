@@ -16,6 +16,8 @@ export default class LoginPage extends Component {
         this.state = {
             spinner: false,
             showError: true,
+            userNameMissing: false,
+            passwordMissing: false,
             showForgotPasswordModal: false,
             errMsg: '',
             userName: '',
@@ -84,6 +86,8 @@ export default class LoginPage extends Component {
             showForgotPasswordModal: false,
             userName: '',
             password: '',
+            userNameMissing: false,
+            passwordMissing: false,
             showError: false
         });
     }
@@ -105,13 +109,14 @@ export default class LoginPage extends Component {
     }
     onSignInBtnClicked() {
         const { userName, password } = this.state;
-        console.log(userName ,"&&", password);
-        if(userName && password && userName !== "" && password !== "") {
-            console.log("------66666666--------");
+        console.log(userName, "&&", password);
+        if (userName && password && userName !== "" && password !== "") {
             this.setState({
                 spinner: true,
                 showError: false,
                 showForgotPasswordModal: false,
+                userNameMissing: false,
+                passwordMissing: false,
                 errMsg: '',
             });
             this.authenticateApi.proceedLoginApi({
@@ -121,27 +126,28 @@ export default class LoginPage extends Component {
                 },
                 successHandler: this.onLoginSuccess,
                 errorHandler: this.errorHandler
-            }); 
-        }else {
-            console.log("##############" , i18nMessages['ERROR_MSG_CREDENTIALS_MISSING']);
+            });
+        } else {
+
             this.setState({
-                showError: true,
-                errMsg: i18nMessages['ERROR_MSG_CREDENTIALS_MISSING'],
+                userNameMissing: (userName && userName !== '') ? false : true,
+                passwordMissing: (password && password !== '') ? false : true
             });
         }
-        
+
     }
 
     onLoginSuccess(data) {
         console.log("RESP:", data);
-        this.setState({ spinner: false });
+        this.setState({
+            spinner: false,
+            userNameMissing: false,
+            passwordMissing: false,
+        });
         this.props.navigation.navigate('dashboard');
     }
 
     render() {
-        /**
-         * <Text style={styleContent.forgotPassword} > Forgot Password ? </Text> 
-         */
         let logoImg = require('../images/ametek_logo@1X.png');
         return (
             <Container style={styleContent.container}>
@@ -157,9 +163,9 @@ export default class LoginPage extends Component {
                             <Text style={styleContent.welcomeMsg}>Welcome message goes here Test the login widow here Welcome mess</Text>
                         </View>
                         <View style={styleContent.loginMiddle}>
-                            <Item regular>
+                            <Item regular error={this.state.userNameMissing} >
                                 <Icon active name='person' />
-                                <Input 
+                                <Input
                                     containerStyle={commonStyling.fontMediumLabel}
                                     placeholder='Username'
                                     returnKeyType="next"
@@ -168,7 +174,7 @@ export default class LoginPage extends Component {
                                     autoCorrect={false}
                                     onChangeText={(val) => { this.onUserNameChanged(val) }} />
                             </Item>
-                            <Item regular >
+                            <Item regular error={this.state.passwordMissing} >
                                 <Icon active name='lock' />
                                 <Input placeholder='Password'
                                     secureTextEntry={true}
