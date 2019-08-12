@@ -1,6 +1,6 @@
 import ServiceClass from "./Services";
 
-class AuthenticationApi {
+class RefDataApi {
     constructor() {
 
     }
@@ -23,20 +23,25 @@ class AuthenticationApi {
     }
 
 
-    proceedLoginApi({ params, successHandler, errorHandler }) {
-        ServiceClass.loginService(params).then((resp) => {
-            if (resp && resp.data && successHandler) {
-                ServiceClass.updateHeaderInformation(resp.data);
-                successHandler(resp.data);
-            } else {
-                alert("VALIDATE THE RESPONSE")
-            }
-        }).catch((err) => {
-            if (errorHandler) {
-                errorHandler(err.response.data)
-            }
-        })
+    fetchRefData({ params }) {
+        return new Promise(function(resolve, reject) {
+            ServiceClass.getRefData(params).then((resp) => {
+                if (resp && resp.data) {
+                    resolve(resp.data);
+                } else {
+                    alert("VALIDATE THE RESPONSE")
+                }
+            }).catch((err) => {
+                if (err && err.response && err.response.data) {
+                    reject(err.response.data)
+                } else {
+                    reject({message:"NORMALIZED ERROR",error:"FORBIDDEN"})
+                }
+            })
+          });
+
+       
     }
 }
 
-export default AuthenticationApi;
+export default RefDataApi;

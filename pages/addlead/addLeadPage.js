@@ -1,6 +1,8 @@
 import { Body, Button, Card, CardItem, CheckBox, Col, Container, Content, DatePicker, Footer, Grid, Header, Input, Item, Label, Left, ListItem, Picker, Right, Row, Text, Textarea, Title } from 'native-base';
 import React from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { connect } from 'react-redux';
+import RefDataApi from '../../services/RefDataApi';
 import appConfig from '../common/config';
 import i18nMessages from '../common/i18n';
 import SpinnerComponent from '../common/spinnerComponent';
@@ -8,7 +10,8 @@ import styleContent from './addLeadStyle';
 import BUListComponent from './BUListComponent';
 
 
-export default class AddLeadPage extends React.Component {
+const refDataApi = new RefDataApi();
+ class AddLeadPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -37,6 +40,8 @@ export default class AddLeadPage extends React.Component {
   }
 
   componentDidMount() {
+    console.log("DIDmount ...... ", this.props)
+    this.props.loadRefData()
     this.setState({
       spinner: false,
       selectedSource: undefined,
@@ -638,3 +643,31 @@ export default class AddLeadPage extends React.Component {
     );
   }
 }
+
+// This function provides a means of sending actions so that data in the Redux store
+// can be modified. In this example, calling this.props.addToCounter() will now dispatch
+// (send) an action so that the reducer can update the Redux state.
+function mapDispatchToProps(dispatch) {
+  return {
+    loadRefData: () => {
+      refDataApi.fetchRefData({
+        params:"type=CURRENCY,TENURE"
+      }) .then((resp)=>{
+        dispatch({type:'FETCH_REF_DATA',id:1121})
+      }).catch((resp) => {
+        console.log(resp)
+      })
+    } 
+  }
+}
+
+// This function provides access to data in the Redux state in the React component
+// In this example, the value of this.props.count will now always have the same value
+// As the count value in the Redux state
+function mapStateToProps(state) {
+  return {
+    count: state.count
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddLeadPage)

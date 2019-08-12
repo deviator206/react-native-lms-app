@@ -7,6 +7,7 @@
  */
 import React from 'react';
 import { createAppContainer, createDrawerNavigator, createStackNavigator } from 'react-navigation';
+import { Provider } from 'react-redux';
 import AddLeadPage from './pages/addlead/addLeadPage';
 import AppBootstrap from './pages/bootstrap/AppBootstrap';
 import DashboardPage from './pages/dashboard/dashboard';
@@ -17,30 +18,30 @@ import MiListPage from './pages/marketlist/miListPage';
 import NotificationListPage from './pages/notifications/notificationListPage';
 import SideMenuBar from './pages/sidemenu/sideMenu';
 import ViewLeadPage from './pages/viewlead/viewLeadPage';
+import { default as configureStore } from './storage/store/createAppStore';
 
 console.disableYellowBox = true;
-
 const SideDrawerNavigator = createDrawerNavigator(
   {
     bootstap: {
-      screen:AppBootstrap,
+      screen: AppBootstrap,
       navigationOptions: () => ({
         header: null,
         drawerLabel: "Demo Screen 1"
       })
     },
     login: {
-      screen:LoginPage,
+      screen: LoginPage,
       navigationOptions: () => ({
         header: null,
         drawerLabel: "Demo Screen 2"
       })
     },
     dashboard: {
-      screen:DashboardPage,
+      screen: DashboardPage,
       drawerLabel: "Demo Screen 3"
     },
-    
+
     viewlead: {
       screen: ViewLeadPage
     },
@@ -53,15 +54,15 @@ const SideDrawerNavigator = createDrawerNavigator(
     notificationlist: {
       screen: NotificationListPage
     },
-    miadd:{
+    miadd: {
       screen: MiAddPage
     },
-    leaddetails:{
+    leaddetails: {
       screen: LeadDetailsPage
     },
-    
-    drawer:{
-      screen: SideMenuBar 
+
+    drawer: {
+      screen: SideMenuBar
     }
   },
   {
@@ -70,33 +71,33 @@ const SideDrawerNavigator = createDrawerNavigator(
     initialRouteName: "login",
     mode: 'modal',
     headerMode: 'none',
-    initialRouteParams : { someParam: 'Bonjour' }
+    initialRouteParams: { someParam: 'Bonjour' }
   }
 );
 
 const AppNavigator = createStackNavigator({
   bootstap: {
-    screen:AppBootstrap,
+    screen: AppBootstrap,
     navigationOptions: () => ({
       header: null
     })
   },
   login: {
-    screen:LoginPage,
+    screen: LoginPage,
     navigationOptions: () => ({
       header: null
     })
   },
   dashboard: {
-    screen:DashboardPage
+    screen: DashboardPage
   },
   viewlead: {
     screen: ViewLeadPage
   },
-  miadd:{
+  miadd: {
     screen: MiAddPage
   },
-  leaddetails:{
+  leaddetails: {
     screen: LeadDetailsPage
   },
   addlead: {
@@ -108,28 +109,32 @@ const AppNavigator = createStackNavigator({
   milist: {
     screen: MiListPage
   },
-  
-  drawer:{
-    screen: SideMenuBar 
+
+  drawer: {
+    screen: SideMenuBar
   }
 }, {
-  initialRouteName: "login",
-  mode: 'modal',
-  headerMode: 'none',
-  initialRouteParams : { someParam: 'Bonjour' }
-});
-const AppContainer  = createAppContainer(SideDrawerNavigator);
+    initialRouteName: "login",
+    mode: 'modal',
+    headerMode: 'none',
+    initialRouteParams: { someParam: 'Bonjour' }
+  });
+const AppContainer = createAppContainer(AppNavigator);
 
 
 class App extends React.Component {
   componentDidMount() {
-   //  SplashScreen.hide();
-   console.log("TEST 3");
+    //  SplashScreen.hide();
+   ;
   }
   render() {
-    return <AppContainer />;
+    return (
+      <Provider store={ configureStore({}) }>
+      <AppContainer />
+     </Provider>
+    );
   }
 }
-export default  App;
+export default App;
 
 

@@ -106,6 +106,8 @@ export default class LoginPage extends Component {
             showForgotPasswordModal: false,
             errMsg: i18nMessages['ERROR_MSG_' + (resp.error).toUpperCase()]
         });
+
+        // this.props.navigation.navigate('dashboard');
     }
     onSignInBtnClicked() {
         const { userName, password } = this.state;
@@ -144,7 +146,7 @@ export default class LoginPage extends Component {
             userNameMissing: false,
             passwordMissing: false,
         });
-        this.props.navigation.navigate('dashboard');
+        this.props.navigation.push('dashboard');
     }
 
     render() {

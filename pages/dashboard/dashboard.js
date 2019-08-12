@@ -49,7 +49,7 @@ export default class DashboardPage extends React.Component {
                 <Button onPress={
                     () => {
                         console.log(" menu clicked");
-                        this.props.navigation.navigate("addlead");
+                        this.props.navigation.push('addlead');
                     }
                 } vertical style={styleContent.footerSection} >
                     <Icon name="note-add" style={styleContent.tabIconStyling} />

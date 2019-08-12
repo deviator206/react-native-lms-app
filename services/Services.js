@@ -1,11 +1,12 @@
 import axios from 'axios';
 const SERVER_CONFIG = {
     hostPort: 'http://52.66.240.20:8080/',
-    basePath: 'be_lms_app/'
+    basePath: 'lmsApp-0.1.0/'
 };
 
 const SERVICE_URL = {
-    'LOGIN': 'login/'
+    'LOGIN': 'login/',
+    'REF_DATA':'refdata/'
 }
 
 const axiosInstance = axios.create({
@@ -37,6 +38,9 @@ class ServiceClass {
 
     static async loginService(params) {
         return await axiosInstance.post(SERVICE_URL['LOGIN'], params);
+    }
+    static async getRefData(params) {
+        return await axiosInstance.get(SERVICE_URL['REF_DATA']+'?'+params);
     }
 }
 export default ServiceClass;
