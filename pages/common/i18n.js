@@ -11,7 +11,7 @@ const i18nMessages = {
     "lbl_contact_phone":" Phone",
     "lbl_contact_country":" Country",
     "lbl_contact_state":" State",
-    "lbl_business_unit_info":"Business Unit Info",
+    "lbl_business_unit_info":"Business Information",
     "lbl_business_unit_name":"BU Name",
     "lbl_add_bu":"Add",
     "lbl_industry":" Industry",

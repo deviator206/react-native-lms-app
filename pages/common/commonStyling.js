@@ -15,7 +15,7 @@ const styleContent = StyleSheet.create({
     },
     headerTitleWrapper: {
         width: "70%",
-        paddingTop: "2%",
+        paddingTop: "4%",
         marginLeft: "3%"
     },
     headerSection: {
@@ -35,20 +35,44 @@ const styleContent = StyleSheet.create({
         color: "black",
         fontSize: 25
     },
+    dynamicComponentTextAreaStyle: {
+        color: "#000000",
+        fontSize: 14,
+
+        fontFamily: 'Montserrat-Regular',
+        textTransform: "uppercase",
+        fontWeight: "100",
+        width: '95%'
+    },
     dynamicComponentTextStyle: {
-        color: "#616161"
+        color: "#000000",
+        fontSize: 14,
+
+        height: 40,
+        lineHeight: 40,
+        fontFamily: 'Montserrat-Regular',
+        textTransform: "uppercase",
+        fontWeight: "100"
     },
     errorMessageText: {
         color: "red",
         fontSize: 18
     },
-    sectionTitle:{
-        fontFamily:"Montserrat-SemiBold",
-        fontSize:12,
-        color:"#616161",
-        marginTop:"2%",
-        marginBottom:"2%"
-    }
-    
+    sectionTitle: {
+        fontFamily: "Montserrat-SemiBold",
+        fontSize: 15,
+        color: "#616161",
+        marginTop: "10%",
+        marginBottom: "2%",
+        textTransform: "uppercase"
+    },
+    labelStyling: {
+        color: "#AEAEAE",
+        fontSize: 14,
+        marginTop: "4%",
+        marginBottom: "0%",
+        fontFamily: 'Montserrat-Medium'
+    },
+
 });
 export default styleContent;

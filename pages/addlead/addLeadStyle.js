@@ -35,15 +35,18 @@ const styleContent = StyleSheet.create({
         fontSize: 16,
     },
     labelStyling: {
-        color:"#616161",
+        color:"#AEAEAE",
         fontSize: 12,
-        fontFamily: 'Montserrat-Bold'
+        marginTop:"4%",
+        marginBottom:"0%",
+        fontFamily: 'Montserrat-Medium'
     },
     dynamicComponentTextStyle :{
-        color:"red",
+        color:"green",
         fontSize: 14,
         lineHeight:14,
-        fontFamily: 'Montserrat-Regular'
+        fontFamily: 'Montserrat-Regular',
+        textTransform: "uppercase"
     },
     datePickerStyle:{
        color:"#616161",
@@ -59,14 +62,17 @@ const styleContent = StyleSheet.create({
     },
     labelStylingSection: {
         color:"#616161",
-        fontSize: 14,
+        fontSize: 24,
         fontFamily: 'Montserrat-Bold',
         fontWeight:"bold"
     },
     addBUStyling:{
         backgroundColor:"#EC2227",
         alignSelf:"center",
-        marginTop:"5%"
+        marginTop:"10%",
+        height:45,
+        lineHeight:45
+       
     }
 });
 export default styleContent;

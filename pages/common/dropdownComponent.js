@@ -27,6 +27,9 @@ export default class DropDownComponent extends React.Component {
             <Picker
                 mode="dropdown"
                 iosIcon={<Icon name="arrow-down" />}
+                textStyle={styleContent.dynamicComponentTextStyle}
+                itemStyle={styleContent.dynamicComponentTextStyle}
+                itemTextStyle={styleContent.dynamicComponentTextStyle}
                 style={styleContent.dynamicComponentTextStyle}
                 placeholderStyle={styleContent.dynamicComponentTextStyle}
                 onValueChange={onDropDownSelectionChange()}

@@ -9,8 +9,8 @@ export default class BUListComponent extends React.Component {
     }
 
     getListItemsView() {
-        const{businessUnitList, onBuRemoval}  = this.props;
-        
+        const{ onBuRemoval}  = this.props;
+        const businessUnitList = ["Atlas","Spectro","KTem","LmQT"];
         const listViews =[];
         businessUnitList.forEach(element => {
             listViews.push(

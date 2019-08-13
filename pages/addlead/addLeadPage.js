@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { connect } from 'react-redux';
 import RefDataApi from '../../services/RefDataApi';
 import { default as commonStyle } from '../common/commonStyling';
+import DropDownComponent from '../common/dropdownComponent';
 import appConfig from '../common/config';
 import HeaderComponent from '../common/headerComponent';
 import i18nMessages from '../common/i18n';
@@ -33,7 +34,7 @@ class AddLeadPage extends React.Component {
     this.onLeadAddDateSelected = this.onLeadAddDateSelected.bind(this);
     this.getLeadSourceTypes = this.getLeadSourceTypes.bind(this);
     this.getDatePickerView = this.getDatePickerView.bind(this);
-    this.getDropdownForTenure = this.getDropdownForTenure.bind(this);
+
     this.onTenureChanged = this.onTenureChanged.bind(this);
     this.getDropdownFor = this.getDropdownFor.bind(this);
     this.getUnitAddedList = this.getUnitAddedList.bind(this);
@@ -147,30 +148,46 @@ class AddLeadPage extends React.Component {
     )
   }
 
-  getDropdownForTenure() {
-    return (
-      <Item picker>
-        <Picker
-          mode="dropdown"
-          iosIcon={<Icon name="arrow-down" />}
-          style={styleContent.dynamicComponentTextStyle}
-          selectedValue={this.state.selectedSource}
-          placeholderStyle={styleContent.dynamicComponentTextStyle}
-          onValueChange={this.onSourceChanged.bind(this)}
-          placeholderIconColor="#007aff"
-        >
-          <Picker.Item label="Wallet" style={styleContent.dynamicComponentTextStyle} value="key0" />
-          <Picker.Item label="ATM Card" value="key1" />
-          <Picker.Item label="Debit Card" value="key2" />
-          <Picker.Item label="Credit Card" value="key3" />
-          <Picker.Item label="Net Banking" value="key4" />
-        </Picker>
-      </Item>
-    );
-  }
 
 
   getDropdownFor(type) {
+    let returnedView = '';
+    let dataSource = [];
+    switch (type) {
+      case 'TENURE':
+        dataSource = appConfig.LEAD_TENURE;
+        break;
+      case 'SOURCE_TYPE':
+        dataSource = appConfig.LEAD_SOURCE_TYPE;
+        break;
+      case 'SALES_REP':
+        dataSource = appConfig.SALES_REP_LIST;
+        break;
+      case 'CURRENCY':
+        dataSource = appConfig.SUPPORTED_CURRENCY;
+        break;
+      case 'INDUSTRY':
+        dataSource = appConfig.INDUSTRY_LIST;
+        break;
+      case 'BU_NAME':
+        dataSource = appConfig.BU_LIST;
+        break;
+      case 'COUNTRY':
+        dataSource = ["INDIA", "USA"];
+
+        break;
+      case 'STATE':
+        dataSource = ["PUNJAB", "MAH"];
+        break;
+      default:
+        break;
+    }
+
+    returnedView = <DropDownComponent dataSource={dataSource} />;
+    return returnedView;
+
+  }
+  getDropdownFor1(type) {
     let returnedView = '';
     const pickerItemArr = [];
     switch (type) {
@@ -199,7 +216,10 @@ class AddLeadPage extends React.Component {
       case 'SOURCE_TYPE':
         appConfig.LEAD_SOURCE_TYPE.forEach(singleItem => {
           pickerItemArr.push(
-            (<Picker.Item label={singleItem} style={styleContent.dynamicComponentTextStyle} value={singleItem} />)
+            (<Picker.Item
+              label={singleItem.toUpperCase()}
+              style={styleContent.dynamicComponentTextStyle}
+              value={singleItem} />)
           )
         });
         returnedView = (
@@ -404,24 +424,41 @@ class AddLeadPage extends React.Component {
   getViewForSelfApproval() {
     const { isSelfApproved = false } = this.state;
     const selfApprovalCheckbox = (
-      <Col>
+      <Col 
+      style={{
+        width:"50%",
+      }}
+      >
         <ListItem
+        style={{
+          padding:"0%",
+         
+        }}
           button
           onPress={() => {
             this.onSelfApprovedClicked();
           }}
         >
-          <CheckBox checked={isSelfApproved} />
+          <CheckBox checked={isSelfApproved} color="black" style={{
+            paddingLeft:"0%",
+            marginLeft: "0%"
+
+          }} />
           <Body>
-            <Text>{i18nMessages.lbl_self_approved} </Text>
+            <Text style={commonStyle.labelStyling} 
+            >{i18nMessages.lbl_self_approved} </Text>
           </Body>
         </ListItem>
       </Col>
 
     );
     const saleRepSelection = (
-      <Col>
-        <Text note style={styleContent.labelStyling} >{i18nMessages.lbl_select_rep} </Text>
+      <Col 
+      style={{
+        width:"50%"
+      }}
+      >
+        <Text note style={commonStyle.labelStyling} >{i18nMessages.lbl_select_rep} </Text>
         <Item >
           {this.getDropdownFor('SALES_REP')}
         </Item>
@@ -429,7 +466,11 @@ class AddLeadPage extends React.Component {
     )
     if (isSelfApproved) {
       return (
-        <Row>
+        <Row
+          style={{
+            marginTop: "3%"
+          }}
+        >
           {selfApprovalCheckbox}
           {saleRepSelection}
         </Row>
@@ -455,7 +496,7 @@ class AddLeadPage extends React.Component {
               <Grid >
                 <Row>
                   <Col >
-                    <Text note style={commonStyle.sectionTitle}>  {i18nMessages.date_label}</Text>
+                    <Text note style={commonStyle.sectionTitle}>{i18nMessages.date_label}</Text>
                   </Col>
                   <Col>
 
@@ -487,10 +528,10 @@ class AddLeadPage extends React.Component {
                 </Row>
                 <Row>
                   <Col>
-                    <Label style={styleContent.labelStyling}>{i18nMessages.customer_name_lbl}</Label>
-                    <Item >
+                    <Label style={commonStyle.labelStyling}>{i18nMessages.customer_name_lbl}</Label>
+                    <Item  >
                       <Input
-                        style={styleContent.dynamicComponentTextStyle}
+                        style={commonStyle.dynamicComponentTextStyle}
                         returnKeyType="next"
                         clearButtonMode="always"
                         autoCapitalize="none"
@@ -500,14 +541,14 @@ class AddLeadPage extends React.Component {
                   </Col>
                 </Row>
 
-                <Row><Col><Text note style={styleContent.labelStyling} >{i18nMessages.requirement_project_lbl} </Text></Col></Row>
+                <Row><Col><Text note style={commonStyle.labelStyling} >{i18nMessages.requirement_project_lbl} </Text></Col></Row>
 
                 <Row>
                   <Col>
                     <Item>
                       <Textarea
-                        style={styleContent.dynamicComponentTextStyle}
-                        rowSpan={4} style={styleContent.textAreaStyling}
+                        style={commonStyle.dynamicComponentTextAreaStyle}
+                        rowSpan={4}
                         bordered
                       />
 
@@ -517,7 +558,7 @@ class AddLeadPage extends React.Component {
 
                 <Row>
                   <Col>
-                    <Text note style={styleContent.labelStyling} >{i18nMessages.tenure_lbl} </Text>
+                    <Text note style={commonStyle.labelStyling} >{i18nMessages.tenure_lbl} </Text>
                     <Item >
                       {this.getDropdownFor('TENURE')}
 
@@ -525,15 +566,17 @@ class AddLeadPage extends React.Component {
                   </Col>
                 </Row>
 
-                <Row><Col><Text note style={styleContent.labelStylingSection} >{i18nMessages.lbl_contact_info}</Text></Col></Row>
+                <Row><Col><Text note style={commonStyle.sectionTitle} >{i18nMessages.lbl_contact_info}</Text></Col></Row>
                 <Row>
                   <Col>
-                    <Item floatingLabel>
-                      <Label style={styleContent.labelStyling} >
-                        {i18nMessages.lbl_contact_name}
-                      </Label>
+
+                    <Label style={commonStyle.labelStyling} >
+                      {i18nMessages.lbl_contact_name}
+                    </Label>
+                    <Item >
+
                       <Input
-                        style={styleContent.dynamicComponentTextStyle}
+                        style={commonStyle.dynamicComponentTextStyle}
                         returnKeyType="next"
                         clearButtonMode="always"
                         autoCapitalize="none"
@@ -546,12 +589,13 @@ class AddLeadPage extends React.Component {
 
                 <Row>
                   <Col>
-                    <Item floatingLabel>
-                      <Label style={styleContent.labelStyling} >
-                        {i18nMessages.lbl_contact_email}
-                      </Label>
+                    <Label style={commonStyle.labelStyling} >
+                      {i18nMessages.lbl_contact_email}
+                    </Label>
+                    <Item >
+
                       <Input
-                        style={styleContent.dynamicComponentTextStyle}
+                        style={commonStyle.dynamicComponentTextStyle}
                         returnKeyType="next"
                         clearButtonMode="always"
                         autoCapitalize="none"
@@ -564,12 +608,13 @@ class AddLeadPage extends React.Component {
 
                 <Row>
                   <Col>
-                    <Item floatingLabel>
-                      <Label style={styleContent.labelStyling} >
-                        {i18nMessages.lbl_contact_phone}
-                      </Label>
+                    <Label style={commonStyle.labelStyling} >
+                      {i18nMessages.lbl_contact_phone}
+                    </Label>
+                    <Item >
+
                       <Input
-                        style={styleContent.dynamicComponentTextStyle}
+                        style={commonStyle.dynamicComponentTextStyle}
                         returnKeyType="next"
                         clearButtonMode="always"
                         autoCapitalize="none"
@@ -582,7 +627,7 @@ class AddLeadPage extends React.Component {
 
                 <Row>
                   <Col>
-                    <Text note style={styleContent.labelStyling} >{i18nMessages.lbl_contact_country} </Text>
+                    <Text note style={commonStyle.labelStyling} >{i18nMessages.lbl_contact_country} </Text>
                     <Item >
                       {this.getDropdownFor('COUNTRY')}
                     </Item>
@@ -590,25 +635,50 @@ class AddLeadPage extends React.Component {
                 </Row>
                 <Row>
                   <Col>
-                    <Text note style={styleContent.labelStyling} >{i18nMessages.lbl_contact_state} </Text>
+                    <Text note style={commonStyle.labelStyling} >{i18nMessages.lbl_contact_state} </Text>
                     <Item >
                       {this.getDropdownFor('STATE')}
                     </Item>
                   </Col>
                 </Row>
 
-                <Row><Col><Text note style={styleContent.labelStylingSection} >{i18nMessages.lbl_business_unit_info}</Text></Col></Row>
+                <Row><Col><Text note style={commonStyle.sectionTitle} >{i18nMessages.lbl_business_unit_info}</Text></Col></Row>
                 <Row>
-                  <Col>
-                    <Text note style={styleContent.labelStyling} >{i18nMessages.lbl_business_unit_name} </Text>
+                  <Col style={{
+                    width: "70%"
+                  }}>
+                    <Text note style={commonStyle.labelStyling} >{i18nMessages.lbl_business_unit_name} </Text>
                     <Item >
                       {this.getDropdownFor('BU_NAME')}
                     </Item>
                   </Col>
-                  <Col>
-                    <Button style={styleContent.addBUStyling} onPress={() => { this.onBuSelectionConfirmed() }} >
-                      <Icon name="add" /><Text style={{ fontSize: 16 }}>{i18nMessages.lbl_add_bu} </Text>
+                  <Col
+                  >
+                    <Button iconLeft
+                      style={{
+                        width: "80%",
+                        backgroundColor: "#EC2227",
+                        marginTop: "25%",
+                        marginLeft: "10%"
+                      }}
+                    >
+                      <Icon name="add" style={{
+                        marginLeft: "15%",
+                        fontSize: 24,
+                        color: "white"
+                      }} />
+                      <Text
+                        style={
+                          {
+                            marginRight: "30%",
+                            paddingLeft: "0%",
+                            fontSize: 14,
+                            fontFamily: 'Montserrat-Medium',
+                          }
+                        }
+                      > {i18nMessages.lbl_add_bu}</Text>
                     </Button>
+
                   </Col>
                 </Row>
                 <Row>
@@ -618,19 +688,25 @@ class AddLeadPage extends React.Component {
                 </Row>
                 <Row>
                   <Col>
-                    <Text note style={styleContent.labelStyling} >{i18nMessages.lbl_industry} </Text>
+                    <Label note style={commonStyle.labelStyling} >{i18nMessages.lbl_industry} </Label>
                     <Item >
                       {this.getDropdownFor('INDUSTRY')}
                     </Item>
                   </Col>
                 </Row>
-                <Row>
-                  <Col>
-                    <Text note style={styleContent.labelStyling} >{i18nMessages.lbl_estimated_budget} </Text>
+                <Row style={{
+                  marginTop: "3%"
+                }}>
+                  <Col
+                    style={{
+                      width: "40%"
+                    }}
+                  >
+                    <Label note style={commonStyle.labelStyling} >{i18nMessages.lbl_estimated_budget} </Label>
                     <Item >
 
                       <Input
-                        style={styleContent.dynamicComponentTextStyle}
+                        style={commonStyle.dynamicComponentTextStyle}
                         returnKeyType="next"
                         clearButtonMode="always"
                         autoCapitalize="none"
@@ -639,8 +715,13 @@ class AddLeadPage extends React.Component {
 
                     </Item>
                   </Col>
-                  <Col>
-                    <Text note style={styleContent.labelStyling} >{i18nMessages.lbl_currency} </Text>
+                  <Col
+                    style={{
+                      width: "40%",
+                      marginLeft: "10%"
+                    }}
+                  >
+                    <Text note style={commonStyle.labelStyling} >{i18nMessages.lbl_currency} </Text>
                     <Item >
                       {this.getDropdownFor('CURRENCY')}
                     </Item>
