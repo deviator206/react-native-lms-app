@@ -1,29 +1,19 @@
 import ServiceClass from "./Services";
 
+
 class RefDataApi {
-    constructor() {
-
+    constructor({state}) {
+        this.reducerName ='ref_data';
+        this.currentState = state;
     }
 
-    forgotPasswordApi({ params={userName:"test01",password:"abc"}, successHandler, errorHandler }) {
-        ServiceClass.loginService(params).then((resp) => {
-            if (resp && resp.data && successHandler) {
-                ServiceClass.updateHeaderInformation(resp.data);
-                successHandler(resp.data);
-            } else {
-                alert("VALIDATE THE RESPONSE")
-            }
-        }).catch((err) => {
-            if (err && err.response && err.response.data && errorHandler) {
-                errorHandler(err.response.data)
-            } else if(errorHandler) {
-                errorHandler({message:"NORMALIZED ERROR",error:"FORBIDDEN"})
-            }
-        })
+    getRefInfo(state) {
+        return (state[this.reducerName] && state[this.reducerName].ref_info ) ? state[this.reducerName].ref_info: {}
     }
-
-
+   
     fetchRefData({ params }) {
+        const ref = this.getRefInfo(this.currentState);
+        // if(ref.has)
         return new Promise(function(resolve, reject) {
             ServiceClass.getRefData(params).then((resp) => {
                 if (resp && resp.data) {

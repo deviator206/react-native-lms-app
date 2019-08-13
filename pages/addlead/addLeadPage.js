@@ -1,20 +1,23 @@
-import { Body, Button, Card, CardItem, CheckBox, Col, Container, Content, DatePicker, Footer, Grid, Header, Input, Item, Label, Left, ListItem, Picker, Right, Row, Text, Textarea, Title } from 'native-base';
+import { Body, Button, Card, View, CardItem, CheckBox, Col, Container, Content, DatePicker, Footer, Grid, Input, Item, Label, ListItem, Picker, Row, Text, Textarea } from 'native-base';
 import React from 'react';
+import { default as FeatherIcon } from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { connect } from 'react-redux';
 import RefDataApi from '../../services/RefDataApi';
+import { default as commonStyle } from '../common/commonStyling';
 import appConfig from '../common/config';
+import HeaderComponent from '../common/headerComponent';
 import i18nMessages from '../common/i18n';
 import SpinnerComponent from '../common/spinnerComponent';
 import styleContent from './addLeadStyle';
 import BUListComponent from './BUListComponent';
 
 
-const refDataApi = new RefDataApi();
- class AddLeadPage extends React.Component {
+const refDataApi = new RefDataApi({ state: {} });
+class AddLeadPage extends React.Component {
   constructor(props) {
     super(props);
-    this.state= {
+    this.state = {
       spinner: false,
       selectedSource: undefined,
       selectedTenure: undefined,
@@ -40,9 +43,20 @@ const refDataApi = new RefDataApi();
   }
 
   componentDidMount() {
-    this.props.loadRefData();
+
+    this.props.loadRefData().then((resp) => {
+      this.props.dispatchAction({ type: 'FETCH_REF_DATA', data: resp });
+      this.setState({
+        spinner: false,
+      });
+    }).catch((resp) => {
+      console.log(resp)
+      this.setState({
+        spinner: false,
+      });
+    });
     this.setState({
-      spinner: false,
+      spinner: true,
       selectedSource: undefined,
       selectedTenure: undefined,
       currentSelectedBU: appConfig.BU_LIST[0],
@@ -77,25 +91,18 @@ const refDataApi = new RefDataApi();
 
   getHeaderSection() {
     return (
-      <Header style={styleContent.headerSection}>
-        <Left>
-          <Button transparent onPress={() => this.props.navigation.goBack()}>
-            <Icon name="arrow-back" style={{color:"white", fontSize:35}} />
-          </Button>
-        </Left>
-        <Body>
-          <Title>Add Lead</Title>
-        </Body>
-        <Right />
-      </Header>
-
+      <HeaderComponent title="Add Lead" showSideMenuBtn={true} sideMenuClickHandler={() => {
+        alert("TEST")
+      }} />
     )
   }
 
 
   getDatePickerView() {
     return (
+
       <DatePicker
+
         defaultDate={this.state.leadAddedDate}
         textStyle={styleContent.datePickerStyle}
         placeHolderTextStyle={styleContent.datePickerStyle}
@@ -103,6 +110,7 @@ const refDataApi = new RefDataApi();
         placeHolderText={i18nMessages.select_date_lbl}
         onDateChange={this.onLeadAddDateSelected}
       />
+
     )
   }
   getSpinnerComponentView() {
@@ -394,7 +402,7 @@ const refDataApi = new RefDataApi();
   }
 
   getViewForSelfApproval() {
-    const { isSelfApproved = false  } = this.state;
+    const { isSelfApproved = false } = this.state;
     const selfApprovalCheckbox = (
       <Col>
         <ListItem
@@ -436,6 +444,8 @@ const refDataApi = new RefDataApi();
 
   render() {
     const { isSelfApproved = false } = this.state;
+    const { ref_info } = this.props;
+    console.log(ref_info);
     return (
       <Container style={styleContent.container}>
         {this.getHeaderSection()}
@@ -445,17 +455,31 @@ const refDataApi = new RefDataApi();
               <Grid >
                 <Row>
                   <Col >
-                    <Text note style={styleContent.labelStyling}>{i18nMessages.date_label}</Text>
+                    <Text note style={commonStyle.sectionTitle}>  {i18nMessages.date_label}</Text>
                   </Col>
                   <Col>
 
-                    <Text note style={styleContent.labelStyling} >{i18nMessages.source_type}</Text>
+                    <Text note style={commonStyle.sectionTitle} >{i18nMessages.source_type}</Text>
                   </Col>
                 </Row>
                 <Row>
-                  <Col>
-                   
-                    {this.getDatePickerView()}
+                  <Col style={
+                    {
+                      backgroundColor: "white",
+                    }
+                  }>
+                    <Grid>
+                      <Row>
+                        <Col>
+                          <FeatherIcon name="calendar" style={styleContent.calenderIcon} />
+                        </Col>
+                        <Col style={{
+                          width: "80%"
+                        }}>
+                          {this.getDatePickerView()}
+                        </Col>
+                      </Row>
+                    </Grid>
                   </Col>
                   <Col>
                     {this.getDropdownFor("SOURCE_TYPE")}
@@ -583,7 +607,7 @@ const refDataApi = new RefDataApi();
                   </Col>
                   <Col>
                     <Button style={styleContent.addBUStyling} onPress={() => { this.onBuSelectionConfirmed() }} >
-                      <Icon name="add"  /><Text style={{ fontSize: 16 }}>{i18nMessages.lbl_add_bu} </Text>
+                      <Icon name="add" /><Text style={{ fontSize: 16 }}>{i18nMessages.lbl_add_bu} </Text>
                     </Button>
                   </Col>
                 </Row>
@@ -635,7 +659,7 @@ const refDataApi = new RefDataApi();
         <Footer>
           <Button style={styleContent.addLeadFooter}>
             <Text style={styleContent.addLeadFooterText}>ADD LEAD </Text>
-            <Icon name="arrow-forward" style={{color:"white", fontSize:20}} />
+            <Icon name="arrow-forward" style={{ color: "white", fontSize: 20 }} />
           </Button >
         </Footer>
         {this.getSpinnerComponentView()}
@@ -650,15 +674,14 @@ const refDataApi = new RefDataApi();
 // (send) an action so that the reducer can update the Redux state.
 function mapDispatchToProps(dispatch) {
   return {
-    loadRefData: () => {
-      refDataApi.fetchRefData({
-        params:"type=SOURCE,CURRENCY,TENURE,COUNTRY,INDUSTRY,BU"
-      }) .then((resp)=>{
-        dispatch({type:'FETCH_REF_DATA',id:1121,data:resp})
-      }).catch((resp) => {
-        console.log(resp)
-      })
-    } 
+    loadRefData: async () => {
+      await refDataApi.fetchRefData({
+        params: "type=SOURCE,CURRENCY,TENURE,COUNTRY,INDUSTRY,BU"
+      });
+    },
+    dispatchAction: (param) => {
+      dispatch(param);
+    }
   }
 }
 
@@ -667,7 +690,8 @@ function mapDispatchToProps(dispatch) {
 // As the count value in the Redux state
 function mapStateToProps(state) {
   return {
-    count: state.count
+    count: state.count,
+    ref_info: refDataApi.getRefInfo(state)
   }
 }
 

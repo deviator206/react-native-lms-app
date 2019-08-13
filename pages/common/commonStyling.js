@@ -7,9 +7,21 @@ const styleContent = StyleSheet.create({
         marginBottom: 10,
         height: 56
     },
+    headerTitle: {
+        textAlign: "center",
+        fontFamily: "Montserrat-Medium",
+        fontSize: 20
+
+    },
+    headerTitleWrapper: {
+        width: "70%",
+        paddingTop: "2%",
+        marginLeft: "3%"
+    },
     headerSection: {
         backgroundColor: "#0E0D0D",
-        width: "100%"
+        width: "100%",
+        padding: "1%"
     },
     footerSection: {
         backgroundColor: "#FFFFFF",
@@ -29,6 +41,14 @@ const styleContent = StyleSheet.create({
     errorMessageText: {
         color: "red",
         fontSize: 18
+    },
+    sectionTitle:{
+        fontFamily:"Montserrat-SemiBold",
+        fontSize:12,
+        color:"#616161",
+        marginTop:"2%",
+        marginBottom:"2%"
     }
+    
 });
 export default styleContent;

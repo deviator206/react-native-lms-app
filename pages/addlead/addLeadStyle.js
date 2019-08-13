@@ -10,6 +10,12 @@ const styleContent = StyleSheet.create({
         backgroundColor:"#0E0D0D",
         width:"100%"
     },
+    calenderIcon: {
+        color: "black",
+        fontSize: 20,
+        marginTop:"30%",
+        marginLeft:"10%"
+      },
     mainContent:{
         flex:0.8,
         backgroundColor:"#FFFFFF",
@@ -34,10 +40,15 @@ const styleContent = StyleSheet.create({
         fontFamily: 'Montserrat-Bold'
     },
     dynamicComponentTextStyle :{
-        color:"#616161"
+        color:"red",
+        fontSize: 14,
+        lineHeight:14,
+        fontFamily: 'Montserrat-Regular'
     },
     datePickerStyle:{
-       color:"#616161"
+       color:"#616161",
+       fontSize:14,
+       fontFamily: 'Montserrat-Medium'
     },
     textAreaStyling:{
         width: '95%'

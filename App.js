@@ -115,7 +115,7 @@ const AppNavigator = createStackNavigator({
     screen: SideMenuBar
   }
 }, {
-    initialRouteName: "login",
+    initialRouteName: "addlead",
     mode: 'modal',
     headerMode: 'none',
     initialRouteParams: { someParam: 'Bonjour' }
