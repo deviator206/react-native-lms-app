@@ -41,7 +41,8 @@ const styleContent = StyleSheet.create({
         fontSize: 14,
         fontFamily: 'Montserrat-SemiBold',
         color: "#616161",
-        marginBottom: "3%"
+        marginBottom: "3%",
+        textTransform:"uppercase"
     },
     secondaryTextDesignation:{
         fontSize: 12,
@@ -75,8 +76,41 @@ const styleContent = StyleSheet.create({
     primaryText: {
         fontSize: 18,
         fontFamily: 'Montserrat-Medium',
-        color: "#1A1A1A"
-    }
+        color: "#1A1A1A",
+        textTransform:"capitalize"
+    },
+    colValueThird: {
+       
+    },
+    colValue: {
+        flexDirection: 'row', flexWrap: 'wrap',
+        width:"85%"
+    },
+    textAreaStyling:{
+        width: '95%'
+    },
+    marginTopStyling:{
+        marginTop:"3%"
+      },
+    approvedStatusCircle: {
+        width: 20,
+        height: 20,
+        borderRadius: 20/2,
+        backgroundColor: 'red',
+        
+    },
+    addLeadFooter:{
+        backgroundColor: '#ec2227',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
+        height: '100%'
+    },
+    addLeadFooterText:{
+        color:"#FAFAFA",
+        fontFamily: 'Montserrat-Regular',
+        fontSize: 16,
+    },
 
 });
 export default styleContent;

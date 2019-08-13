@@ -40,7 +40,6 @@ const styleContent = StyleSheet.create({
     dynamicComponentTextAreaStyle: {
         color: "#000000",
         fontSize: 14,
-
         fontFamily: 'Montserrat-Regular',
         textTransform: "uppercase",
         fontWeight: "100",
@@ -73,6 +72,11 @@ const styleContent = StyleSheet.create({
         fontSize: 14,
         marginTop: "4%",
         marginBottom: "0%",
+        fontFamily: 'Montserrat-Medium'
+    },
+    darkLabelStyling: {
+        color: "#1A1A1A",
+        fontSize: 15,
         fontFamily: 'Montserrat-Medium'
     },
 

@@ -1,6 +1,7 @@
-import { Card, CardItem, Col, Container, Content, Grid, Input, Item, Row, Text, Textarea } from 'native-base';
+import { Card, CardItem, Col, Container,Button, Content, Grid, Input, Item, Row, Footer, View, Text, Textarea } from 'native-base';
 import React from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {default as MaterialIcon} from 'react-native-vector-icons/MaterialIcons';
 import { default as FeatherIcon } from 'react-native-vector-icons/SimpleLineIcons';
 import CheckBoxComponent from '../common/checkBoxComponent';
 import appConfig from '../common/config';
@@ -10,6 +11,7 @@ import HeaderComponent from '../common/headerComponent';
 import i18nMessages from '../common/i18n';
 import SpinnerComponent from '../common/spinnerComponent';
 import styleContent from './leadDetailsPageStyle';
+import { default as commonStyle } from '../common/commonStyling';
 
 
 
@@ -67,8 +69,11 @@ export default class LeadDetailsPage extends React.Component {
                     <Text style={styleContent.secondaryLabel}> STATUS</Text>
                   </Row>
                   <Row>
-                    <Col>
+                    <Col style={styleContent.colValue}>
                       <Text style={styleContent.primaryText}> [TODO: PENDING] </Text>
+                    </Col>
+                    <Col style={styleContent.colValueThird} >
+                      <View style={styleContent.approvedStatusCircle} />
                     </Col>
 
                   </Row>
@@ -94,11 +99,13 @@ export default class LeadDetailsPage extends React.Component {
             <CardItem>
               <Col>
                 <Grid>
-                  <Row>
+                  <Row >
                     <Text style={styleContent.secondaryLabel}> ESTIMATED BUDGET </Text>
                   </Row>
                   <Row>
-                    <Col>
+                    <Col style={{
+                      width: "50%"
+                    }}>
                       <Item >
                         <Input
                           style={styleContent.secondaryDarkText}
@@ -109,15 +116,19 @@ export default class LeadDetailsPage extends React.Component {
                         />
                       </Item>
                     </Col>
-                    <Col>
+                    <Col style={{
+                      marginTop: "3%",
+                      width: "30%",
+                      marginLeft: "10%"
+                    }}>
                       <DropDownComponent dataSource={appConfig.SUPPORTED_CURRENCY} />
                     </Col>
                   </Row>
-                  <Row>
+                  <Row style={styleContent.marginTopStyling}>
                     <Col>
                       <CheckBoxComponent checkBoxLabel={i18nMessages.lbl_assign_rep} />
                     </Col>
-                    <Col>
+                    <Col style={styleContent.marginTopStyling}>
                       <DropDownComponent dataSource={appConfig.SALES_REP_LIST} />
                     </Col>
                   </Row>
@@ -125,7 +136,7 @@ export default class LeadDetailsPage extends React.Component {
                     <Col>
                       <CheckBoxComponent checkBoxLabel={i18nMessages.lbl_modify_bu} />
                     </Col>
-                    <Col>
+                    <Col style={styleContent.marginTopStyling}>
                       <DropDownComponent dataSource={appConfig.BU_LIST} />
                     </Col>
                   </Row>
@@ -136,7 +147,14 @@ export default class LeadDetailsPage extends React.Component {
                   </Row>
                   <Row>
                     <Col>
-                      <Textarea rowSpan={5} bordered placeholder="Textarea" />
+                      <Textarea
+                        style={commonStyle.dynamicComponentTextAreaStyle}
+                        rowSpan={4}
+                        bordered
+                        placeholder="Lorem Ipsum is sim"
+                      />
+
+
                     </Col>
                   </Row>
                 </Grid>
@@ -151,7 +169,7 @@ export default class LeadDetailsPage extends React.Component {
 
   }
   getBusinessUnitInfo() {
-    const leadDetails = { "id": 1, "source": "Marketing", "custName": "shicv", "description": "dingDong", "leadContact": { "name": "dingdong", "email": "a@b.com", "phoneNumber": "9764007637", "country": "India", "state": "MH" }, "leadsSummaryRes": { "businessUnits": ["marketing", "sales"], "salesRep": "shivanshu", "industry": "it" }, "deleted": false, "creatorId": "123", "creationDate": "2019-06-04" };
+    const leadDetails = { "id": 1, "source": "Marketing", "custName": "shicv", "description": "dingDong", "leadContact": { "name": "dingdong", "email": "a@b.com", "phoneNumber": "9764007637", "country": "India", "state": "MH" }, "leadsSummaryRes": { "businessUnits": ["Spectro", "atlas"], "salesRep": "shivanshu", "industry": "it" }, "deleted": false, "creatorId": "123", "creationDate": "2019-06-04" };
     let returnedView;
     if (leadDetails && leadDetails.id && leadDetails.leadsSummaryRes && leadDetails.leadsSummaryRes.businessUnits) {
       let unitList = [];
@@ -195,7 +213,7 @@ export default class LeadDetailsPage extends React.Component {
 
 
   getSalesRepInfo() {
-    const leadDetails = { "id": 1, "source": "Marketing", "custName": "shicv", "description": "dingDong", "leadContact": { "name": "dingdong", "email": "a@b.com", "phoneNumber": "9764007637", "country": "India", "state": "MH" }, "leadsSummaryRes": { "businessUnits": ["marketing", "sales"], "salesRep": "shivanshu", "industry": "it" }, "deleted": false, "creatorId": "123", "creationDate": "2019-06-04" };
+    const leadDetails = { "id": 1, "source": "Marketing", "custName": "shicv", "description": "dingDong", "leadContact": { "name": "dingdong", "email": "a@b.com", "phoneNumber": "9764007637", "country": "India", "state": "MH" }, "leadsSummaryRes": { "businessUnits": ["marketing", "sales"], "salesRep": "Sunayna Rao", "industry": "it" }, "deleted": false, "creatorId": "123", "creationDate": "2019-06-04" };
     let returnedView;
     if (leadDetails && leadDetails.id && leadDetails.leadsSummaryRes) {
       returnedView = (
@@ -205,7 +223,7 @@ export default class LeadDetailsPage extends React.Component {
               <Col>
                 <Grid>
                   <Row>
-                    <Text style={styleContent.secondaryLabel}> SALES REP </Text>
+                    <Text style={styleContent.secondaryLabel}> Sales Reprentative </Text>
                   </Row>
                   <Row>
                     <Col>
@@ -229,7 +247,7 @@ export default class LeadDetailsPage extends React.Component {
 
   getContactInfo() {
     // const { spinner } = this.state;
-    const leadDetails = { "id": 1, "source": "Marketing", "custName": "shicv", "description": "dingDong", "leadContact": { "name": "Mr. Rajesh Kumar", "email": "a@b.com", "phoneNumber": "9764007637", "country": "India", "state": "MH" }, "leadsSummaryRes": { "businessUnits": ["marketing", "sales"], "salesRep": "shivanshu", "industry": "it" }, "deleted": false, "creatorId": "123", "creationDate": "2019-06-04" };
+    const leadDetails = { "id": 1, "source": "Marketing", "custName": "shicv", "description": "dingDong", "leadContact": { "name": "Mr. Rajesh Kumar", "email": "rkumar@rksolustions.com", "phoneNumber": "9896777716", "country": "India", "state": "MH" }, "leadsSummaryRes": { "businessUnits": ["marketing", "sales"], "salesRep": "shivanshu", "industry": "it" }, "deleted": false, "creatorId": "123", "creationDate": "2019-06-04" };
     let returnedView;
     if (leadDetails && leadDetails.id && leadDetails.leadContact) {
       returnedView = (
@@ -320,8 +338,13 @@ export default class LeadDetailsPage extends React.Component {
             {this.getStatusInfo()}
             {this.getActionsInfo()}
           </Grid>
+          <Footer>
+          <Button style={styleContent.addLeadFooter}>
+            <Text style={styleContent.addLeadFooterText}>UPDATE LEAD </Text>
+            <MaterialIcon name="arrow-forward" style={{ color: "white", fontSize: 20 }} />
+          </Button >
+          </Footer>
         </Content>
-        <FooterComponent />
         {this.getSpinnerComponentView()}
       </Container>
     );
