@@ -1,6 +1,7 @@
 import { Card, CardItem, Col, Container, Content, Grid, Input, Item, Row, Text, Textarea } from 'native-base';
 import React from 'react';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { default as FeatherIcon } from 'react-native-vector-icons/SimpleLineIcons';
 import CheckBoxComponent from '../common/checkBoxComponent';
 import appConfig from '../common/config';
 import DropDownComponent from '../common/dropdownComponent';
@@ -53,7 +54,7 @@ export default class LeadDetailsPage extends React.Component {
   }
 
   getStatusInfo() {
-    const leadDetails = { "id": 1, "source": "Marketing", "custName": "shicv", "description": "dingDong", "leadContact": { "name": "dingdong", "email": "a@b.com", "phoneNumber": "9764007637", "country": "India", "state": "MH" }, "leadsSummaryRes": { "businessUnits": ["marketing", "sales"], "salesRep": "shivanshu", "industry": "it" }, "deleted": false, "creatorId": "123", "creationDate": "2019-06-04" };
+    const leadDetails = { "id": 1, "source": "Marketing", "custName": "shicv", "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.", "leadContact": { "name": "dingdong", "email": "a@b.com", "phoneNumber": "9764007637", "country": "India", "state": "MH" }, "leadsSummaryRes": { "businessUnits": ["marketing", "sales"], "salesRep": "shivanshu", "industry": "it" }, "deleted": false, "creatorId": "123", "creationDate": "2019-06-04" };
     let returnedView;
     if (leadDetails && leadDetails.id && leadDetails.leadsSummaryRes) {
       returnedView = (
@@ -228,7 +229,7 @@ export default class LeadDetailsPage extends React.Component {
 
   getContactInfo() {
     // const { spinner } = this.state;
-    const leadDetails = { "id": 1, "source": "Marketing", "custName": "shicv", "description": "dingDong", "leadContact": { "name": "dingdong", "email": "a@b.com", "phoneNumber": "9764007637", "country": "India", "state": "MH" }, "leadsSummaryRes": { "businessUnits": ["marketing", "sales"], "salesRep": "shivanshu", "industry": "it" }, "deleted": false, "creatorId": "123", "creationDate": "2019-06-04" };
+    const leadDetails = { "id": 1, "source": "Marketing", "custName": "shicv", "description": "dingDong", "leadContact": { "name": "Mr. Rajesh Kumar", "email": "a@b.com", "phoneNumber": "9764007637", "country": "India", "state": "MH" }, "leadsSummaryRes": { "businessUnits": ["marketing", "sales"], "salesRep": "shivanshu", "industry": "it" }, "deleted": false, "creatorId": "123", "creationDate": "2019-06-04" };
     let returnedView;
     if (leadDetails && leadDetails.id && leadDetails.leadContact) {
       returnedView = (
@@ -241,24 +242,27 @@ export default class LeadDetailsPage extends React.Component {
                     <Text style={styleContent.secondaryLabel}> CONTACT </Text>
                   </Row>
                   <Row>
-                    <Col>
+                    <Col style={styleContent.colValue}>
                       <Text style={styleContent.primaryText}> {leadDetails.leadContact.name} </Text>
+                      <Text style={styleContent.secondaryTextDesignation}>  VP_DESIGNATION </Text>
                     </Col>
-                    <Col>
-                      <Text style={styleContent.secondaryText}> [TODO:] VP_DESIGNATION </Text>
-                    </Col>
+
                   </Row>
                   <Row>
                     <Text style={styleContent.secondaryText}> [TODO:] Basavanagudi, Apt-4, Shivaswamy, 080-26500744, RO Bangalore </Text>
                   </Row>
 
-                  <Row>
-                    <Icon name="email" style={styleContent.iconStyling} />
+                  <Row style={
+                    {
+                      marginBottom: "2%"
+                    }
+                  }>
+                    <Icon name="email-outline" style={styleContent.iconStyling} />
                     <Text style={styleContent.secondaryDarkText}> {leadDetails.leadContact.email} </Text>
                   </Row>
 
                   <Row>
-                    <Icon name="local-phone" style={styleContent.iconStyling} />
+                    <FeatherIcon name="phone" style={styleContent.iconStyling} />
                     <Text style={styleContent.secondaryDarkText}> {leadDetails.leadContact.phoneNumber} </Text>
                   </Row>
                 </Grid>
@@ -274,12 +278,12 @@ export default class LeadDetailsPage extends React.Component {
   }
   getCustomerInfo() {
     const { spinner } = this.state;
-    const leadDetails = { "id": 1, "source": "Marketing", "custName": "shicv", "description": "dingDong", "leadContact": { "name": "dingdong", "email": "a@b.com", "phoneNumber": "9764007637", "country": "India", "state": "MH" }, "leadsSummaryRes": { "businessUnits": ["marketing", "sales"], "salesRep": "shivanshu", "industry": "it" }, "deleted": false, "creatorId": "123", "creationDate": "2019-06-04" };
+    const leadDetails = { "id": 1, "source": "Marketing", "custName": "RekTech Pvt. Ltd", "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.", "leadContact": { "name": "dingdong", "email": "a@b.com", "phoneNumber": "9764007637", "country": "India", "state": "MH" }, "leadsSummaryRes": { "businessUnits": ["marketing", "sales"], "salesRep": "shivanshu", "industry": "it" }, "deleted": false, "creatorId": "123", "creationDate": "2019-06-04" };
     let returnedView;
     if (leadDetails && leadDetails.id) {
       returnedView = (
         <Row>
-          <Card style={styleContent.gridCardWrapper} >
+          <Card transparent style={styleContent.noCard} >
             <CardItem>
               <Col>
                 <Grid>
@@ -305,9 +309,8 @@ export default class LeadDetailsPage extends React.Component {
     return (
       <Container>
 
-        <HeaderComponent title="LeadDetails" showSideMenuBtn={true} sideMenuClickHandler={this.sideMenuClickHandler} />
+        <HeaderComponent title="Leads Detail" showSideMenuBtn={true} sideMenuClickHandler={this.sideMenuClickHandler} />
         <Content style={styleContent.mainContent}>
-          <Text> @Text2</Text>
           <Grid style={styleContent.gridWrapper} >
             {this.getCustomerInfo()}
 

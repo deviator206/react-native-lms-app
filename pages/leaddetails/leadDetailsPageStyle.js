@@ -11,49 +11,70 @@ const styleContent = StyleSheet.create({
         alignSelf: "center"
     },
     gridCardWrapper: {
-        width: "95%",
+        width: "90%",
         alignSelf: "center",
-        backgroundColor: "yellow"
+        marginTop: "5%",
+        marginLeft: "5%",
+        marginRight: "5%"
+    },
+    noCard:{
+        backgroundColor:"red",
+        width: "90%",
+        alignSelf: "center",
+        marginTop: "5%",
+        marginLeft: "5%",
+        marginRight: "5%"
     },
     customerName: {
         fontSize: 18,
-        fontFamily: 'Montserrat-Bold',
-        fontWeight: "bold",
-        color: "#000000"
+        fontFamily: 'Montserrat-SemiBold',
+        color: "#000000",
+        marginBottom:"3%"
     },
     requirement: {
         fontSize: 14,
-        fontFamily: 'Montserrat-Bold',
+        lineHeight:20,
+        fontFamily: 'Montserrat-Regular',
         color: "#616161"
     },
     secondaryLabel: {
-        fontSize: 12,
-        fontFamily: 'Montserrat-Bold',
-        color: "#616161"
+        fontSize: 14,
+        fontFamily: 'Montserrat-SemiBold',
+        color: "#616161",
+        marginBottom: "3%"
     },
-    secondaryLabel: {
+    secondaryTextDesignation:{
         fontSize: 12,
-        fontFamily: 'Montserrat-Bold',
-        color: "#616161"
+        fontFamily: 'Montserrat-Medium',
+        color: "#AEAEAE",
+        marginTop:"1%"
     },
     secondaryText: {
         fontSize: 12,
-        fontFamily: 'Montserrat-Bold',
-        color: "#AEAEAE"
+        lineHeight:18,
+        fontFamily: 'Montserrat-Medium',
+        color: "#AEAEAE",
+        marginBottom: "3%"
     }
     ,
     secondaryDarkText: {
         fontSize: 14,
-        fontFamily: 'Montserrat-Bold',
-        color: "#1A1A1A"
+        fontFamily: 'Montserrat-Medium',
+        color: "#1A1A1A",
+        marginLeft:"3%"
     }
     ,
+    colValue: {
+        flexDirection: 'row', 
+        flexWrap: 'wrap',
+        marginBottom:"2%"       
+    },
     iconStyling: {
-        fontSize: 25
+        fontSize: 20
     },
     primaryText: {
         fontSize: 18,
-        fontFamily: 'Montserrat-Bold',
+        fontFamily: 'Montserrat-Medium',
         color: "#1A1A1A"
     }
 

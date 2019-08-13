@@ -115,7 +115,7 @@ const AppNavigator = createStackNavigator({
     screen: SideMenuBar
   }
 }, {
-    initialRouteName: "viewlead",
+    initialRouteName: "leaddetails",
     mode: 'modal',
     headerMode: 'none',
     initialRouteParams: { someParam: 'Bonjour' }
