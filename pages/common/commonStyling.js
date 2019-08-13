@@ -29,10 +29,12 @@ const styleContent = StyleSheet.create({
     },
     tabNameStyling: {
         fontSize: 12,
+        fontFamily: 'Montserrat-Medium',
         color: "#616161"
     },
     tabIconStyling: {
-        color: "black",
+        color: "#616161",
+       
         fontSize: 25
     },
     dynamicComponentTextAreaStyle: {

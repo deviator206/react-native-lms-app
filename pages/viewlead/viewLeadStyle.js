@@ -2,61 +2,96 @@
 import { StyleSheet } from 'react-native';
 const styleContent = StyleSheet.create({
     mainContent: {
-        flex: 1
+        flex: 1,
+        backgroundColor: "#E8E8E8"
     },
-    iconStylingBigger:{
-        fontSize:35
+    iconStyling: {
+        fontSize: 20,
+        color: "#616161"
     },
-    iconStyling:{
-        fontSize:25
+    searchBarStyling: {
+        width: "90%",
+        alignSelf: "center",
+        backgroundColor: "white",
+        paddingLeft: "5%",
+        paddingRight: "5%",
+        borderColor: '#999999',
+
     },
-    searchBarStyling:{
-        width: "80%",
-        alignSelf:"center",
-        
-    },
-    searchBarWrapper:{
+    searchBarWrapper: {
         width: "90%",
     },
-    gridWrapper:{
-        width:"96%",
-        marginTop:"2%",
-        alignSelf:"center"
+    gridWrapper: {
+        width: "96%",
+        marginTop: "2%",
+        alignSelf: "center"
     },
-    gridCardWrapper:{
-        width:"95%",
-        alignSelf:"center",
-        backgroundColor:"yellow"
+    gridCardWrapper: {
+        width: "90%",
+        alignSelf: "center",
+        marginTop: "5%",
+        marginLeft: "5%",
+        marginRight: "5%"
     },
-    searchAndFilterWrapper:{
-        marginTop:"2%"
+    searchAndFilterWrapper: {
+        marginTop: "5%"
     },
-    colLabelOnly:{
-        width:"40%",
+    colLabelOnly: {
+        width: "40%",
     },
-    colValue:{
-        
+    colValue: {
+        flexDirection: 'row', flexWrap: 'wrap',
+        width:"55%"
     },
-    cardViewMainTitle:{
+    colValueThird: {
+       
+    },
+    cardViewMainTitle: {
         fontSize: 18,
-        fontFamily: 'Montserrat-Bold',
-        fontWeight:"bold",
-        color:"#000000"
+        fontFamily: 'Montserrat-SemiBold',
+        color: "#000000",
+        marginBottom: "3%"
     },
-    cardViewSecondaryInfo:{
+    cardViewSecondaryInfo: {
         fontSize: 14,
-        fontFamily: 'Montserrat-Bold',
-        color:"#AEAEAE"
+        fontFamily: 'Montserrat-Regular',
+        color: "#616161",
+        marginBottom: "3%"
     },
-    cardViewPrimaryLabel:{
+    cardViewPrimaryLabel: {
         fontSize: 14,
-        fontFamily: 'Montserrat-Bold',
-        color:"#616161"
+        fontFamily: 'Montserrat-Regular',
+        color: "#616161"
     },
-    cardViewPrimaryValue:{
+    cardViewPrimaryValue: {
         fontSize: 14,
-        fontFamily: 'Montserrat-Bold',
-        color:"#21A50E"
+        fontFamily: 'Montserrat-Medium',
+        color: "#1A1A1A"
+    },
+    approvedStatus: {
+        fontSize: 14,
+        fontFamily: 'Montserrat-Medium',
+        color: "#21A50E",
+        textTransform:"uppercase"
+    },
+    closedStatus: {
+        fontSize: 14,
+        fontFamily: 'Montserrat-Medium',
+        color: "#EC2227",
+        textTransform:"uppercase"
+    },
+    pendingStatus: {
+        fontSize: 14,
+        fontFamily: 'Montserrat-Medium',
+        color: "#F37C57",
+        textTransform:"uppercase"
+    },
+    approvedStatusCircle: {
+        width: 20,
+        height: 20,
+        borderRadius: 20/2,
+        backgroundColor: 'red',
+        
     }
 });
 export default styleContent;

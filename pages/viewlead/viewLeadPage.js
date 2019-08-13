@@ -1,9 +1,11 @@
-import { Button, Card, CardItem, Col, Container, Content, Grid, Input, Item, Row, Text } from 'native-base';
+import { Button, Card, CardItem, Col, Container, Content, Grid, Label, Input, Item, Row, Text } from 'native-base';
 import React from 'react';
 import { Alert, FlatList, Modal, TouchableHighlight, View } from 'react-native';
 import { default as FilterIcon } from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { default as EntypoIcon } from 'react-native-vector-icons/Entypo';
 import HeaderComponent from '../common/headerComponent';
+import FooterComponent from '../common/footerComponent';
 import styleContent from './viewLeadStyle';
 
 
@@ -14,6 +16,7 @@ export default class ViewLeadPage extends React.Component {
             filterVisible: false
         };
         this.filerBtnToggled = this.filerBtnToggled.bind(this);
+        this.getStatusClass =this.getStatusClass.bind(this);
     }
 
     filerBtnToggled() {
@@ -29,13 +32,25 @@ export default class ViewLeadPage extends React.Component {
         });
     }
 
+    getStatusClass(status) {
+        if(status && status.toUpperCase() === 'APPROVED'){
+            return styleContent.approvedStatus;
+        } else  if(status && status.toUpperCase() === 'CLOSED'){
+            return styleContent.closedStatus;
+        } else if(status && status.toUpperCase() === 'PENDING'){
+            return styleContent.pendingStatus;
+        }
+        return styleContent.cardViewSecondaryInfo;
+
+    }
+
     getViewLeads() {
         const dataR = [
             {
                 companyName: "CM Tek-3",
                 description: "This is likely happening when upgrading React Native from below 0.60 to 0.60 or above. Going forward",
                 contact: "RK Sharma",
-                status: "CLOSED",
+                status: "Approved",
                 salesRep: "Samir",
                 businessUnit: "Atlas",
                 lastUpdated: "12/4/2019",
@@ -44,7 +59,7 @@ export default class ViewLeadPage extends React.Component {
                 companyName: 'BM Sigma',
                 description: "This is likely happening when upgrading React Native from below 0.60 to 0.60 or above. Going forward",
                 contact: "Shrivastava",
-                status: "PENDING",
+                status: "Closed",
                 salesRep: "Sunayna",
                 businessUnit: "Spectro",
                 lastUpdated: "12/4/2019",
@@ -55,7 +70,7 @@ export default class ViewLeadPage extends React.Component {
                 companyName: 'Suraj Ent',
                 description: "This is likely happening when upgrading React Native from below 0.60 to 0.60 or above. Going forward",
                 contact: "Shrivastava",
-                status: "PENDING",
+                status: "Pending",
                 salesRep: "Sunayna",
                 businessUnit: "Spectro",
                 lastUpdated: "12/4/2019",
@@ -78,14 +93,14 @@ export default class ViewLeadPage extends React.Component {
             <FlatList
                 data={dataR}
                 renderItem={({ item }) =>
-                    <Row 
-                    button 
-                              onPress={()=>{
-                                this.props.navigation.navigate("leaddetails");
-                              }}
-                    > 
+                    <Row
+                        button
+                        onPress={() => {
+                            this.props.navigation.navigate("leaddetails");
+                        }}
+                    >
                         <Card style={styleContent.gridCardWrapper}
-                               >
+                        >
                             <CardItem>
                                 <Col>
                                     <Grid>
@@ -105,16 +120,23 @@ export default class ViewLeadPage extends React.Component {
 
                                             </Col>
                                             <Col style={styleContent.colValue} >
-                                                <Text style={styleContent.cardViewPrimaryValue} >: {item.contact}  </Text>
+                                            <Text style={styleContent.cardViewPrimaryValue} >:   </Text>
+                                                <Text style={styleContent.cardViewPrimaryValue} >{item.contact}  </Text>
                                             </Col>
                                         </Row>
                                         <Row>
                                             <Col style={styleContent.colLabelOnly} >
-                                                <Text style={styleContent.cardViewPrimaryLabel}  > Status </Text>
+                                                <Text style={
+                                                    styleContent.cardViewPrimaryLabel}  > Status </Text>
 
                                             </Col>
                                             <Col style={styleContent.colValue} >
-                                                <Text style={styleContent.cardViewPrimaryValue} >: {item.status}  </Text>
+                                            <Text style={styleContent.cardViewPrimaryValue} >:   </Text>
+                                                <Text style={this.getStatusClass(item.status)} > {item.status}  </Text>
+                                                
+                                            </Col>
+                                            <Col style={styleContent.colValueThird} >
+                                                <View style={styleContent.approvedStatusCircle} />
                                             </Col>
 
                                         </Row>
@@ -125,7 +147,8 @@ export default class ViewLeadPage extends React.Component {
 
                                             </Col>
                                             <Col style={styleContent.colValue} >
-                                                <Text style={styleContent.cardViewPrimaryValue} >: {item.salesRep}  </Text>
+                                            <Text style={styleContent.cardViewPrimaryValue} >:   </Text>
+                                                <Text style={styleContent.cardViewPrimaryValue} > {item.salesRep}  </Text>
                                             </Col>
                                         </Row>
                                         <Row>
@@ -134,7 +157,8 @@ export default class ViewLeadPage extends React.Component {
 
                                             </Col>
                                             <Col style={styleContent.colValue} >
-                                                <Text style={styleContent.cardViewPrimaryValue} >: {item.businessUnit}  </Text>
+                                            <Text style={styleContent.cardViewPrimaryValue} >:   </Text>
+                                                <Text style={styleContent.cardViewPrimaryValue} > {item.businessUnit}  </Text>
                                             </Col>
 
                                         </Row>
@@ -144,7 +168,8 @@ export default class ViewLeadPage extends React.Component {
 
                                             </Col>
                                             <Col style={styleContent.colValue} >
-                                                <Text style={styleContent.cardViewPrimaryValue} >: {item.lastUpdated}  </Text>
+                                            <Text style={styleContent.cardViewPrimaryValue} >:   </Text>
+                                                <Text style={styleContent.cardViewPrimaryValue} > {item.lastUpdated}  </Text>
                                             </Col>
 
                                         </Row>
@@ -153,7 +178,8 @@ export default class ViewLeadPage extends React.Component {
                                                 <Text style={styleContent.cardViewPrimaryLabel}  > Inactive Days </Text>
                                             </Col>
                                             <Col style={styleContent.colValue} >
-                                                <Text style={styleContent.cardViewPrimaryValue} >: {item.inactiveDays}  </Text>
+                                            <Text style={styleContent.cardViewPrimaryValue} >:   </Text>
+                                                <Text style={styleContent.cardViewPrimaryValue} > {item.inactiveDays}  </Text>
                                             </Col>
                                         </Row>
                                     </Grid>
@@ -178,8 +204,17 @@ export default class ViewLeadPage extends React.Component {
                     <Grid >
                         <Row style={styleContent.searchAndFilterWrapper}>
                             <Col style={styleContent.searchBarWrapper} >
-                                <Item searchBar rounded style={styleContent.searchBarStyling}>
-                                    <Input placeholder="Search" />
+                                <Item searchBar
+                                    rounded
+                                    style={styleContent.searchBarStyling}>
+                                    <Input
+                                        placeholder="Search"
+                                        style={{
+                                            fontSize: 14,
+                                            fontFamily: 'Montserrat-Regular',
+                                            color: "#616161"
+                                        }}
+                                    />
                                     <Icon name="search" style={styleContent.iconStyling} />
                                 </Item>
                             </Col>
@@ -193,7 +228,7 @@ export default class ViewLeadPage extends React.Component {
 
                                     }
                                 >
-                                    <FilterIcon name="filter-outline" style={styleContent.iconStylingBigger} />
+                                    <EntypoIcon name="sound-mix" style={styleContent.iconStyling} />
                                 </Button>
                             </Col>
                         </Row>
@@ -203,6 +238,7 @@ export default class ViewLeadPage extends React.Component {
                         {this.getViewLeads()}
                     </Grid>
                 </Content>
+                <FooterComponent />
 
                 <Modal
                     animationType="slide"
@@ -215,18 +251,18 @@ export default class ViewLeadPage extends React.Component {
                         <Grid style={{ width: '96%', backgroundColor: 'white', marginTop: 10, padding: 10 }}>
                             <Row><Col><Text note>Status</Text></Col><Col><Text note>Tenure</Text></Col></Row>
                             <Row>
-                                <Col> 
-                                <Text>Hello World!</Text>
-                                 </Col>
-                                <Col> 
-                                <Text>Hello World!</Text> 
+                                <Col>
+                                    <Text>Hello World!</Text>
+                                </Col>
+                                <Col>
+                                    <Text>Hello World!</Text>
                                 </Col>
                             </Row>
                         </Grid>
                         <View style={{ marginTop: 22 }}>
 
                             <View>
-                                
+
 
                                 <TouchableHighlight
                                     onPress={() => {

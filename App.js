@@ -68,7 +68,7 @@ const SideDrawerNavigator = createDrawerNavigator(
   {
     drawerPosition: "left",
     contentComponent: props => <SideMenuBar {...props} />,
-    initialRouteName: "login",
+    initialRouteName: "viewlead",
     mode: 'modal',
     headerMode: 'none',
     initialRouteParams: { someParam: 'Bonjour' }
@@ -115,7 +115,7 @@ const AppNavigator = createStackNavigator({
     screen: SideMenuBar
   }
 }, {
-    initialRouteName: "addlead",
+    initialRouteName: "viewlead",
     mode: 'modal',
     headerMode: 'none',
     initialRouteParams: { someParam: 'Bonjour' }
