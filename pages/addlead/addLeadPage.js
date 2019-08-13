@@ -14,15 +14,15 @@ const refDataApi = new RefDataApi();
  class AddLeadPage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
+    this.state= {
       spinner: false,
       selectedSource: undefined,
       selectedTenure: undefined,
-      currentSelectedBU: undefined,
+      currentSelectedBU: appConfig.BU_LIST[0],
       selectedBuList: [],
       isSelfApproved: false,
       leadAddedDate: new Date(2018, 4, 4)
-    }
+    };
     this.getSpinnerComponentView = this.getSpinnerComponentView.bind(this);
     this.getHeaderSection = this.getHeaderSection.bind(this);
     this.onSourceChanged = this.onSourceChanged.bind(this);
@@ -40,8 +40,7 @@ const refDataApi = new RefDataApi();
   }
 
   componentDidMount() {
-    console.log("DIDmount ...... ", this.props)
-    this.props.loadRefData()
+    this.props.loadRefData();
     this.setState({
       spinner: false,
       selectedSource: undefined,
@@ -387,7 +386,7 @@ const refDataApi = new RefDataApi();
   }
 
   onSelfApprovedClicked() {
-    const { isSelfApproved } = this.state;
+    const { isSelfApproved = false } = this.state;
     this.setState({
       isSelfApproved: !isSelfApproved
     });
@@ -395,7 +394,7 @@ const refDataApi = new RefDataApi();
   }
 
   getViewForSelfApproval() {
-    const { isSelfApproved } = this.state;
+    const { isSelfApproved = false  } = this.state;
     const selfApprovalCheckbox = (
       <Col>
         <ListItem
@@ -436,7 +435,7 @@ const refDataApi = new RefDataApi();
   }
 
   render() {
-    const { isSelfApproved } = this.state;
+    const { isSelfApproved = false } = this.state;
     return (
       <Container style={styleContent.container}>
         {this.getHeaderSection()}
@@ -449,11 +448,13 @@ const refDataApi = new RefDataApi();
                     <Text note style={styleContent.labelStyling}>{i18nMessages.date_label}</Text>
                   </Col>
                   <Col>
+
                     <Text note style={styleContent.labelStyling} >{i18nMessages.source_type}</Text>
                   </Col>
                 </Row>
                 <Row>
                   <Col>
+                   
                     {this.getDatePickerView()}
                   </Col>
                   <Col>
@@ -651,9 +652,9 @@ function mapDispatchToProps(dispatch) {
   return {
     loadRefData: () => {
       refDataApi.fetchRefData({
-        params:"type=CURRENCY,TENURE"
+        params:"type=SOURCE,CURRENCY,TENURE,COUNTRY,INDUSTRY,BU"
       }) .then((resp)=>{
-        dispatch({type:'FETCH_REF_DATA',id:1121})
+        dispatch({type:'FETCH_REF_DATA',id:1121,data:resp})
       }).catch((resp) => {
         console.log(resp)
       })

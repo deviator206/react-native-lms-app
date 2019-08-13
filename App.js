@@ -75,6 +75,7 @@ const SideDrawerNavigator = createDrawerNavigator(
   }
 );
 
+
 const AppNavigator = createStackNavigator({
   bootstap: {
     screen: AppBootstrap,
@@ -122,6 +123,7 @@ const AppNavigator = createStackNavigator({
 const AppContainer = createAppContainer(AppNavigator);
 
 
+const newStore = configureStore({});
 class App extends React.Component {
   componentDidMount() {
     //  SplashScreen.hide();
@@ -129,7 +131,7 @@ class App extends React.Component {
   }
   render() {
     return (
-      <Provider store={ configureStore({}) }>
+      <Provider store={ newStore }>
       <AppContainer />
      </Provider>
     );
