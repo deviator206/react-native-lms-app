@@ -33,7 +33,7 @@ class AuthenticationApi {
             }
         }).catch((err) => {
             if (errorHandler) {
-                errorHandler(err.response.data)
+                errorHandler({message:"NORMALIZED ERROR",error:"FORBIDDEN"})
             }
         })
     }

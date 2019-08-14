@@ -10,7 +10,7 @@ const SERVICE_URL = {
 }
 
 const axiosInstance = axios.create({
-    timeout: 1000,
+    timeout: 6000,
     baseURL: SERVER_CONFIG.hostPort + SERVER_CONFIG.basePath,
     headers: {
         Accept: 'application/json',

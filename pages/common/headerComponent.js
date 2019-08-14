@@ -2,12 +2,14 @@ import { Button, Header, Left, Right, Title, View } from 'native-base';
 import React from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { default as MaterialCommunityIcon } from 'react-native-vector-icons/MaterialCommunityIcons';
+import {default as MaterialIcon} from 'react-native-vector-icons/MaterialIcons';
 import styleContent from './commonStyling';
 
 export default class HeaderComponent extends React.Component {
     constructor(props) {
         super(props);
         this.getSideMenuViews = this.getSideMenuViews.bind(this);
+        this.getHamburgerIcon = this.getHamburgerIcon.bind(this);
     }
 
     getSideMenuViews() {
@@ -25,6 +27,14 @@ export default class HeaderComponent extends React.Component {
         }
     }
 
+    getHamburgerIcon() {
+        const {hamburger = false} = this.props;
+        if(hamburger) {
+            return <MaterialIcon name='menu' style={{ color: "white",  fontSize:25 }} />
+        }
+        return <Icon name="ios-arrow-back" style={{ color: "white", fontSize: 35 }} />;
+    }
+
     render() {
         const { title, previousPage, showSideMenuBtn = false } = this.props;
         console.log(previousPage);
@@ -32,7 +42,7 @@ export default class HeaderComponent extends React.Component {
             <Header style={styleContent.headerSection} hasTabs>
                 <Left>
                     <Button transparent onPress={() => this.props.navigation.goBack()}>
-                        <Icon name="ios-arrow-back" style={{ color: "white", fontSize: 35 }} />
+                        {this.getHamburgerIcon()}
                     </Button>
                 </Left>
                 <View style={styleContent.headerTitleWrapper}>

@@ -1,7 +1,9 @@
-import { Body, Button, Card, Col, Container, Content, Footer, FooterTab, Grid, Header, Item, Left, Picker, Right, Row, Text, Title, View } from 'native-base';
+import { Button, Card, Col, Container, Content, Grid, Item, Picker, Row, Text, View } from 'native-base';
 import React from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import appConfig from '../common/config';
+import FooterComponent from '../common/footerComponent';
+import HeaderComponent from '../common/headerComponent';
 import SpinnerComponent from '../common/spinnerComponent';
 import styleContent from './dashboardStyle';
 
@@ -29,34 +31,7 @@ export default class DashboardPage extends React.Component {
     }
 
     getFooterTab() {
-        return (<Footer >
-            <FooterTab style={styleContent.footerSection}>
-                <Button vertical style={styleContent.footerSingleTab}>
-                    <Icon name="home" style={styleContent.tabIconStyling} />
-                    <Text style={styleContent.tabNameStyling}>Home</Text>
-                </Button >
-                <Button vertical 
-                onPress={
-                    () => {
-                        this.props.navigation.navigate("viewlead");
-                    }
-                }
-                
-                style={styleContent.footerSection} >
-                    <Icon name="view-list" style={styleContent.tabIconStyling} />
-                    <Text style={styleContent.tabNameStyling}> View Lead</Text>
-                </Button>
-                <Button onPress={
-                    () => {
-                        console.log(" menu clicked");
-                        this.props.navigation.push('addlead');
-                    }
-                } vertical style={styleContent.footerSection} >
-                    <Icon name="note-add" style={styleContent.tabIconStyling} />
-                    <Text style={styleContent.tabNameStyling}>Add Lead</Text>
-                </Button>
-            </FooterTab>
-        </Footer>)
+        return (<FooterComponent  {...this.props} disableHome={true} />)
     }
 
     componentDidMount() {
@@ -70,28 +45,30 @@ export default class DashboardPage extends React.Component {
             case 'BU_NAME':
                 appConfig.BU_LIST.forEach(singleItem => {
                     pickerItemArr.push(
-                        (<Picker.Item 
+                        (<Picker.Item
                             label={singleItem}
                             style={{
-                                backgroundColor:"red"
+                                backgroundColor: "red"
                             }}
-
                             value={singleItem} />)
                     )
                 });
                 returnedView = (
-                    <Item picker >
+                    <Item picker
+
+                    >
                         <Picker
                             style={
                                 {
-                                    borderRadius: 80, 
-                                    borderWidth: 10, 
+                                    borderRadius: 80,
+                                    borderWidth: 10,
                                     borderColor: 'red',
-                                    
                                     backgroundColor: "#707070"
                                 }
                             }
                             mode="dropdown"
+                            textStyle={{ color: "#d3d3d3" }}
+                            itemTextStyle={{ color: '#d3d3d3' }}
                             iosIcon={<Icon name="arrow-down" />}
                         >
                             {pickerItemArr}
@@ -109,7 +86,13 @@ export default class DashboardPage extends React.Component {
     }
 
     getHeaderSection() {
-        return (
+
+        return (<HeaderComponent title="Dashboard" showSideMenuBtn={true} hamburger={true} sideMenuClickHandler={() => {
+            alert("TEST")
+        }} />);
+
+        /*
+          return (
             <Header style={styleContent.headerSection}>
                 <Left>
                     <Button
@@ -127,7 +110,8 @@ export default class DashboardPage extends React.Component {
                 <Right />
             </Header>
 
-        )
+        )*/
+
     }
 
     render() {
@@ -170,7 +154,7 @@ export default class DashboardPage extends React.Component {
 
                             <Row>
                                 <Col style={{
-                                    marginRight:"5%"
+                                    marginRight: "5%"
                                 }}>
                                     <Text note style={styleContent.labelStyling}  > Originator BU</Text>
                                     {this.getDropdownFor('BU_NAME')}
@@ -192,7 +176,7 @@ export default class DashboardPage extends React.Component {
 
                             <Row>
                                 <Col style={{
-                                    marginRight:"5%"
+                                    marginRight: "5%"
                                 }}>
                                     <Text note style={styleContent.labelStyling}  >Start Date</Text>
                                     {this.getDropdownFor('BU_NAME')}
@@ -202,23 +186,15 @@ export default class DashboardPage extends React.Component {
                                     {this.getDropdownFor('BU_NAME')}
                                 </Col>
                             </Row>
-                            <Row>
-                                <Col>
-                                    <Button transparent style={{
-                                        backgroundColor: "red",
-                                        borderRadius: 20,
-                                        alignSelf: "center",
-                                        marginTop: "2%"
+                            <Row style={
+                                    {
+                                        marginTop: "5%"
                                     }
-
-                                    }>
-                                        <Text style={
-                                            {
-                                                color: "white",
-                                                fontSize: 14
-
-                                            }
-                                        }> REFINE RESULTS</Text>
+                                }>
+                                <Col >
+                                    <Button transparent
+                                        style={styleContent.roundedButton}>
+                                        <Text style={styleContent.roundedButtonText}> REFINE RESULTS</Text>
                                     </Button>
                                 </Col>
                             </Row>
@@ -226,21 +202,26 @@ export default class DashboardPage extends React.Component {
                             <Row>
                                 <Col style={{
                                     alignItems: "center",
-                                    marginTop: "2%"
+                                    marginTop: "8%",
+                                    marginBottom: "5%"
                                 }}
                                 >
                                     <Text style={
                                         {
                                             color: "#44C1EE",
-                                            fontSize: 45
+                                            fontSize: 47,
+                                            lineHeight: 50,
+                                            fontStyle: "Montserrat-Medium",
+                                            textTransform: "uppercase"
 
                                         }
                                     }> 6752</Text>
                                     <Text style={
                                         {
                                             color: "#FFFFFF",
-                                            fontSize: 22
-
+                                            fontSize: 19,
+                                            fontStyle: "Montserrat-SemiBold",
+                                            textTransform: "uppercase"
                                         }
                                     }> TOTAL LEADS</Text>
 
@@ -251,15 +232,9 @@ export default class DashboardPage extends React.Component {
                                 <Col >
                                     <Card style={styleContent.cardStyling}>
                                         <View >
-                                            <Text style={{
-                                                color: "#AEAEAE",
-                                                fontSize: 14
-                                            }}>
+                                            <Text style={styleContent.cardHeader}>
                                                 Approved Lead</Text>
-                                            <Text style={{
-                                                color: "#8BBF45",
-                                                fontSize: 40
-                                            }}>
+                                            <Text style={styleContent.approvedValue}>
                                                 131</Text>
                                         </View>
                                     </Card>
@@ -269,16 +244,10 @@ export default class DashboardPage extends React.Component {
                                 <Col >
                                     <Card style={styleContent.cardStyling}>
                                         <View >
-                                            <Text style={{
-                                                color: "#AEAEAE",
-                                                fontSize: 14
-                                            }}>
+                                            <Text style={styleContent.cardHeader}>
                                                 Rejected Lead</Text>
-                                            <Text style={{
-                                                color: "#616161",
-                                                fontSize: 40
-                                            }}>
-                                                131</Text>
+                                            <Text style={styleContent.rejectedValue}>
+                                                78</Text>
                                         </View>
                                     </Card>
 
@@ -292,16 +261,10 @@ export default class DashboardPage extends React.Component {
                                 <Col >
                                     <Card style={styleContent.cardStyling}>
                                         <View >
-                                            <Text style={{
-                                                color: "#AEAEAE",
-                                                fontSize: 14
-                                            }}>
-                                                Approved Lead</Text>
-                                            <Text style={{
-                                                color: "#8BBF45",
-                                                fontSize: 40
-                                            }}>
-                                                131</Text>
+                                            <Text style={styleContent.cardHeader}>
+                                                Assigned Lead</Text>
+                                            <Text style={styleContent.closedValue}>
+                                                45</Text>
                                         </View>
                                     </Card>
 
@@ -310,41 +273,25 @@ export default class DashboardPage extends React.Component {
                                 <Col >
                                     <Card style={styleContent.cardStyling}>
                                         <View >
-                                            <Text style={{
-                                                color: "#AEAEAE",
-                                                fontSize: 14
-                                            }}>
-                                                Rejected Lead</Text>
-                                            <Text style={{
-                                                color: "#616161",
-                                                fontSize: 40
-                                            }}>
-                                                131</Text>
+                                            <Text style={styleContent.cardHeader}>
+                                                Pending Lead</Text>
+                                            <Text style={styleContent.pendingValue}>
+                                                55</Text>
                                         </View>
                                     </Card>
 
                                 </Col>
                             </Row>
-                            <Row>
-                                <Col>
-                                            <Right>
-                                    <Button transparent style={{
-                                        backgroundColor: "red",
-                                        borderRadius: 20,
-                                        alignSelf: "center",
-                                        marginTop: "2%"
+                            <Row style={
+                                    {
+                                        marginTop: "5%"
                                     }
-
-                                    }>
-                                        <Text style={
-                                            {
-                                                color: "white",
-                                                fontSize: 14
-
-                                            }
-                                        }> EXTRACT REPORT</Text>
+                                }>
+                                <Col >
+                                <Button transparent
+                                        style={styleContent.roundedButton}>
+                                        <Text style={styleContent.roundedButtonText}> Extract RESULTS</Text>
                                     </Button>
-                                    </Right>
                                 </Col>
                             </Row>
 

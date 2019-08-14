@@ -1,17 +1,16 @@
-import { Card, CardItem, Col, Container,Button, Content, Grid, Input, Item, Row, Footer, View, Text, Textarea } from 'native-base';
+import { Button, Card, CardItem, Col, Container, Content, Footer, Grid, Input, Item, Row, Text, Textarea, View } from 'native-base';
 import React from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {default as MaterialIcon} from 'react-native-vector-icons/MaterialIcons';
+import { default as MaterialIcon } from 'react-native-vector-icons/MaterialIcons';
 import { default as FeatherIcon } from 'react-native-vector-icons/SimpleLineIcons';
 import CheckBoxComponent from '../common/checkBoxComponent';
+import { default as commonStyle } from '../common/commonStyling';
 import appConfig from '../common/config';
 import DropDownComponent from '../common/dropdownComponent';
-import FooterComponent from '../common/footerComponent';
 import HeaderComponent from '../common/headerComponent';
 import i18nMessages from '../common/i18n';
 import SpinnerComponent from '../common/spinnerComponent';
 import styleContent from './leadDetailsPageStyle';
-import { default as commonStyle } from '../common/commonStyling';
 
 
 

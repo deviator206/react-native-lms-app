@@ -1,11 +1,10 @@
-import { Button, Card, CardItem, Col, Container, Content, Grid, Label, Input, Item, Row, Text } from 'native-base';
+import { Button, Card, CardItem, Col, Container, Content, Grid, Input, Item, Row, Text } from 'native-base';
 import React from 'react';
 import { Alert, FlatList, Modal, TouchableHighlight, View } from 'react-native';
-import { default as FilterIcon } from 'react-native-vector-icons/MaterialCommunityIcons';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import { default as EntypoIcon } from 'react-native-vector-icons/Entypo';
-import HeaderComponent from '../common/headerComponent';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import FooterComponent from '../common/footerComponent';
+import HeaderComponent from '../common/headerComponent';
 import styleContent from './viewLeadStyle';
 
 
@@ -238,7 +237,7 @@ export default class ViewLeadPage extends React.Component {
                         {this.getViewLeads()}
                     </Grid>
                 </Content>
-                <FooterComponent />
+                <FooterComponent  {...this.props} disableView={true} />
 
                 <Modal
                     animationType="slide"
