@@ -323,6 +323,7 @@ export default class LeadDetailsPage extends React.Component {
   }
 
   render() {
+    // {this.getActionsInfo()}
     return (
       <Container>
 
@@ -335,7 +336,7 @@ export default class LeadDetailsPage extends React.Component {
             {this.getSalesRepInfo()}
             {this.getBusinessUnitInfo()}
             {this.getStatusInfo()}
-            {this.getActionsInfo()}
+            
           </Grid>
           <Footer>
           <Button style={styleContent.addLeadFooter}>
