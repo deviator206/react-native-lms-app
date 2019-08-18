@@ -17,7 +17,7 @@ export default class FooterComponent extends React.Component {
                         onPress={
                             () => {
                                 if (!disableHome) {
-                                    this.props.navigation.push("dashboard");
+                                    this.props.navigation.navigate("dashboard");
                                 }
                             }
                         }
@@ -29,7 +29,7 @@ export default class FooterComponent extends React.Component {
                         onPress={
                             () => {
                                 if (!disableView) {
-                                    this.props.navigation.push("viewlead");
+                                    this.props.navigation.navigate("viewlead");
                                 }
                             }
                         }
@@ -40,7 +40,7 @@ export default class FooterComponent extends React.Component {
                     <Button onPress={
                         () => {
                             if (!disableAdd) {
-                                this.props.navigation.push("addlead");
+                                this.props.navigation.navigate("addlead");
                             }
                         }
                     } vertical style={styleContent.footerSection} >

@@ -1,12 +1,12 @@
-import { Body, Button, Card, View, CardItem, CheckBox, Col, Container, Content, DatePicker, Footer, Grid, Input, Item, Label, ListItem, Picker, Row, Text, Textarea } from 'native-base';
+import { Body, Button, Card, CardItem, CheckBox, Col, Container, Content, DatePicker, Footer, Grid, Input, Item, Label, ListItem, Picker, Row, Text, Textarea } from 'native-base';
 import React from 'react';
 import { default as FeatherIcon } from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { connect } from 'react-redux';
 import RefDataApi from '../../services/RefDataApi';
 import { default as commonStyle } from '../common/commonStyling';
-import DropDownComponent from '../common/dropdownComponent';
 import appConfig from '../common/config';
+import DropDownComponent from '../common/dropdownComponent';
 import HeaderComponent from '../common/headerComponent';
 import i18nMessages from '../common/i18n';
 import SpinnerComponent from '../common/spinnerComponent';
@@ -41,21 +41,39 @@ class AddLeadPage extends React.Component {
     this.onBuSelectionConfirmed = this.onBuSelectionConfirmed.bind(this);
     this.updateBuRmoval = this.updateBuRmoval.bind(this);
     this.onSelfApprovedClicked = this.onSelfApprovedClicked.bind(this);
+
+    this.onResponseFromReferenceData = this.onResponseFromReferenceData.bind(this);
+    this.onErrorResponseFromReferenceData = this.onErrorResponseFromReferenceData.bind(this);
+
   }
 
-  componentDidMount() {
-
-    this.props.loadRefData().then((resp) => {
-      this.props.dispatchAction({ type: 'FETCH_REF_DATA', data: resp });
-      this.setState({
-        spinner: false,
-      });
-    }).catch((resp) => {
-      console.log(resp)
-      this.setState({
-        spinner: false,
-      });
+  onResponseFromReferenceData(resp) {
+    console.log("[onResponseFromReferenceData] ", resp)
+    this.setState({
+      spinner: false,
+      referenceData: resp
     });
+  }
+  onErrorResponseFromReferenceData(resp) {
+    console.log("[onErrorResponseFromReferenceData] ", resp)
+    this.setState({
+      spinner: false
+    });
+  }
+  componentDidMount() {
+    this.props.loadRefData().then(this.onResponseFromReferenceData).catch(this.onErrorResponseFromReferenceData);
+
+    // this.props.loadRefData().then((resp) => {
+    //   // this.props.dispatchAction({ type: 'FETCH_REF_DATA', dataResp: {  data: resp.data, query:  "type=SOURCE,CURRENCY,TENURE,COUNTRY,INDUSTRY,BU" } });
+    //   this.setState({
+    //     spinner: false,
+    //     referenceData: resp
+    //   });
+    // }).catch((resp) => {
+    //   this.setState({
+    //     spinner: false,
+    //   });
+    // });
     this.setState({
       spinner: true,
       selectedSource: undefined,
@@ -116,7 +134,7 @@ class AddLeadPage extends React.Component {
   }
   getSpinnerComponentView() {
     const { spinner } = this.state;
-    console.log(spinner)
+
     const loaderView = (<SpinnerComponent />);
     const nonLoaderView = null;
     if (spinner) {
@@ -148,42 +166,63 @@ class AddLeadPage extends React.Component {
     )
   }
 
-
-
   getDropdownFor(type) {
-    let returnedView = '';
+    const { referenceData = {} } = this.state;
+    let returnedView = null;
     let dataSource = [];
+
+    console.log("[getDropdownFor] ", type, "::referenceData::", referenceData);
     switch (type) {
       case 'TENURE':
-        dataSource = appConfig.LEAD_TENURE;
+        dataSource = (referenceData && referenceData['TENURE']) ? referenceData['TENURE'] : [];
+        returnedView = <DropDownComponent dataSource={dataSource} />;
         break;
       case 'SOURCE_TYPE':
-        dataSource = appConfig.LEAD_SOURCE_TYPE;
+        dataSource = (referenceData && referenceData['SOURCE']) ? referenceData['SOURCE'] : [];
+        returnedView = <DropDownComponent dataSource={dataSource} />;
         break;
-      case 'SALES_REP':
+      case 'SALES_REP1':
         dataSource = appConfig.SALES_REP_LIST;
+        returnedView = <DropDownComponent dataSource={dataSource} />;
         break;
       case 'CURRENCY':
-        dataSource = appConfig.SUPPORTED_CURRENCY;
+        dataSource = (referenceData && referenceData['CURRENCY']) ? referenceData['CURRENCY'] : [];
+        returnedView = <DropDownComponent dataSource={dataSource} />;
         break;
       case 'INDUSTRY':
-        dataSource = appConfig.INDUSTRY_LIST;
+        dataSource = (referenceData && referenceData['INDUSTRY']) ? referenceData['INDUSTRY'] : [];
+        returnedView = <DropDownComponent dataSource={dataSource} />;
         break;
       case 'BU_NAME':
-        dataSource = appConfig.BU_LIST;
+        dataSource = (referenceData && referenceData['BU']) ? referenceData['BU'] : [];
+        returnedView = <DropDownComponent dataSource={dataSource} />;
         break;
       case 'COUNTRY':
-        dataSource = ["INDIA", "USA"];
-
+        dataSource = (referenceData && referenceData['COUNTRY']) ? referenceData['COUNTRY'] : [];
+        returnedView = <DropDownComponent dataSource={dataSource} />;
         break;
       case 'STATE':
-        dataSource = ["PUNJAB", "MAH"];
+        dataSource = (referenceData && referenceData['STATE']) ? referenceData['STATE'] : [];
+        returnedView = <DropDownComponent dataSource={dataSource} />;
         break;
       default:
+        returnedView = (
+          <Item picker>
+            <Picker
+              mode="dropdown"
+              iosIcon={<Icon name="arrow-down" />}
+              style={styleContent.dynamicComponentTextStyle}
+              selectedValue={this.state.selectedSource}
+              placeholderStyle={styleContent.dynamicComponentTextStyle}
+              onValueChange={this.onSourceChanged.bind(this)}
+              placeholderIconColor="#007aff"
+            >
+              <Picker.Item label="RANDOM" style={styleContent.dynamicComponentTextStyle} value="key0" />
+              <Picker.Item label="CHECK THIS" value="key1" />
+            </Picker>
+          </Item>);
         break;
     }
-
-    returnedView = <DropDownComponent dataSource={dataSource} />;
     return returnedView;
 
   }
@@ -418,34 +457,34 @@ class AddLeadPage extends React.Component {
     this.setState({
       isSelfApproved: !isSelfApproved
     });
-    console.log(isSelfApproved)
+
   }
 
   getViewForSelfApproval() {
     const { isSelfApproved = false } = this.state;
     const selfApprovalCheckbox = (
-      <Col 
-      style={{
-        width:"50%",
-      }}
+      <Col
+        style={{
+          width: "50%",
+        }}
       >
         <ListItem
-        style={{
-          padding:"0%",
-         
-        }}
+          style={{
+            padding: "0%",
+
+          }}
           button
           onPress={() => {
             this.onSelfApprovedClicked();
           }}
         >
           <CheckBox checked={isSelfApproved} color="black" style={{
-            paddingLeft:"0%",
+            paddingLeft: "0%",
             marginLeft: "0%"
 
           }} />
           <Body>
-            <Text style={commonStyle.labelStyling} 
+            <Text style={commonStyle.labelStyling}
             >{i18nMessages.lbl_self_approved} </Text>
           </Body>
         </ListItem>
@@ -453,10 +492,10 @@ class AddLeadPage extends React.Component {
 
     );
     const saleRepSelection = (
-      <Col 
-      style={{
-        width:"50%"
-      }}
+      <Col
+        style={{
+          width: "50%"
+        }}
       >
         <Text note style={commonStyle.labelStyling} >{i18nMessages.lbl_select_rep} </Text>
         <Item >
@@ -484,9 +523,8 @@ class AddLeadPage extends React.Component {
   }
 
   render() {
-    const { isSelfApproved = false } = this.state;
-    const { ref_info } = this.props;
-    console.log(ref_info);
+    const { isSelfApproved = false, referenceData = {} } = this.state;
+    console.log("REF DATA ", referenceData);
     return (
       <Container style={styleContent.container}>
         {this.getHeaderSection()}
@@ -565,7 +603,6 @@ class AddLeadPage extends React.Component {
                     </Item>
                   </Col>
                 </Row>
-
                 <Row><Col><Text note style={commonStyle.sectionTitle} >{i18nMessages.lbl_contact_info}</Text></Col></Row>
                 <Row>
                   <Col>
@@ -586,7 +623,6 @@ class AddLeadPage extends React.Component {
                     </Item>
                   </Col>
                 </Row>
-
                 <Row>
                   <Col>
                     <Label style={commonStyle.labelStyling} >
@@ -727,9 +763,9 @@ class AddLeadPage extends React.Component {
                     </Item>
                   </Col>
                 </Row>
+
+                
                 {this.getViewForSelfApproval()}
-
-
               </Grid>
 
             </CardItem>
@@ -755,9 +791,22 @@ class AddLeadPage extends React.Component {
 // (send) an action so that the reducer can update the Redux state.
 function mapDispatchToProps(dispatch) {
   return {
-    loadRefData: async () => {
-      await refDataApi.fetchRefData({
+    loadRefData: () => {
+      return refDataApi.fetchRefData({
         params: "type=SOURCE,CURRENCY,TENURE,COUNTRY,INDUSTRY,BU"
+      }).then(result => {
+        const refInfo = {};
+        if (result && result.data) {
+          result.data.forEach((element) => {
+            if (element && element.type) {
+              if (!refInfo[element.type]) {
+                refInfo[element.type] = [];
+              }
+              refInfo[element.type].push(element);
+            }
+          });
+        }
+        return refInfo;
       });
     },
     dispatchAction: (param) => {
@@ -771,8 +820,7 @@ function mapDispatchToProps(dispatch) {
 // As the count value in the Redux state
 function mapStateToProps(state) {
   return {
-    count: state.count,
-    ref_info: refDataApi.getRefInfo(state)
+    count: state.count
   }
 }
 

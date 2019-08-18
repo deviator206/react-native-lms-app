@@ -1,0 +1,39 @@
+
+GD
+https://xd.adobe.com/spec/21c796a3-7084-42c2-5cb9-56b8bf8bab04-57f6/screen/2a17a233-d255-44f7-aea0-b0ab309d0742/iPhone-X-XS-3
+
+https://xd.adobe.com/spec/21c796a3-7084-42c2-5cb9-56b8bf8bab04-57f6/screen/2a17a233-d255-44f7-aea0-b0ab309d0742/iPhone-X-XS-3
+
+components
+https://docs.nativebase.io/Components.html#checkbox-headref
+
+icons
+https://oblador.github.io/react-native-vector-icons/
+
+
+
+https://codedaily.io/tutorials/22/The-Shapes-of-React-Native
+
+
+
+Sessions
+Session
+
+http://www.reactnativeexpress.com/es6
+
+http://www.reactnativeexpress.com/react_redux
+
+createStackNavigator(RouteConfigs, StackNavigatorConfig);
+
+https://oblador.github.io/react-native-vector-icons/
+
+Icons :
+https://github.com/GeekyAnts/NativeBase-KitchenSink/search?q=react-native-vector-icons&unscoped_q=react-native-vector-icons
+
+changes 
+https://github.com/GeekyAnts/NativeBase-KitchenSink/blob/9eb8c7cb9195055f0d5f5e9c09065c2b524b6003/android/settings.gradle
+https://github.com/GeekyAnts/NativeBase-KitchenSink/blob/9eb8c7cb9195055f0d5f5e9c09065c2b524b6003/android/app/build.gradle
+
+But not really required
+
+

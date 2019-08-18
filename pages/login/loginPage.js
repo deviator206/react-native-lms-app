@@ -146,7 +146,7 @@ export default class LoginPage extends Component {
             userNameMissing: false,
             passwordMissing: false,
         });
-        this.props.navigation.push('dashboard');
+        this.props.navigation.navigate('dashboard');
     }
 
     render() {

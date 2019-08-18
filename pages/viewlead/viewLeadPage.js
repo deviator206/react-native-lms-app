@@ -95,7 +95,7 @@ export default class ViewLeadPage extends React.Component {
                     <Row
                         button
                         onPress={() => {
-                            this.props.navigation.navigate("leaddetails");
+                            this.props.navigation.navigate("leaddetails",{ name: 'VIEWLEAD_##_LEADDETAILS' });
                         }}
                     >
                         <Card style={styleContent.gridCardWrapper}

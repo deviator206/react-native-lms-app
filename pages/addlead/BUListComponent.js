@@ -12,9 +12,10 @@ export default class BUListComponent extends React.Component {
         const{ onBuRemoval}  = this.props;
         const businessUnitList = ["Atlas","Spectro","KTem","LmQT"];
         const listViews =[];
-        businessUnitList.forEach(element => {
+        businessUnitList.forEach((element,index) => {
+            const uniqueKey = 'sam'+index;
             listViews.push(
-                <ListItem thumbnail >
+                <ListItem thumbnail key={uniqueKey} >
                         <Body>
                             <Text>{element}</Text>
                         </Body>

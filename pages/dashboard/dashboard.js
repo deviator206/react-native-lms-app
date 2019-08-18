@@ -211,8 +211,7 @@ export default class DashboardPage extends React.Component {
                                             color: "#44C1EE",
                                             fontSize: 47,
                                             lineHeight: 50,
-                                            fontStyle: "Montserrat-Medium",
-                                            textTransform: "uppercase"
+                                            fontFamily: "Montserrat-Medium"
 
                                         }
                                     }> 6752</Text>
