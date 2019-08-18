@@ -5,8 +5,9 @@ import appConfig from '../common/config';
 import FooterComponent from '../common/footerComponent';
 import HeaderComponent from '../common/headerComponent';
 import SpinnerComponent from '../common/spinnerComponent';
+import { default as commonStyle } from '../common/commonStyling';
 import styleContent from './dashboardStyle';
-
+import {default as AppConst} from '../common/consts';
 export default class DashboardPage extends React.Component {
     constructor(props) {
         super(props);
@@ -56,16 +57,20 @@ export default class DashboardPage extends React.Component {
                     )
                 });
                 returnedView = (
-                    <Item picker
-
+                    <Item picker style={
+                        {
+                            borderRadius: 80,
+                            borderColor: '#393939',
+                            backgroundColor: "#393939",
+                            paddingLeft: "2%"                         
+                        }
+                    }
                     >
                         <Picker
                             style={
                                 {
-                                    borderRadius: 80,
-                                    borderWidth: 10,
-                                    borderColor: 'red',
-                                    backgroundColor: "#707070"
+                                    color: "#f0f3f7",
+                                    textTransform: "capitalize"
                                 }
                             }
                             mode="dropdown"
@@ -128,12 +133,11 @@ export default class DashboardPage extends React.Component {
                     <View style={
                         {
                             width: "100%",
-                            backgroundColor: "yellow",
-                            height: 500,
+                            height: 620,
                             paddingTop: "4%",
                             flexDirection: "row",
                             justifyContent: "space-between",
-                            backgroundColor: "#0E0D0D"
+                            backgroundColor: "#222222"
                         }
                     }>
                     </View>
@@ -156,7 +160,10 @@ export default class DashboardPage extends React.Component {
 
                         <Grid style={styleContent.gridSection} >
 
-                            <Row>
+                            <Row style={{
+                                marginTop: "5%",
+                                paddingHorizontal: "3%"
+                            }}>
                                 <Col style={{
                                     marginRight: "5%"
                                 }}>
@@ -171,28 +178,34 @@ export default class DashboardPage extends React.Component {
 
 
 
-                            <Row>
+                            <Row style={{
+                                marginTop: "5%",
+                                paddingHorizontal: "3%"
+                            }}>
                                 <Col>
-                                    <Text note style={styleContent.labelStyling}  >Select Rep</Text>
+                                    <Text note style={styleContent.labelStyling}  > Representative</Text>
                                     {this.getDropdownFor('BU_NAME')}
                                 </Col>
                             </Row>
 
-                            <Row>
+                            <Row style={{
+                                marginTop: "5%",
+                                paddingHorizontal: "3%"
+                            }}>
                                 <Col style={{
                                     marginRight: "5%"
                                 }}>
-                                    <Text note style={styleContent.labelStyling}  >Start Date</Text>
+                                    <Text note style={[styleContent.labelStyling, commonStyle.textUppercase]}  >Start Date</Text>
                                     {this.getDropdownFor('BU_NAME')}
                                 </Col>
                                 <Col>
-                                    <Text note style={styleContent.labelStyling}  >End Date</Text>
+                                    <Text note style={[styleContent.labelStyling, commonStyle.textUppercase]}  >End Date</Text>
                                     {this.getDropdownFor('BU_NAME')}
                                 </Col>
                             </Row>
                             <Row style={
                                     {
-                                        marginTop: "5%"
+                                        marginTop: "10%"
                                     }
                                 }>
                                 <Col >
@@ -212,9 +225,10 @@ export default class DashboardPage extends React.Component {
                                 >
                                     <Text style={
                                         {
-                                            color: "#44C1EE",
+                                            color: AppConst.primaryBlue,
                                             fontSize: 47,
                                             lineHeight: 50,
+                                            marginTop: "3%",
                                             fontFamily: "Montserrat-Medium"
 
                                         }
@@ -224,14 +238,15 @@ export default class DashboardPage extends React.Component {
                                             color: "#FFFFFF",
                                             fontSize: 19,
                                             fontFamily: "Montserrat-SemiBold",
-                                            textTransform: "uppercase"
+                                            textTransform: "uppercase",
+                                            marginTop: "2%"
                                         }
                                     }> TOTAL LEADS</Text>
 
                                 </Col>
                             </Row>
 
-                            <Row>
+                            <Row style={{ marginLeft: "4%"}}>
                                 <Col >
                                     <Card style={styleContent.cardStyling}>
                                         <View >
@@ -260,7 +275,7 @@ export default class DashboardPage extends React.Component {
 
 
 
-                            <Row>
+                            <Row style={{ marginLeft: "4%"}}>
                                 <Col >
                                     <Card style={styleContent.cardStyling}>
                                         <View >

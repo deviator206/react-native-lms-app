@@ -1,5 +1,6 @@
 
 import { StyleSheet } from 'react-native';
+import { yellow } from 'ansi-colors';
 const styleContent = StyleSheet.create({
     container: {
         flex: 1,
@@ -18,7 +19,6 @@ const styleContent = StyleSheet.create({
       },
     mainContent:{
         flex:0.8,
-        backgroundColor:"#FFFFFF",
         width: "100%",
         height: '100%'
     },
@@ -57,8 +57,9 @@ const styleContent = StyleSheet.create({
         width: '95%'
     },
     gridWrapper:{
-        width:"96%",
-        alignSelf:"center"
+        width:"100%",
+        height: "100%",
+        marginTop: 0
     },
     labelStylingSection: {
         color:"#616161",

@@ -1,11 +1,12 @@
 
 import { StyleSheet } from 'react-native';
+import {default as AppConst} from './consts';
 const styleContent = StyleSheet.create({
     fontMediumLabel: {
         backgroundColor: '#fff',
         borderRadius: 6,
         marginBottom: 10,
-        height: 56
+        height: 56,
     },
     headerTitle: {
         textAlign: "center",
@@ -55,9 +56,16 @@ const styleContent = StyleSheet.create({
         textTransform: "uppercase",
         fontWeight: "100"
     },
+    errorMsgContent: {
+       // marginTop: "10%",
+        //backgroundColor: "green"
+    },
     errorMessageText: {
-        color: "red",
-        fontSize: 18
+        color: AppConst.primaryRed,
+        fontFamily: 'Montserrat-SemiBold',
+        fontSize: 14,
+        marginVertical: "1%"
+        //marginTop: "5%"
     },
     sectionTitle: {
         fontFamily: "Montserrat-SemiBold",
@@ -79,6 +87,17 @@ const styleContent = StyleSheet.create({
         fontSize: 15,
         fontFamily: 'Montserrat-Medium'
     },
-
+    textUppercase: {
+        textTransform: "uppercase"
+    },
+    inputBoxStyle: {
+        fontFamily: 'Montserrat-Medium',
+        fontSize: 14,
+        color: "#1A1A1A",
+        backgroundColor: "#ffffff",
+        borderColor: "#D9D9D9",
+        borderWidth: 1,
+        borderLeftWidth: 0
+    }
 });
 export default styleContent;

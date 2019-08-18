@@ -72,7 +72,7 @@ export default class LoginPage extends Component {
         const { showError = false, errMsg } = this.state;
         if (showError) {
             return (
-                <View >
+                <View  style={commonStyling.errorMsgContent}>
                     <Text style={commonStyling.errorMessageText}>{errMsg}</Text>
                 </View>
             )
@@ -162,43 +162,56 @@ export default class LoginPage extends Component {
                     <View style={styleContent.loginUpperContent}>
                         <View style={styleContent.loginUpper}>
                             <Text style={styleContent.h1Login}>LOGIN</Text>
-                            <Text style={styleContent.welcomeMsg}>Welcome message goes here Test the login widow here Welcome mess</Text>
+                            <View style={styleContent.hairline} />
+                            <Text style={styleContent.welcomeMsg}>Welcome message goes here Test the login window here Welcome mess</Text>
                         </View>
                         <View style={styleContent.loginMiddle}>
-                            <Item regular error={this.state.userNameMissing} >
-                                <Icon active name='person' />
+                            {this.getErrorView()}
+                            <Item regular error={this.state.userNameMissing}  style={styleContent.usernameInput}>
+                                <Icon active name='person' style={styleContent.iconLoginPage}/>
                                 <Input
+                                    style={commonStyling.inputBoxStyle}
                                     containerStyle={commonStyling.fontMediumLabel}
                                     placeholder='Username'
+                                    placeholderTextColor="#b4b4b4" 
                                     returnKeyType="next"
                                     clearButtonMode="always"
                                     autoCapitalize="none"
                                     autoCorrect={false}
                                     onChangeText={(val) => { this.onUserNameChanged(val) }} />
                             </Item>
-                            <Item regular error={this.state.passwordMissing} >
-                                <Icon active name='lock' />
-                                <Input placeholder='Password'
+                            <View style={{height: 12}}/>
+                            <Item regular error={this.state.passwordMissing}  style={styleContent.passwordInput}>
+                                <Icon active name='lock' style={styleContent.iconLoginPage}/>
+                                <Input 
+                                    style={commonStyling.inputBoxStyle}
+                                    placeholder='Password'
+                                    placeholderTextColor="#b4b4b4" 
                                     secureTextEntry={true}
                                     clearButtonMode="always"
                                     autoCapitalize="none"
                                     autoCorrect={false}
                                     onChangeText={(val) => { this.onPasswordChanged(val) }} />
                             </Item>
-                        </View>
-                        {this.getErrorView()}
 
-                        <Button style={{
-                            backgroundColor: "red"
-                        }}
+                            <View  style={
+                                {
+                                    width: "100%",
+                                    paddingVertical: "2%",
+                                    alignItems: "flex-end"
+                                }
+                            }>
+                                <Button style={styleContent.forgetPswdLinkButton}
                             transparent
                             onPress={
                                 () => {
                                     this.toggleForgotPassword()
                                 }
                             }>
-                            <Text >forgot password</Text>
+                                    <Text  style={styleContent.forgetPswdLink}>Forgot password</Text>
                         </Button>
+                            </View>
+                        </View>
                     </View>
 
                     <View style={styleContent.versionView}>
@@ -209,7 +222,7 @@ export default class LoginPage extends Component {
                         <Button style={styleContent.loginBtn}
                             onPress={() => this.onSignInBtnClicked()}>
                             <View style={styleContent.buttonTextView} >
-                                <Text style={styleContent.signInText} > SIGN IN </Text><Icon name="arrow-forward" />
+                                <Text style={styleContent.signInText} > SIGN IN </Text><Icon name="arrow-forward"  style={styleContent.signInIcon}/>
                             </View>
                         </Button>
                     </View>

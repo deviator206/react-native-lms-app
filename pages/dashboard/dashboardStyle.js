@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import {default as AppConst} from '../common/consts';
 const styleContent = StyleSheet.create({
     container: {
         flex: 1,
@@ -75,49 +76,54 @@ const styleContent = StyleSheet.create({
     },
     cardHeader: {
         color: "#AEAEAE",
-        fontSize: 15,
+        fontSize: 14,
+        marginTop: "8%",
         fontFamily: "Montserrat-Medium"
     },
     approvedValue: {
-        color: "#8BBF45",
-        fontSize: 41,
+        color: AppConst.primaryGreen,
+        fontSize: 40,
         textAlign: "center",
         fontFamily: "Montserrat-Medium"
     },
     rejectedValue: {
-        color: "#EC2227",
-        fontSize: 41,
+        color: AppConst.primaryRed,
+        fontSize: 40,
         textAlign: "center",
         fontFamily: "Montserrat-Medium"
     },
     closedValue: {
-        color: "#000000",
-        fontSize: 41,
+        color: AppConst.mediumGrey,
+        fontSize: 40,
         textAlign: "center",
         fontFamily: "Montserrat-Medium"
     },
     pendingValue: {
-        color: "#F37C57",
-        fontSize: 41,
+        color: AppConst.primaryOrange,
+        fontSize: 40,
         textAlign: "center",
         fontFamily: "Montserrat-Medium"
     },
     cardStyling: {
-        margin: "4%",
-        width: "85%",
+       // marginHorizontal: "4%",
+        width: "94%",
+        height: 130,
+        justifyContent: "space-around",
         padding: "10%",
         alignItems: "center",
         backgroundColor: "#FCFCFC",
         borderRadius: 5,
     },
     roundedButton: {
-        backgroundColor: "red",
-        borderRadius: 20,
+        backgroundColor: AppConst.primaryRed,
+        borderRadius: 30,
         alignSelf: "center",
+        height: 45,
+        paddingHorizontal: "5%"
     },
     roundedButtonText: {
         color: "white",
-        fontSize: 15,
+        fontSize: 14,
         fontFamily: "Montserrat-Medium",
         textTransform: "uppercase",
         textAlign:"center"
