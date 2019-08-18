@@ -196,9 +196,11 @@ export default class ViewLeadPage extends React.Component {
         return returnedView;
     }
     render() {
+        const {navigation} = this.props;
+        
         return (
             <Container>
-                <HeaderComponent title="View Leads" />
+                <HeaderComponent title="View Leads"  navigation={navigation} />
                 <Content style={styleContent.mainContent}>
                     <Grid >
                         <Row style={styleContent.searchAndFilterWrapper}>

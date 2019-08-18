@@ -16,6 +16,8 @@ export default class DashboardPage extends React.Component {
         this.getSpinnerComponentView = this.getSpinnerComponentView.bind(this);
         this.getFooterTab = this.getFooterTab.bind(this);
         this.getDropdownFor = this.getDropdownFor.bind(this);
+        this.sideMenuClicked = this.sideMenuClicked.bind(this);
+        this.getHeaderSection  =this.getHeaderSection.bind(this);
 
     }
 
@@ -85,11 +87,13 @@ export default class DashboardPage extends React.Component {
         return returnedView;
     }
 
+    sideMenuClicked() {
+        this.props.navigation.openDrawer();
+    }
+
     getHeaderSection() {
 
-        return (<HeaderComponent title="Dashboard" showSideMenuBtn={true} hamburger={true} sideMenuClickHandler={() => {
-            alert("TEST")
-        }} />);
+        return (<HeaderComponent title="Dashboard" showSideMenuBtn={true} hamburger={true} sideMenuClickHandler={this.sideMenuClicked} />);
 
         /*
           return (
@@ -219,7 +223,7 @@ export default class DashboardPage extends React.Component {
                                         {
                                             color: "#FFFFFF",
                                             fontSize: 19,
-                                            fontStyle: "Montserrat-SemiBold",
+                                            fontFamily: "Montserrat-SemiBold",
                                             textTransform: "uppercase"
                                         }
                                     }> TOTAL LEADS</Text>

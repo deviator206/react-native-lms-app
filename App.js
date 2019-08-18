@@ -6,7 +6,7 @@
  * @flow
  */
 import React from 'react';
-import { createAppContainer, createDrawerNavigator, createStackNavigator, createSwitchNavigator } from 'react-navigation';
+import { createAppContainer, createDrawerNavigator, createStackNavigator } from 'react-navigation';
 import { Provider } from 'react-redux';
 import AddLeadPage from './pages/addlead/addLeadPage';
 import AppBootstrap from './pages/bootstrap/AppBootstrap';
@@ -23,30 +23,10 @@ import { default as configureStore } from './storage/store/createAppStore';
 console.disableYellowBox = true;
 const SideDrawerNavigator = createDrawerNavigator(
   {
-    bootstap: {
-      screen: AppBootstrap,
-      navigationOptions: () => ({
-        header: null,
-        drawerLabel: "Demo Screen 1"
-      })
-    },
-    login: {
-      screen: LoginPage,
-      navigationOptions: () => ({
-        header: null,
-        drawerLabel: "Demo Screen 2"
-      })
-    },
+    
     dashboard: {
       screen: DashboardPage,
       drawerLabel: "Demo Screen 3"
-    },
-
-    viewlead: {
-      screen: ViewLeadPage
-    },
-    addlead: {
-      screen: AddLeadPage
     },
     milist: {
       screen: MiListPage
@@ -57,10 +37,6 @@ const SideDrawerNavigator = createDrawerNavigator(
     miadd: {
       screen: MiAddPage
     },
-    leaddetails: {
-      screen: LeadDetailsPage
-    },
-
     drawer: {
       screen: SideMenuBar
     }
@@ -68,57 +44,12 @@ const SideDrawerNavigator = createDrawerNavigator(
   {
     drawerPosition: "left",
     contentComponent: props => <SideMenuBar {...props} />,
-    initialRouteName: "viewlead",
+    initialRouteName: "dashboard",
     mode: 'modal',
     headerMode: 'none',
     initialRouteParams: { someParam: 'Bonjour' }
   }
 );
-
-const AppSwitchNavigator = createSwitchNavigator({
-  bootstap: {
-    screen: AppBootstrap,
-    navigationOptions: () => ({
-      header: null
-    })
-  },
-  login: {
-    screen: LoginPage,
-    navigationOptions: () => ({
-      header: null
-    })
-  },
-  dashboard: {
-    screen: DashboardPage
-  },
-  viewlead: {
-    screen: ViewLeadPage
-  },
-  miadd: {
-    screen: MiAddPage
-  },
-  leaddetails: {
-    screen: LeadDetailsPage
-  },
-  addlead: {
-    screen: AddLeadPage
-  },
-  notificationlist: {
-    screen: NotificationListPage
-  },
-  milist: {
-    screen: MiListPage
-  },
-
-  drawer: {
-    screen: SideMenuBar
-  }
-}, {
-    initialRouteName: "login",
-    mode: 'modal',
-    headerMode: 'none',
-    initialRouteParams: { someParam: 'Bonjour' }
-  });
 
   
 const AppNavigator = createStackNavigator({
@@ -137,7 +68,7 @@ const AppNavigator = createStackNavigator({
     })
   },
   dashboard: {
-    screen: DashboardPage
+    screen: SideDrawerNavigator
   },
   viewlead: {
     screen: ViewLeadPage,
