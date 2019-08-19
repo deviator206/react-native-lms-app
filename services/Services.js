@@ -7,7 +7,9 @@ const SERVER_CONFIG = {
 const SERVICE_URL = {
     'LOGIN': 'login/',
     'REF_DATA':'refdata/',
-    'CREATE_LEAD':'rootlead/'
+    'CREATE_LEAD':'rootlead/',
+    'GET_LEADS':'leads/',
+    'LEAD_DETAILS': 'lead/'
 }
 
 const axiosInstance = axios.create({
@@ -48,5 +50,12 @@ class ServiceClass {
         return await axiosInstance.post(SERVICE_URL['CREATE_LEAD'], params);
     }
 
+    static async getLeads(params) {
+        return await axiosInstance.get(SERVICE_URL['GET_LEADS']);
+    }
+
+    static async getLeadDetails({itemId}) {
+        return await axiosInstance.get(SERVICE_URL['LEAD_DETAILS']+itemId);
+    }
 }
 export default ServiceClass;

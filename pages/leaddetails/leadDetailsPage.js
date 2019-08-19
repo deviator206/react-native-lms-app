@@ -3,6 +3,8 @@ import React from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { default as MaterialIcon } from 'react-native-vector-icons/MaterialIcons';
 import { default as FeatherIcon } from 'react-native-vector-icons/SimpleLineIcons';
+import { connect } from 'react-redux';
+import LeadApi from '../../services/LeadApi';
 import CheckBoxComponent from '../common/checkBoxComponent';
 import { default as commonStyle } from '../common/commonStyling';
 import appConfig from '../common/config';
@@ -12,9 +14,9 @@ import i18nMessages from '../common/i18n';
 import SpinnerComponent from '../common/spinnerComponent';
 import styleContent from './leadDetailsPageStyle';
 
+const leadApi = new LeadApi({ state: {} });
 
-
-export default class LeadDetailsPage extends React.Component {
+class LeadDetailsPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -29,13 +31,66 @@ export default class LeadDetailsPage extends React.Component {
     this.getBusinessUnitInfo = this.getBusinessUnitInfo.bind(this);
     this.getActionsInfo = this.getActionsInfo.bind(this);
     this.getStatusInfo = this.getStatusInfo.bind(this);
+    this.loadLeadDetail = this.loadLeadDetail.bind(this);
+
+    this.onLeadResponseSuccess = this.onLeadResponseSuccess.bind(this);
+    this.onLeadResponseError = this.onLeadResponseError.bind(this);
+    this.getFormattedAddress = this.getFormattedAddress.bind(this);
+    this.willFocusSubscription = null;
+
   }
 
-  componentDidMount() {
+
+  getFormattedAddress(leadContact) {
+    const { state, country }= leadContact;
+    let address ='';
+    if(state && state != '') {
+      address += " "+ state
+    }
+
+    if(country && country != '') {
+      address += " "+ country
+    }
+
+    return address;
+  }
+
+  onLeadResponseSuccess(resp) {
     this.setState({
       spinner: false,
-      leadDetails: { "id": 1, "source": "Marketing", "custName": "shicv", "description": "dingDong", "leadContact": { "name": "dingdong", "email": "a@b.com", "phoneNumber": "9764007637", "country": "India", "state": "MH" }, "leadsSummaryRes": { "businessUnits": ["marketing", "sales"], "salesRep": "shivanshu", "industry": "it" }, "deleted": false, "creatorId": "123", "creationDate": "2019-06-04" }
+      leadDetails: resp
     });
+  }
+
+  onLeadResponseError(error) {
+    console.log(error);
+    this.setState({
+      spinner: false
+    });
+  }
+
+  loadLeadDetail() {
+    const { navigation } = this.props;
+    const itemId = navigation.getParam('leadId', 'NO-ID');
+
+    this.setState({
+      spinner: true
+    });
+    this.props.loadLeadDetail({ itemId }).then(this.onLeadResponseSuccess).catch(this.onLeadResponseError)
+  }
+  componentDidMount() {
+    this.willFocusSubscription = this.props.navigation.addListener('willFocus', this.loadLeadDetail);
+    /*this.setState({
+      spinner: false,
+      leadDetails: { "id": 1, "source": "Marketing", "custName": "shicv", "description": "dingDong", "leadContact": { "name": "dingdong", "email": "a@b.com", "phoneNumber": "9764007637", "country": "India", "state": "MH" }, "leadsSummaryRes": { "businessUnits": ["marketing", "sales"], "salesRep": "shivanshu", "industry": "it" }, "deleted": false, "creatorId": "123", "creationDate": "2019-06-04" }
+    });*/
+  }
+
+  componentWillUnmount() {
+    if (this.willFocusSubscription) {
+      this.willFocusSubscription.remove();
+    }
+
   }
 
   getSpinnerComponentView() {
@@ -168,7 +223,8 @@ export default class LeadDetailsPage extends React.Component {
 
   }
   getBusinessUnitInfo() {
-    const leadDetails = { "id": 1, "source": "Marketing", "custName": "shicv", "description": "dingDong", "leadContact": { "name": "dingdong", "email": "a@b.com", "phoneNumber": "9764007637", "country": "India", "state": "MH" }, "leadsSummaryRes": { "businessUnits": ["Spectro", "atlas"], "salesRep": "shivanshu", "industry": "it" }, "deleted": false, "creatorId": "123", "creationDate": "2019-06-04" };
+    const {leadDetails} = this.state;
+    // const leadDetails = { "id": 1, "source": "Marketing", "custName": "shicv", "description": "dingDong", "leadContact": { "name": "dingdong", "email": "a@b.com", "phoneNumber": "9764007637", "country": "India", "state": "MH" }, "leadsSummaryRes": { "businessUnits": ["Spectro", "atlas"], "salesRep": "shivanshu", "industry": "it" }, "deleted": false, "creatorId": "123", "creationDate": "2019-06-04" };
     let returnedView;
     if (leadDetails && leadDetails.id && leadDetails.leadsSummaryRes && leadDetails.leadsSummaryRes.businessUnits) {
       let unitList = [];
@@ -212,7 +268,8 @@ export default class LeadDetailsPage extends React.Component {
 
 
   getSalesRepInfo() {
-    const leadDetails = { "id": 1, "source": "Marketing", "custName": "shicv", "description": "dingDong", "leadContact": { "name": "dingdong", "email": "a@b.com", "phoneNumber": "9764007637", "country": "India", "state": "MH" }, "leadsSummaryRes": { "businessUnits": ["marketing", "sales"], "salesRep": "Sunayna Rao", "industry": "it" }, "deleted": false, "creatorId": "123", "creationDate": "2019-06-04" };
+    const {leadDetails} = this.state;
+   //  const leadDetails = { "id": 1, "source": "Marketing", "custName": "shicv", "description": "dingDong", "leadContact": { "name": "dingdong", "email": "a@b.com", "phoneNumber": "9764007637", "country": "India", "state": "MH" }, "leadsSummaryRes": { "businessUnits": ["marketing", "sales"], "salesRep": "Sunayna Rao", "industry": "it" }, "deleted": false, "creatorId": "123", "creationDate": "2019-06-04" };
     let returnedView;
     if (leadDetails && leadDetails.id && leadDetails.leadsSummaryRes) {
       returnedView = (
@@ -245,8 +302,8 @@ export default class LeadDetailsPage extends React.Component {
 
 
   getContactInfo() {
-    // const { spinner } = this.state;
-    const leadDetails = { "id": 1, "source": "Marketing", "custName": "shicv", "description": "dingDong", "leadContact": { "name": "Mr. Rajesh Kumar", "email": "rkumar@rksolustions.com", "phoneNumber": "9896777716", "country": "India", "state": "MH" }, "leadsSummaryRes": { "businessUnits": ["marketing", "sales"], "salesRep": "shivanshu", "industry": "it" }, "deleted": false, "creatorId": "123", "creationDate": "2019-06-04" };
+    const { leadDetails } = this.state;
+    // const leadDetails = { "id": 1, "source": "Marketing", "custName": "shicv", "description": "dingDong", "leadContact": { "name": "Mr. Rajesh Kumar", "email": "rkumar@rksolustions.com", "phoneNumber": "9896777716", "country": "India", "state": "MH" }, "leadsSummaryRes": { "businessUnits": ["marketing", "sales"], "salesRep": "shivanshu", "industry": "it" }, "deleted": false, "creatorId": "123", "creationDate": "2019-06-04" };
     let returnedView;
     if (leadDetails && leadDetails.id && leadDetails.leadContact) {
       returnedView = (
@@ -261,12 +318,12 @@ export default class LeadDetailsPage extends React.Component {
                   <Row>
                     <Col style={styleContent.colValue}>
                       <Text style={styleContent.primaryText}> {leadDetails.leadContact.name} </Text>
-                      <Text style={styleContent.secondaryTextDesignation}>  VP_DESIGNATION </Text>
+                      <Text style={styleContent.secondaryTextDesignation}>  {leadDetails.leadContact.designation} </Text>
                     </Col>
 
                   </Row>
                   <Row>
-                    <Text style={styleContent.secondaryText}> [TODO:] Basavanagudi, Apt-4, Shivaswamy, 080-26500744, RO Bangalore </Text>
+                    <Text style={styleContent.secondaryText}> {this.getFormattedAddress(leadDetails.leadContact)} </Text>
                   </Row>
 
                   <Row style={
@@ -294,8 +351,8 @@ export default class LeadDetailsPage extends React.Component {
 
   }
   getCustomerInfo() {
-    const { spinner } = this.state;
-    const leadDetails = { "id": 1, "source": "Marketing", "custName": "RekTech Pvt. Ltd", "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.", "leadContact": { "name": "dingdong", "email": "a@b.com", "phoneNumber": "9764007637", "country": "India", "state": "MH" }, "leadsSummaryRes": { "businessUnits": ["marketing", "sales"], "salesRep": "shivanshu", "industry": "it" }, "deleted": false, "creatorId": "123", "creationDate": "2019-06-04" };
+    const { leadDetails} = this.state;
+    // const leadDetails = { "id": 1, "source": "Marketing", "custName": "RekTech Pvt. Ltd", "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.", "leadContact": { "name": "dingdong", "email": "a@b.com", "phoneNumber": "9764007637", "country": "India", "state": "MH" }, "leadsSummaryRes": { "businessUnits": ["marketing", "sales"], "salesRep": "shivanshu", "industry": "it" }, "deleted": false, "creatorId": "123", "creationDate": "2019-06-04" };
     let returnedView;
     if (leadDetails && leadDetails.id) {
       returnedView = (
@@ -304,12 +361,22 @@ export default class LeadDetailsPage extends React.Component {
             <CardItem>
               <Col>
                 <Grid>
+                <Row>
+                    <Text style={styleContent.requirement} > {leadDetails.creationDate}</Text>
+                  </Row>
                   <Row>
                     <Text style={styleContent.customerName}> {leadDetails.custName}</Text>
                   </Row>
                   <Row>
                     <Text style={styleContent.requirement} > {leadDetails.description}</Text>
                   </Row>
+                  <Row>
+                    <Text style={styleContent.requirement} > {leadDetails.source}</Text>
+                  </Row>
+                  <Row>
+                    <Text style={styleContent.requirement} > {leadDetails.tenure}</Text>
+                  </Row>
+                 
                 </Grid>
               </Col>
             </CardItem>
@@ -336,13 +403,13 @@ export default class LeadDetailsPage extends React.Component {
             {this.getSalesRepInfo()}
             {this.getBusinessUnitInfo()}
             {this.getStatusInfo()}
-            
+
           </Grid>
           <Footer>
-          <Button style={styleContent.addLeadFooter}>
-            <Text style={styleContent.addLeadFooterText}>UPDATE LEAD </Text>
-            <MaterialIcon name="arrow-forward" style={{ color: "white", fontSize: 20 }} />
-          </Button >
+            <Button style={styleContent.addLeadFooter}>
+              <Text style={styleContent.addLeadFooterText}>UPDATE LEAD </Text>
+              <MaterialIcon name="arrow-forward" style={{ color: "white", fontSize: 20 }} />
+            </Button >
           </Footer>
         </Content>
         {this.getSpinnerComponentView()}
@@ -350,3 +417,32 @@ export default class LeadDetailsPage extends React.Component {
     );
   }
 }
+
+
+// This function provides a means of sending actions so that data in the Redux store
+// can be modified. In this example, calling this.props.addToCounter() will now dispatch
+// (send) an action so that the reducer can update the Redux state.
+function mapDispatchToProps(dispatch) {
+  return {
+    loadLeadDetail: (inputParams) => {
+      return leadApi.getLeadDetails(inputParams).then((resp) => {
+        return resp;
+      })
+
+    },
+    dispatchAction: (param) => {
+      dispatch(param);
+    }
+  }
+}
+
+// This function provides access to data in the Redux state in the React component
+// In this example, the value of this.props.count will now always have the same value
+// As the count value in the Redux state
+function mapStateToProps(state) {
+  return {
+    count: state.count
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LeadDetailsPage)

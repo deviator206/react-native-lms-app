@@ -51,5 +51,71 @@ BU:
 
 CURRENCY:[{"code":"INR","name":"INR","type":"CURRENCY"},{"code":"USD","name":"USD","type":"CURRENCY"}],
 STATE:[{"code":"KAR","name":"KARNATAKA","type":"IND_STATE"},{"code":"MAH","name":"MAHARASHTRA","type":"IND_STATE"},{"code":"PUN","name":"PUNJAB","type":"IND_STATE"},
-{"code":"ALB","name":"Alabama","type":"USD_STATE"},{"code":"ALK","name":"Alaska","type":"USD_STATE"}],
+{{"code":"ALA","name":"Alabama","type":"USA_STATE"}
+,{"code":"ALK","name":"Alaska","type":"USD_STATE"}],
 INDUSTRY:[{"code":"QLY","name":"Quality","type":"INDUSTRY"},{"code":"ENGG","name":"Engineering","type":"INDUSTRY"} ]
+
+
+
+
+User Listing
+http://52.66.164.208:8080/lmsApp-0.1.0/users
+[{"userId":2,"userName":"sbamane","enabled":true,"email":null},{"userId":3,"userName":"syadav","enabled":true,"email":null},{"userId":5,"userName":"syadav01","enabled":true,"email":null},{"userId":7,"userName":"syadav02","enabled":true,"email":null},{"userId":8,"userName":"shiv.orian@gmail.com","enabled":true,"email":null},{"userId":9,"userName":"abc","enabled":true,"email":"a@b.com"}]
+
+
+
+Lead Creation
+http://52.66.164.208:8080/lmsApp-0.1.0/rootlead 
+{
+  "source": "WEB",
+  "custName": "shicv",
+  "description": "dingDong",
+  "tenure": "LT1Y",
+  "leadContact": {
+    "name": "dingdong",
+    "email": "a@b.com",
+    "phoneNumber": "9764007637",
+    "country": "IND",
+    "state": "KAR"
+  },
+  "leadsSummaryRes": {
+    "businessUnits": [
+      "ART",
+      "ATL"
+    ],
+    "salesRep": "shivanshu",
+    "industry": "QLY"
+  },
+  "deleted": false,
+  "creatorId": "8",
+  "creationDate": "2019-06-04"
+}
+
+Create User 
+http://52.66.164.208:8080/lmsApp-0.1.0/user
+{
+  "userName": "x",
+  "password": "x",
+  "email": "a1@b.com"
+}
+
+
+CONTACT_EMAIL: "a@a.fin"
+CONTACT_NAME: "suresh chauhan"
+CONTACT_PHONE: "983733"
+COUNTRY: "CND"
+CURRENCY: "INR"
+CUSTOMER_NAME: "FM REK"
+ESTIMATE: "767676"
+INDUSTRY: "ENGG"
+REQUIREMENT: "Here's text area to play around"
+SOURCE: "NEWSPAPER"
+TENURE: "LT1Y"
+currentSelectedBU: "SPECTRO"
+
+CUSTOMER_NAME
+REQUIREMENT
+CONTACT_NAME
+CONTACT_EMAIL
+CONTACT_PHONE
+ESTIMATE
