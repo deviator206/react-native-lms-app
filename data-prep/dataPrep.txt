@@ -1,0 +1,55 @@
+SOURCE :{
+"code": "ONLINE",
+"name": "Online",
+"type": "SOURCE"
+},
+{
+"code": "NEWSPAPER",
+"name": "Newspaper",
+"type": "SOURCE"
+},
+{
+"code": "WEB",
+"name": "Web",
+"type": "SOURCE"
+}],
+
+Tenure:[
+{"code":"LT1Y","name":"Less Than 1 Year","type":"TENURE"},
+{"code":"LT6M","name":"Less Than 6 Month","type":"TENURE"},
+{"code":"LTI","name":"Not Sure","type":"TENURE"},
+{"code":"LTM","name":"Less Than 1 Month","type":"TENURE"}],
+
+COUNTRY:
+[
+{"code":"CND","name":"Canada","type":"COUNTRY"},
+{"code":"IND","name":"India","type":"COUNTRY"},
+{"code":"USA","name":"United States","type":"COUNTRY"},
+{"code":"VTN","name":"Viet Nam","type":"COUNTRY"}],
+
+BU:
+[
+{"code":"AMS","name":"AMS ","type":"BU"},
+{"code":"AMT","name":"AMT ","type":"BU"},
+{"code":"ART","name":"Air-Tech ","type":"BU"},
+{"code":"ATL","name":"Atlas ","type":"BU"},
+{"code":"BKF","name":"Brookfield ","type":"BU"},
+{"code":"CAM","name":"Cameca ","type":"BU"},
+{"code":"CR","name":"Creaform","type":"BU"},
+{"code":"CTS","name":"CTS ","type":"BU"},
+{"code":"EDA","name":"EDAX ","type":"BU"},
+{"code":"EPI","name":"E & PI ","type":"BU"},
+{"code":"LND","name":"Land ","type":"BU"},
+{"code":"MIC","name":"Micropoise ","type":"BU"},
+{"code":"PR","name":"Precitech","type":"BU"},
+{"code":"PRP","name":"Prog.Power ","type":"BU"},
+{"code":"SMP","name":"SMP ","type":"BU"},
+{"code":"SP","name":"Spectro ","type":"BU"},
+{"code":"STC","name":"STC ","type":"BU"},
+{"code":"VRI","name":"VRI ","type":"BU"},
+{"code":"ZY","name":"Zygo","type":"BU"}],
+
+CURRENCY:[{"code":"INR","name":"INR","type":"CURRENCY"},{"code":"USD","name":"USD","type":"CURRENCY"}],
+STATE:[{"code":"KAR","name":"KARNATAKA","type":"IND_STATE"},{"code":"MAH","name":"MAHARASHTRA","type":"IND_STATE"},{"code":"PUN","name":"PUNJAB","type":"IND_STATE"},
+{"code":"ALB","name":"Alabama","type":"USD_STATE"},{"code":"ALK","name":"Alaska","type":"USD_STATE"}],
+INDUSTRY:[{"code":"QLY","name":"Quality","type":"INDUSTRY"},{"code":"ENGG","name":"Engineering","type":"INDUSTRY"} ]

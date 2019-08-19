@@ -75,12 +75,12 @@ export default class MiAddPage extends React.Component {
                 <Content style={styleContent.mainContent}>
                     <Grid style={styleContent.gridWrapper}>
                         <Row >
-                            <Col >
-                                <Label style={styleContent.labelStyling}>{i18nMessages.customer_name_lbl}</Label>
+                            <Col style={{ marginTop: "5%"}}>
+                                <Label style={styleContent.secondaryLabel}>{i18nMessages.customer_name_lbl}</Label>
                             </Col>
                         </Row>
                         <Row >
-                            <Col >
+                            <Col  style={{ marginBottom: "5%"}}>
                                 {this.getDropdownFor("TYPE")}
 
                             </Col>
@@ -104,9 +104,9 @@ export default class MiAddPage extends React.Component {
                         <Row><Col><Text note style={styleContent.labelStyling} >{i18nMessages.requirement_project_lbl} </Text></Col></Row>
                         <Row>
                             <Col>
-                                <Item >
+                                <Item style={{height: 50,  width: "95%"}}>
                                     <Input
-                                        style={styleContent.dynamicComponentTextStyle}
+                                        style={styleContent.dynamicTextStyle}
                                         returnKeyType="next"
                                         clearButtonMode="always"
                                         autoCapitalize="none"
@@ -121,8 +121,8 @@ export default class MiAddPage extends React.Component {
 
                 </Content>
                 <Footer>
-                    <Button style={styleContent.addLeadFooter}>
-                        <Text style={styleContent.addLeadFooterText}>ADD MI </Text>
+                    <Button style={styleContent.addFooter}>
+                        <Text style={styleContent.addFooterText}>ADD MI </Text>
                         <Icon name="arrow-forward" style={{ color: "white", fontSize: 20 }} />
                     </Button >
                 </Footer>

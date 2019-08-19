@@ -108,11 +108,11 @@ export default class MiListPage extends React.Component {
                                         </Row>
                                         <Row>
                                             <Col style={styleContent.colLabelOnly} >
-                                                <Text style={styleContent.cardViewPrimaryLabel}  > Status </Text>
+                                                <Text style={styleContent.cardViewPrimaryLabel}  > Status: </Text>
 
                                             </Col>
                                             <Col style={styleContent.colValue} >
-                                                <Text style={styleContent.cardViewPrimaryValue} >: {item.status}  </Text>
+                                                <Text style={styleContent.cardViewPrimaryValue} > {item.status}  </Text>
                                             </Col>
 
                                         </Row>
@@ -141,7 +141,7 @@ export default class MiListPage extends React.Component {
                             <Col style={styleContent.searchBarWrapper} >
                                 <Item searchBar rounded style={styleContent.searchBarStyling}>
                                     <Input placeholder="Search"  />
-                                    <Icon name="search" style={styleContent.iconStyling} />
+                                    <Icon name="search" style={[styleContent.iconStyling, styleContent.searchIcon]} />
                                 </Item>
                             </Col>
                             <Col  >
@@ -165,12 +165,16 @@ export default class MiListPage extends React.Component {
                     </Grid>
                 </Content>
                 <Button 
-                    style={styleContent.circular} 
+                    style={styleContent.floatingButton} 
                     button
                     onPress={()=>{
                         this.props.navigation.navigate('miadd');
                     }} >
-                            <Icon name="add" style={{ color: "white", fontSize: 50 }} />
+                            <Icon name="add" style={{ 
+                                color: "white", 
+                                fontSize: 30,
+                                marginLeft: 15
+                                }} />
                 </Button>
                <FooterComponent />
 

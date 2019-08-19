@@ -5,24 +5,27 @@ const styleContent = StyleSheet.create({
         flexDirection: "column"
     },
     sideMenuSectionOne: {
-        flex: 0.8,
+        flex: 0.6,
         width: "100%",
         justifyContent: "space-between",
-        backgroundColor: "#545454",
-        alignItems: "center"
+        backgroundColor: "#333333",
+        alignItems: "flex-start",
+        paddingLeft: "10%"
     },
     profilePic: {
-        width: "80%",
+        flex: 0.8,
+        width: "90%",
         borderRadius: 50,
-        aspectRatio: 0.6,
+        aspectRatio: 0.75,
         resizeMode: 'contain',
-        alignSelf: "center"
+        alignSelf: "flex-start",
+        paddingLeft: "8%"
     },
     profileName: {
+        flex: 0.2,
         color: "#FFFFFF",
-        fontFamily: 'Montserrat-Bold',
+        fontFamily: 'Montserrat-SemiBold',
         fontSize: 20,
-        fontWeight: "bold",
         marginBottom: "10%"
     },
     sideMenuSectionTwo: {
@@ -33,14 +36,24 @@ const styleContent = StyleSheet.create({
         color:"#616161",
         fontFamily: 'Montserrat-Regular',
         fontSize: 16,
+        marginVertical: "1%"
 
     },
     iconStyling: {
-        
+        color: "#666666",
+        marginHorizontal: "5%"
     },
     closeBtnStyling: {
         alignSelf:"flex-end",
-        backgroundColor:"#545454"
+        backgroundColor:"#333333",
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 5,
+        marginRight: 5
+    },
+    closeBtn: {
+        color: "#666666",
+        fontSize: 35
     },
     listItemStyle: {
         width:"100%",

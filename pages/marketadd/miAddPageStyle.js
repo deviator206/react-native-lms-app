@@ -97,6 +97,40 @@ const styleContent = StyleSheet.create({
         marginRight:"4%",
         marginBottom:"2%"
 
-    }
+    },
+    secondaryLabel: {
+        fontSize: 14,
+        fontFamily: 'Montserrat-SemiBold',
+        color: "#616161",
+        marginBottom: "3%",
+        textTransform:"uppercase"
+    },
+    labelStyling: {
+        fontSize: 13,
+        fontFamily: 'Montserrat-Medium',
+        color: "#AEAEAE",
+        marginTop: "5%",
+        marginBottom: "2%"
+    },
+    addFooter:{
+        backgroundColor: '#ec2227',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
+        height: '100%'
+    },
+    addFooterText:{
+        color:"#FAFAFA",
+        fontFamily: 'Montserrat-Regular',
+        fontSize: 16,
+    },
+    dynamicTextStyle: {
+        color: "#000000",
+        fontSize: 14,
+        borderBottomColor: "#cccccc",
+        borderBottomWidth: 1,
+        marginLeft: 0,
+        fontFamily: 'Montserrat-Regular'
+    },
 });
 export default styleContent;

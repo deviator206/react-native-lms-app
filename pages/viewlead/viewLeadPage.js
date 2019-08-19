@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import FooterComponent from '../common/footerComponent';
 import HeaderComponent from '../common/headerComponent';
 import styleContent from './viewLeadStyle';
+import { default as commonStyle } from '../common/commonStyling';
 
 
 export default class ViewLeadPage extends React.Component {
@@ -248,32 +249,70 @@ export default class ViewLeadPage extends React.Component {
                     onRequestClose={() => {
                         Alert.alert('Modal has been closed.');
                     }}>
-                    <Content style={{ width: '100%', marginTop: 80 }}>
-                        <Grid style={{ width: '96%', backgroundColor: 'white', marginTop: 10, padding: 10 }}>
-                            <Row><Col><Text note>Status</Text></Col><Col><Text note>Tenure</Text></Col></Row>
-                            <Row>
+                    <View style={{ width: '100%'}}>
+                        <View style={commonStyle.modalHeaderDiv}>
+                            <Text note style={commonStyle.modalHeader}> Filter View Leads </Text>
+                            <TouchableHighlight
+                                onPress={() => {
+                                    this.filerBtnToggled();
+                                }}>
+                                <Icon name="close" style={commonStyle.modalCloseBtn} />
+                            </TouchableHighlight>
+                        </View>
+                        <View style={{ padding: 20, marginTop: "5%"}}>
+                            <Row style={{ marginBottom: "8%" }}>
                                 <Col>
-                                    <Text>Hello World!</Text>
+                                    <Text note style={{ 
+                                        fontSize: 14,
+                                        fontFamily: 'Montserrat-Medium',
+                                        color: "#616161"}}> Status</Text>
                                 </Col>
                                 <Col>
-                                    <Text>Hello World!</Text>
+                                    <Text note style={{ 
+                                        fontSize: 14,
+                                        fontFamily: 'Montserrat-Medium',
+                                        color: "#616161"}}>Tenure</Text>
                                 </Col>
                             </Row>
-                        </Grid>
-                        <View style={{ marginTop: 22 }}>
+                            <Row style={{  }}>
+                                <Col>
+                                    <Text style={{ 
+                                        fontSize: 16,
+                                        fontFamily: 'Montserrat-Medium',
+                                        color: "#000000"}}>Hello World!</Text>
+                                </Col>
+                                <Col>
+                                    <Text style={{ 
+                                        fontSize: 16,
+                                        fontFamily: 'Montserrat-Medium',
+                                        color: "#000000"}}>Hello World!</Text>
+                                </Col>
+                            </Row>
+                        </View>
+                        <View style={{ width:"100%" , marginTop: "20%", alignItems: "center" }}>
+                            <View  style={{
+                                marginTop: 5,
+                                backgroundColor: "#EC2227",
+                                height: 50,
+                                justifyContent: "center",
+                                alignItems: "center",
+                                alignContent: "center",
+                                width: "90%",
 
-                            <View>
-
-
+                            }}>
                                 <TouchableHighlight
                                     onPress={() => {
                                         this.filerBtnToggled();
                                     }}>
-                                    <Text>Hide Modal</Text>
+                                    <Text  style={{
+                                        color: "#FFFFFF",
+                                        fontSize: 16,
+                                        fontFamily: 'Montserrat-Medium'
+                                    }}>Close</Text>
                                 </TouchableHighlight>
                             </View>
                         </View>
-                    </Content>
+                    </View>
 
                 </Modal>
             </Container>

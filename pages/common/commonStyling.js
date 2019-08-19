@@ -98,6 +98,33 @@ const styleContent = StyleSheet.create({
         borderColor: "#D9D9D9",
         borderWidth: 1,
         borderLeftWidth: 0
+    },
+    modalHeaderDiv: {
+        backgroundColor: "#0E0D0D",
+        height: 70,
+        paddingHorizontal: 20,
+        paddingTop: 15
+    },
+    modalHeader: {
+        color: "#FFFFFF",
+        fontSize: 20,
+        fontFamily: 'Montserrat-Medium',
+        lineHeight: 40,
+        width: "80%"
+    },
+    modalCloseBtn: {
+        position: "absolute",
+        right: 10,
+        top: -35,
+        fontSize: 30,
+        color: "#CCCCCC",
+    },
+    modalBody: {
+        backgroundColor: "#FFFFFF",
+        padding: 25
+    },
+    modalTextBox: {
+        marginBottom: 30
     }
 });
 export default styleContent;

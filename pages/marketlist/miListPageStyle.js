@@ -6,15 +6,20 @@ const styleContent = StyleSheet.create({
         backgroundColor:"#E8E8E8"
     },
     iconStylingBigger: {
-        fontSize: 35
+        fontSize: 25
     },
     iconStyling: {
         fontSize: 25
     },
+    searchIcon: {
+        paddingRight: 5
+    },
     searchBarStyling: {
         width: "80%",
         alignSelf: "center",
-        backgroundColor:"#FFFFFF"
+        backgroundColor:"#FFFFFF",
+        borderWidth: 1,
+        borderColor: "#999999"
 
     },
     searchBarWrapper: {
@@ -26,38 +31,44 @@ const styleContent = StyleSheet.create({
         alignSelf: "center"
     },
     gridCardWrapper: {
-        width: "95%",
+        width: "90%",
         alignSelf: "center",
-        backgroundColor: "yellow"
+        marginTop: "5%",
+        marginLeft: "5%",
+        marginRight: "5%"
     },
     searchAndFilterWrapper: {
         marginTop: "2%"
     },
     colLabelOnly: {
-        width: "40%",
+        width: "50%"
     },
     colValue: {
-
+        width: "50%",
+        justifyContent: "space-around",
+        alignItems: "flex-end"
     },
     cardViewMainTitle: {
         fontSize: 18,
-        fontFamily: 'Montserrat-Bold',
-        fontWeight: "bold",
-        color: "#000000"
+        fontFamily: 'Montserrat-SemiBold',
+        color: "#000000",
+        marginBottom: "3%"
     },
     cardViewSecondaryInfo: {
         fontSize: 14,
-        fontFamily: 'Montserrat-Bold',
-        color: "#AEAEAE"
+        fontFamily: 'Montserrat-Regular',
+        color: "#555555"
     },
     cardViewPrimaryLabel: {
         fontSize: 14,
         fontFamily: 'Montserrat-Bold',
-        color: "#616161"
+        color: "#616161",
+        marginTop: "2%",
+        marginBottom: "2%"
     },
     cardViewPrimaryValue: {
         fontSize: 14,
-        fontFamily: 'Montserrat-Bold',
+        fontFamily: 'Montserrat-SemiBold',
         color: "#21A50E"
     },
     addLeadFooter: {
@@ -68,14 +79,15 @@ const styleContent = StyleSheet.create({
         borderRadius: 90
 
     },
-    circular: {
-        width: 50,
-        height: 50,
-        borderRadius: 50 / 2,
-        backgroundColor: 'red',
+    floatingButton: {
+        position: "absolute",
+        width: 60,
+        height: 60,
+        borderRadius: 60 / 2,
+        backgroundColor: '#EC2227',
+        bottom: 60,
+        right: 15,
         alignSelf:"flex-end",
-        marginRight:"4%",
-        marginBottom:"2%"
 
     }
 });

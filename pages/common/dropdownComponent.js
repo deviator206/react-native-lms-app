@@ -7,15 +7,33 @@ import styleContent from './commonStyling';
 export default class DropDownComponent extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            selected: ''
+        }
         this.onSelectionChanged = this.onSelectionChanged.bind(this);
         this.getView = this.getView.bind(this);
     }
 
-    onSelectionChanged() {
-
+    onSelectionChanged(value) {
+        const {updateToParent, dropDownType} = this.props;
+        this.setState({
+            selected: value
+          });
+        if(updateToParent) {
+            updateToParent({type:dropDownType, value})
+        }
+        
     }
 
+    componentDidMount() {
+        const{dataSource} = this.props;
+        this.setState({
+            selected: (dataSource && dataSource[0] && dataSource[0].name ) ? dataSource[0].name : ''
+          });
+    }
+    
     getView() {
+        const {selected = ''} = this.state;
         let returnedView;
         const { dataSource=["1","2","3"], onDropDownSelectionChange = this.onSelectionChanged } = this.props;
         const pickerItemArr = [];
@@ -25,7 +43,7 @@ export default class DropDownComponent extends React.Component {
             pickerItemArr.push(
                 (<Picker.Item 
                     key={ind}
-                    label={singleItem.name} style={styleContent.dynamicComponentTextStyle} value={singleItem.name} />)
+                    label={singleItem.name} style={styleContent.dynamicComponentTextStyle} value={singleItem.code} />)
             )
         });
         returnedView = (
@@ -38,7 +56,8 @@ export default class DropDownComponent extends React.Component {
                 itemTextStyle={styleContent.dynamicComponentTextStyle}
                 style={styleContent.dynamicComponentTextStyle}
                 placeholderStyle={styleContent.dynamicComponentTextStyle}
-                onValueChange={onDropDownSelectionChange()}
+                onValueChange={onDropDownSelectionChange}
+                selectedValue={selected}
                 placeholderIconColor="#007aff"
             >
                 {pickerItemArr}

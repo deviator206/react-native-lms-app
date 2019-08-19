@@ -96,20 +96,24 @@ export default class ModalComponent extends BaseComponent {
         }}>
         <View style={{ marginTop: 22 }}>
           <View>
-
+           <View style={styleContent.modalHeaderDiv}>
+              <Text note style={styleContent.modalHeader}  > Forgot Password</Text>
             <TouchableHighlight
               onPress={() => {
                 this.setModalVisible(!this.state.modalVisible);
               }}>
-              <Icon name="close" style={{ fontSize: 55 }} />
+                <Icon name="close" style={styleContent.modalCloseBtn} />
             </TouchableHighlight>
+            </View>
 
+            <View style={styleContent.modalBody}>
             <Text style={{
-              fontSize: 14,
-              fontFamily: "Montserrat-SemiBoldItalic"
+                  fontSize: 15,
+                  marginBottom: "5%",
+                  fontFamily: "Montserrat-SemiBoldItalic",
 
-            }}> Enter Your Email -1  </Text>
-            <Item regular error={showInlineError} >
+                }}> Enter Your Email id  </Text>
+                <Item regular error={showInlineError}  style={styleContent.modalTextBox}>
               <Input
 
                 style={styleContent.dynamicComponentTextStyle}
@@ -130,7 +134,10 @@ export default class ModalComponent extends BaseComponent {
             <Button
               style={{
                 marginTop: 5,
-                backgroundColor: "red"
+                    backgroundColor: "#EC2227",
+                    height: 50,
+                    justifyContent: "center",
+                    alignContent: "center",
               }}
               onPress={() => {
                 this.onEmailSubmit()
@@ -139,7 +146,7 @@ export default class ModalComponent extends BaseComponent {
             </Button>
           </View>
         </View>
-
+        </View>
         {this.getSpinnerComponentView(this.state.spinner)}
       </Modal>
     );

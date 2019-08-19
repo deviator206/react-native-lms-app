@@ -1,4 +1,4 @@
-import { Body, Button, Card, CardItem, CheckBox, Col, Container, Content, DatePicker, Footer, Grid, Input, Item, Label, ListItem, Picker, Row, Text, Textarea } from 'native-base';
+import { Body, Button, Card, CardItem, CheckBox, Col, Container, Content, DatePicker, Footer, Grid, Input, Item, Label, ListItem, Row, Text, Textarea } from 'native-base';
 import React from 'react';
 import { default as FeatherIcon } from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import RefDataApi from '../../services/RefDataApi';
 import { default as commonStyle } from '../common/commonStyling';
 import appConfig from '../common/config';
+import appConstant from '../common/consts';
 import DropDownComponent from '../common/dropdownComponent';
 import HeaderComponent from '../common/headerComponent';
 import i18nMessages from '../common/i18n';
@@ -20,22 +21,21 @@ class AddLeadPage extends React.Component {
     super(props);
     this.state = {
       spinner: false,
-      selectedSource: undefined,
-      selectedTenure: undefined,
       currentSelectedBU: appConfig.BU_LIST[0],
       selectedBuList: [],
       isSelfApproved: false,
       leadAddedDate: new Date(2018, 4, 4)
     };
+
+    this.onDropDownChange = this.onDropDownChange.bind(this);
     this.getSpinnerComponentView = this.getSpinnerComponentView.bind(this);
     this.getHeaderSection = this.getHeaderSection.bind(this);
-    this.onSourceChanged = this.onSourceChanged.bind(this);
-    this.onBuSelectionChanged = this.onBuSelectionChanged.bind(this);
+
+
     this.onLeadAddDateSelected = this.onLeadAddDateSelected.bind(this);
-    this.getLeadSourceTypes = this.getLeadSourceTypes.bind(this);
+
     this.getDatePickerView = this.getDatePickerView.bind(this);
 
-    this.onTenureChanged = this.onTenureChanged.bind(this);
     this.getDropdownFor = this.getDropdownFor.bind(this);
     this.getUnitAddedList = this.getUnitAddedList.bind(this);
     this.onBuSelectionConfirmed = this.onBuSelectionConfirmed.bind(this);
@@ -60,6 +60,31 @@ class AddLeadPage extends React.Component {
       spinner: false
     });
   }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    const { TENURE, SOURCE, CURRENCY, INDUSTRY, COUNTRY, BU } = this.props;
+    if (nextState &&
+      (
+        (TENURE !== nextState.TENURE) ||
+        (SOURCE !== nextState.SOURCE) ||
+        (CURRENCY !== nextState.CURRENCY) ||
+        (INDUSTRY !== nextState.INDUSTRY) ||
+        (COUNTRY !== nextState.COUNTRY) ||
+        (BU !== nextState.BU)
+      )
+    ) {
+      console.log(nextState);
+      return false;
+    }
+    return true
+  }
+
+  onDropDownChange({ type, value }) {
+    this.setState({
+      [type]: value
+    });
+  }
+
   componentDidMount() {
     this.props.loadRefData().then(this.onResponseFromReferenceData).catch(this.onErrorResponseFromReferenceData);
 
@@ -76,8 +101,6 @@ class AddLeadPage extends React.Component {
     // });
     this.setState({
       spinner: true,
-      selectedSource: undefined,
-      selectedTenure: undefined,
       currentSelectedBU: appConfig.BU_LIST[0],
       selectedBuList: [],
       isSelfApproved: false,
@@ -96,22 +119,12 @@ class AddLeadPage extends React.Component {
     });
   }
 
-  onBuSelectionChanged(value) {
-    this.setState({
-      currentSelectedBU: value
-    });
-  }
 
-  onSourceChanged(value) {
-    this.setState({
-      selectedSource: value
-    });
-  }
 
   getHeaderSection() {
-    const {navigation} = this.props;
+    const { navigation } = this.props;
     return (
-      <HeaderComponent title="Add Lead"  navigation={navigation}  showSideMenuBtn={true} sideMenuClickHandler={() => {
+      <HeaderComponent title="Add Lead" navigation={navigation} showSideMenuBtn={true} sideMenuClickHandler={() => {
         alert("TEST")
       }} />
     )
@@ -144,285 +157,18 @@ class AddLeadPage extends React.Component {
     return nonLoaderView;
   }
 
-  getLeadSourceTypes() {
-    return (
-      <Item picker>
-        <Picker
-          mode="dropdown"
-          iosIcon={<Icon name="keyboard-arrow-down" />}
-          style={styleContent.dynamicComponentTextStyle}
-          selectedValue={this.state.selectedSource}
-          placeholderStyle={styleContent.dynamicComponentTextStyle}
-          onValueChange={this.onSourceChanged.bind(this)}
-          placeholderIconColor="#007aff"
-        >
-          <Picker.Item label="Wallet" style={styleContent.dynamicComponentTextStyle} value="key0" />
-          <Picker.Item label="ATM Card" value="key1" />
-          <Picker.Item label="Debit Card" value="key2" />
-          <Picker.Item label="Credit Card" value="key3" />
-          <Picker.Item label="Net Banking" value="key4" />
-        </Picker>
-      </Item>
-
-    )
-  }
 
   getDropdownFor(type) {
     const { referenceData = {} } = this.state;
     let returnedView = null;
     let dataSource = [];
-
-    console.log("[getDropdownFor] ", type, "::referenceData::", referenceData);
-    switch (type) {
-      case 'TENURE':
-        dataSource = (referenceData && referenceData['TENURE']) ? referenceData['TENURE'] : [];
-        returnedView = <DropDownComponent dataSource={dataSource} />;
-        break;
-      case 'SOURCE_TYPE':
-        dataSource = (referenceData && referenceData['SOURCE']) ? referenceData['SOURCE'] : [];
-        returnedView = <DropDownComponent dataSource={dataSource} />;
-        break;
-      case 'SALES_REP1':
-        dataSource = appConfig.SALES_REP_LIST;
-        returnedView = <DropDownComponent dataSource={dataSource} />;
-        break;
-      case 'CURRENCY':
-        dataSource = (referenceData && referenceData['CURRENCY']) ? referenceData['CURRENCY'] : [];
-        returnedView = <DropDownComponent dataSource={dataSource} />;
-        break;
-      case 'INDUSTRY':
-        dataSource = (referenceData && referenceData['INDUSTRY']) ? referenceData['INDUSTRY'] : [];
-        returnedView = <DropDownComponent dataSource={dataSource} />;
-        break;
-      case 'BU_NAME':
-        dataSource = (referenceData && referenceData['BU']) ? referenceData['BU'] : [];
-        returnedView = <DropDownComponent dataSource={dataSource} />;
-        break;
-      case 'COUNTRY':
-        dataSource = (referenceData && referenceData['COUNTRY']) ? referenceData['COUNTRY'] : [];
-        returnedView = <DropDownComponent dataSource={dataSource} />;
-        break;
-      case 'STATE':
-        dataSource = (referenceData && referenceData['STATE']) ? referenceData['STATE'] : [];
-        returnedView = <DropDownComponent dataSource={dataSource} />;
-        break;
-      default:
-        returnedView = (
-          <Item picker>
-            <Picker
-              mode="dropdown"
-              iosIcon={<Icon name="arrow-down" />}
-              style={styleContent.dynamicComponentTextStyle}
-              selectedValue={this.state.selectedSource}
-              placeholderStyle={styleContent.dynamicComponentTextStyle}
-              onValueChange={this.onSourceChanged.bind(this)}
-              placeholderIconColor="#007aff"
-            >
-              <Picker.Item label="RANDOM" style={styleContent.dynamicComponentTextStyle} value="key0" />
-              <Picker.Item label="CHECK THIS" value="key1" />
-            </Picker>
-          </Item>);
-        break;
-    }
+    dataSource = (referenceData && referenceData[type]) ? referenceData[type] : [];
+    returnedView = <DropDownComponent
+      dataSource={dataSource}
+      updateToParent={this.onDropDownChange}
+      dropDownType={type} />;
     return returnedView;
 
-  }
-  getDropdownFor1(type) {
-    let returnedView = '';
-    const pickerItemArr = [];
-    switch (type) {
-      case 'TENURE':
-        appConfig.LEAD_TENURE.forEach(singleItem => {
-          pickerItemArr.push(
-            (<Picker.Item label={singleItem} style={styleContent.dynamicComponentTextStyle} value={singleItem} />)
-          )
-        });
-        returnedView = (
-          <Item picker>
-            <Picker
-              mode="dropdown"
-              iosIcon={<Icon name="arrow-down" />}
-              style={styleContent.dynamicComponentTextStyle}
-              selectedValue={this.state.currentSelectedBU}
-              placeholderStyle={styleContent.dynamicComponentTextStyle}
-              onValueChange={this.onBuSelectionChanged.bind(this)}
-              placeholderIconColor="#007aff"
-            >
-              {pickerItemArr}
-
-            </Picker>
-          </Item>);
-        break;
-      case 'SOURCE_TYPE':
-        appConfig.LEAD_SOURCE_TYPE.forEach(singleItem => {
-          pickerItemArr.push(
-            (<Picker.Item
-              label={singleItem.toUpperCase()}
-              style={styleContent.dynamicComponentTextStyle}
-              value={singleItem} />)
-          )
-        });
-        returnedView = (
-          <Item picker>
-            <Picker
-              mode="dropdown"
-              iosIcon={<Icon name="arrow-down" />}
-              style={styleContent.dynamicComponentTextStyle}
-              selectedValue={this.state.currentSelectedBU}
-              placeholderStyle={styleContent.dynamicComponentTextStyle}
-              onValueChange={this.onBuSelectionChanged.bind(this)}
-              placeholderIconColor="#007aff"
-            >
-              {pickerItemArr}
-
-            </Picker>
-          </Item>);
-        break;
-      case 'SALES_REP':
-        appConfig.SALES_REP_LIST.forEach(singleItem => {
-          pickerItemArr.push(
-            (<Picker.Item label={singleItem} style={styleContent.dynamicComponentTextStyle} value={singleItem} />)
-          )
-        });
-        returnedView = (
-          <Item picker>
-            <Picker
-              mode="dropdown"
-              iosIcon={<Icon name="arrow-down" />}
-              style={styleContent.dynamicComponentTextStyle}
-              selectedValue={this.state.currentSelectedBU}
-              placeholderStyle={styleContent.dynamicComponentTextStyle}
-              onValueChange={this.onBuSelectionChanged.bind(this)}
-              placeholderIconColor="#007aff"
-            >
-              {pickerItemArr}
-
-            </Picker>
-          </Item>);
-        break;
-      case 'CURRENCY':
-        appConfig.SUPPORTED_CURRENCY.forEach(singleItem => {
-          pickerItemArr.push(
-            (<Picker.Item label={singleItem} style={styleContent.dynamicComponentTextStyle} value={singleItem} />)
-          )
-        });
-        returnedView = (
-          <Item picker>
-            <Picker
-              mode="dropdown"
-              iosIcon={<Icon name="arrow-down" />}
-              style={styleContent.dynamicComponentTextStyle}
-              selectedValue={this.state.currentSelectedBU}
-              placeholderStyle={styleContent.dynamicComponentTextStyle}
-              onValueChange={this.onBuSelectionChanged.bind(this)}
-              placeholderIconColor="#007aff"
-            >
-              {pickerItemArr}
-
-            </Picker>
-          </Item>);
-
-        break;
-      case 'INDUSTRY':
-        appConfig.INDUSTRY_LIST.forEach(singleItem => {
-          pickerItemArr.push(
-            (<Picker.Item label={singleItem} style={styleContent.dynamicComponentTextStyle} value={singleItem} />)
-          )
-        });
-        returnedView = (
-          <Item picker>
-            <Picker
-              mode="dropdown"
-              iosIcon={<Icon name="arrow-down" />}
-              style={styleContent.dynamicComponentTextStyle}
-              selectedValue={this.state.currentSelectedBU}
-              placeholderStyle={styleContent.dynamicComponentTextStyle}
-              onValueChange={this.onBuSelectionChanged.bind(this)}
-              placeholderIconColor="#007aff"
-            >
-              {pickerItemArr}
-
-            </Picker>
-          </Item>);
-        break;
-      case 'BU_NAME':
-        appConfig.BU_LIST.forEach(singleItem => {
-          pickerItemArr.push(
-            (<Picker.Item label={singleItem} style={styleContent.dynamicComponentTextStyle} value={singleItem} />)
-          )
-        });
-        returnedView = (
-          <Item picker>
-            <Picker
-              mode="dropdown"
-              iosIcon={<Icon name="arrow-down" />}
-              style={styleContent.dynamicComponentTextStyle}
-              selectedValue={this.state.currentSelectedBU}
-              placeholderStyle={styleContent.dynamicComponentTextStyle}
-              onValueChange={this.onBuSelectionChanged.bind(this)}
-              placeholderIconColor="#007aff"
-            >
-              {pickerItemArr}
-
-            </Picker>
-          </Item>);
-        break;
-      case 'COUNTRY':
-        returnedView = (
-          <Item picker>
-            <Picker
-              mode="dropdown"
-              iosIcon={<Icon name="arrow-down" />}
-              style={styleContent.dynamicComponentTextStyle}
-              selectedValue={this.state.selectedSource}
-              placeholderStyle={styleContent.dynamicComponentTextStyle}
-              onValueChange={this.onSourceChanged.bind(this)}
-              placeholderIconColor="#007aff"
-            >
-              <Picker.Item label="India" style={styleContent.dynamicComponentTextStyle} value="key0" />
-              <Picker.Item label="Chine" value="key1" />
-              <Picker.Item label="Pakistan" value="key2" />
-            </Picker>
-          </Item>);
-        break;
-      case 'STATE':
-        returnedView = (
-          <Item picker>
-            <Picker
-              mode="dropdown"
-              iosIcon={<Icon name="arrow-down" />}
-              style={styleContent.dynamicComponentTextStyle}
-              selectedValue={this.state.selectedSource}
-              placeholderStyle={styleContent.dynamicComponentTextStyle}
-              onValueChange={this.onSourceChanged.bind(this)}
-              placeholderIconColor="#007aff"
-            >
-              <Picker.Item label="Maharashtra" style={styleContent.dynamicComponentTextStyle} value="key0" />
-              <Picker.Item label="Karnataka" value="key1" />
-              <Picker.Item label="Punjab" value="key2" />
-            </Picker>
-          </Item>);
-        break;
-      default:
-        returnedView = (
-          <Item picker>
-            <Picker
-              mode="dropdown"
-              iosIcon={<Icon name="arrow-down" />}
-              style={styleContent.dynamicComponentTextStyle}
-              selectedValue={this.state.selectedSource}
-              placeholderStyle={styleContent.dynamicComponentTextStyle}
-              onValueChange={this.onSourceChanged.bind(this)}
-              placeholderIconColor="#007aff"
-            >
-              <Picker.Item label="RANDOM" style={styleContent.dynamicComponentTextStyle} value="key0" />
-              <Picker.Item label="CHECK THIS" value="key1" />
-            </Picker>
-          </Item>);
-        break;
-    }
-
-    return returnedView;
   }
 
   onBuSelectionConfirmed() {
@@ -562,7 +308,7 @@ class AddLeadPage extends React.Component {
                     </Grid>
                   </Col>
                   <Col>
-                    {this.getDropdownFor("SOURCE_TYPE")}
+                    {this.getDropdownFor(appConstant.DROP_DOWN_TYPE.SOURCE)}
                   </Col>
                 </Row>
                 <Row>
@@ -599,7 +345,7 @@ class AddLeadPage extends React.Component {
                   <Col>
                     <Text note style={commonStyle.labelStyling} >{i18nMessages.tenure_lbl} </Text>
                     <Item >
-                      {this.getDropdownFor('TENURE')}
+                      {this.getDropdownFor(appConstant.DROP_DOWN_TYPE.TENURE)}
 
                     </Item>
                   </Col>
@@ -666,7 +412,7 @@ class AddLeadPage extends React.Component {
                   <Col>
                     <Text note style={commonStyle.labelStyling} >{i18nMessages.lbl_contact_country} </Text>
                     <Item >
-                      {this.getDropdownFor('COUNTRY')}
+                      {this.getDropdownFor(appConstant.DROP_DOWN_TYPE.COUNTRY)}
                     </Item>
                   </Col>
                 </Row>
@@ -674,7 +420,7 @@ class AddLeadPage extends React.Component {
                   <Col>
                     <Text note style={commonStyle.labelStyling} >{i18nMessages.lbl_contact_state} </Text>
                     <Item >
-                      {this.getDropdownFor('STATE')}
+                      {this.getDropdownFor(appConstant.DROP_DOWN_TYPE.COUNTRY)}
                     </Item>
                   </Col>
                 </Row>
@@ -686,7 +432,7 @@ class AddLeadPage extends React.Component {
                   }}>
                     <Text note style={commonStyle.labelStyling} >{i18nMessages.lbl_business_unit_name} </Text>
                     <Item >
-                      {this.getDropdownFor('BU_NAME')}
+                      {this.getDropdownFor(appConstant.DROP_DOWN_TYPE.BU_NAME)}
                     </Item>
                   </Col>
                   <Col
@@ -727,7 +473,7 @@ class AddLeadPage extends React.Component {
                   <Col>
                     <Label note style={commonStyle.labelStyling} >{i18nMessages.lbl_industry} </Label>
                     <Item >
-                      {this.getDropdownFor('INDUSTRY')}
+                      {this.getDropdownFor(appConstant.DROP_DOWN_TYPE.INDUSTRY)}
                     </Item>
                   </Col>
                 </Row>
@@ -760,12 +506,12 @@ class AddLeadPage extends React.Component {
                   >
                     <Text note style={commonStyle.labelStyling} >{i18nMessages.lbl_currency} </Text>
                     <Item >
-                      {this.getDropdownFor('CURRENCY')}
+                      {this.getDropdownFor(appConstant.DROP_DOWN_TYPE.CURRENCY)}
                     </Item>
                   </Col>
                 </Row>
 
-                
+
                 {this.getViewForSelfApproval()}
               </Grid>
 
