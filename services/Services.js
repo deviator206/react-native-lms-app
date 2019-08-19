@@ -6,7 +6,8 @@ const SERVER_CONFIG = {
 
 const SERVICE_URL = {
     'LOGIN': 'login/',
-    'REF_DATA':'refdata/'
+    'REF_DATA':'refdata/',
+    'CREATE_LEAD':'rootlead/'
 }
 
 const axiosInstance = axios.create({
@@ -42,5 +43,10 @@ class ServiceClass {
     static async getRefData(params) {
         return await axiosInstance.get(SERVICE_URL['REF_DATA']+'?'+params);
     }
+
+    static async createLead(params) {
+        return await axiosInstance.post(SERVICE_URL['CREATE_LEAD'], params);
+    }
+
 }
 export default ServiceClass;

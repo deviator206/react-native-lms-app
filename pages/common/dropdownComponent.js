@@ -15,33 +15,56 @@ export default class DropDownComponent extends React.Component {
     }
 
     onSelectionChanged(value) {
-        const {updateToParent, dropDownType} = this.props;
+        const { updateToParent, dropDownType } = this.props;
         this.setState({
             selected: value
-          });
-        if(updateToParent) {
-            updateToParent({type:dropDownType, value})
+        });
+        if (updateToParent) {
+            updateToParent({ type: dropDownType, value })
         }
-        
+
     }
 
     componentDidMount() {
-        const{dataSource} = this.props;
+        const { dataSource, updateToParent, dropDownType } = this.props;
+        const value = (dataSource && dataSource[0] && dataSource[0].code) ? dataSource[0].code : '';
         this.setState({
-            selected: (dataSource && dataSource[0] && dataSource[0].name ) ? dataSource[0].name : ''
-          });
+            selected: value
+        });
+        if (updateToParent) {
+            updateToParent({ type: dropDownType, value })
+        }
     }
-    
+
+    componentDidUpdate1(prevProps) {
+        const { dataSource, updateToParent, dropDownType } = this.props;
+        const { selected } = this.state;
+        let value;
+        // Typical usage (don't forget to compare props):
+        if (dataSource !== prevProps.dataSource) {
+            value = (dataSource && dataSource[0] && dataSource[0].code) ? dataSource[0].code : '';
+            if (selected != value) {
+                this.setState({
+                    selected: value
+                });
+            }
+
+            if (updateToParent) {
+                updateToParent({ type: dropDownType, value })
+            }
+        }
+    }
+
     getView() {
-        const {selected = ''} = this.state;
+        const { selected = '' } = this.state;
         let returnedView;
-        const { dataSource=["1","2","3"], onDropDownSelectionChange = this.onSelectionChanged } = this.props;
+        const { dataSource = [], onDropDownSelectionChange = this.onSelectionChanged } = this.props;
         const pickerItemArr = [];
-        const indG = 'KEY_'+parseInt(Math.random(0,111)*1000);
+        const indG = 'KEY_' + parseInt(Math.random(0, 111) * 1000);
         dataSource.forEach(singleItem => {
-            const ind = 'KEY_'+parseInt(Math.random(0,19)*1000);
+            const ind = 'KEY_' + parseInt(Math.random(0, 19) * 1000);
             pickerItemArr.push(
-                (<Picker.Item 
+                (<Picker.Item
                     key={ind}
                     label={singleItem.name} style={styleContent.dynamicComponentTextStyle} value={singleItem.code} />)
             )

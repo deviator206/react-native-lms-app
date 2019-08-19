@@ -6,18 +6,31 @@ export default class BUListComponent extends React.Component {
     constructor(props){
         super(props);
         this.getListItemsView = this.getListItemsView.bind(this);
+        this.getUnitDisplayName = this.getUnitDisplayName.bind(this);
     }
 
+    getUnitDisplayName(codeName) {
+        const{  dataSource = []}  = this.props;
+        let displayName = '';
+        dataSource.every((singleBU)=>{
+            if(codeName === singleBU.code) {
+                displayName = singleBU.name;
+                return false; 
+            }
+            return true;
+        });
+
+        return displayName;
+    }
     getListItemsView() {
-        const{ onBuRemoval}  = this.props;
-        const businessUnitList = ["Atlas","Spectro","KTem","LmQT"];
+        const{ onBuRemoval, businessUnitList = []}  = this.props;
         const listViews =[];
-        businessUnitList.forEach((element,index) => {
-            const uniqueKey = 'sam'+index;
+        businessUnitList.forEach((element) => {
+            const uniqueKey = 'TEMP_BU_LIST'+element;
             listViews.push(
                 <ListItem thumbnail key={uniqueKey} >
                         <Body>
-                            <Text>{element}</Text>
+                            <Text>{this.getUnitDisplayName(element)}</Text>
                         </Body>
                         <Right>
                             <Button transparent onPress={
