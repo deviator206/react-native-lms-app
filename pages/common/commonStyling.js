@@ -101,21 +101,18 @@ const styleContent = StyleSheet.create({
     },
     modalHeaderDiv: {
         backgroundColor: "#0E0D0D",
-        height: 70,
+        height: 60,
         paddingHorizontal: 20,
-        paddingTop: 15
+        paddingTop: 15,
+        justifyContent: "space-between",
+        flexDirection: "row"
     },
     modalHeader: {
         color: "#FFFFFF",
         fontSize: 20,
-        fontFamily: 'Montserrat-Medium',
-        lineHeight: 40,
-        width: "80%"
+        fontFamily: 'Montserrat-Medium'
     },
     modalCloseBtn: {
-        position: "absolute",
-        right: 10,
-        top: -35,
         fontSize: 30,
         color: "#CCCCCC",
     },
@@ -125,6 +122,39 @@ const styleContent = StyleSheet.create({
     },
     modalTextBox: {
         marginBottom: 30
+    },
+    modalFooter:{
+        width:"100%",
+        height: 50
+    },
+    modalButtonContent: {
+        height: 50,
+        justifyContent: "space-around",
+        flexDirection: "row"
+    },
+    modalTwoButtons: {
+        color: "#FFFFFF",
+        fontSize: 18,
+        fontFamily: 'Montserrat-Medium',
+        textAlign: "center",
+        height: 50,
+        lineHeight: 50
+    },
+    primaryButton: {
+        backgroundColor: "#EC2227" 
+    },
+    secondaryButton: {
+        backgroundColor: "#44C1EE"
+    },
+    formGrid: {
+        //backgroundColor: "red"
+    },
+    formGridLabel: {
+        height: 50
+    },
+    formGridValue: {
+        height: 60,
+        marginBottom: 10
     }
 });
 export default styleContent;

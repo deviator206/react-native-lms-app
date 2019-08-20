@@ -10,6 +10,7 @@ import FooterComponent from '../common/footerComponent';
 import HeaderComponent from '../common/headerComponent';
 import SpinnerComponent from '../common/spinnerComponent';
 import styleContent from './viewLeadStyle';
+import i18nMessages from '../common/i18n';
 
 const leadApi = new LeadApi({ state: {} });
 
@@ -311,71 +312,90 @@ class ViewLeadPage extends React.Component {
                     onRequestClose={() => {
                         Alert.alert('Modal has been closed.');
                     }}>
-                    <View style={{ width: '100%' }}>
+                    <View style={{ width: '100%', height: "100%"}}>
                         <View style={commonStyle.modalHeaderDiv}>
-                            <Text note style={commonStyle.modalHeader}> Filter View Leads </Text>
+                            <View><Text note style={commonStyle.modalHeader}> Filter View Leads </Text></View>
+                            <View>
                             <TouchableHighlight
                                 onPress={() => {
                                     this.filerBtnToggled();
                                 }}>
                                 <Icon name="close" style={commonStyle.modalCloseBtn} />
                             </TouchableHighlight>
+                            </View>
                         </View>
-                        <View style={{ padding: 20, marginTop: "5%" }}>
-                            <Row style={{ marginBottom: "8%" }}>
+                        <View style={{flex: 1, padding: 20}}>
+                            <Grid style={commonStyle.formGrid}>
+                                <Row style={commonStyle.formGridLabel}>
                                 <Col>
-                                    <Text note style={{
-                                        fontSize: 14,
-                                        fontFamily: 'Montserrat-Medium',
-                                        color: "#616161"
-                                    }}> Status</Text>
+                                        <Text note style={commonStyle.labelStyling}>{i18nMessages.status}</Text>
+                                    </Col>
+                                    <Col>
+                                        <Text note style={commonStyle.labelStyling}>{i18nMessages.tenure_lbl}</Text>
+                                    </Col>
+                                </Row>
+                                <Row style={commonStyle.formGridValue}>
+                                    <Col>
+                                        <Text>Status dropdown</Text>
                                 </Col>
                                 <Col>
-                                    <Text note style={{
-                                        fontSize: 14,
-                                        fontFamily: 'Montserrat-Medium',
-                                        color: "#616161"
-                                    }}>Tenure</Text>
+                                        <Text>Tenure dropdown</Text>
                                 </Col>
                             </Row>
-                            <Row style={{}}>
-                                <Col>
-                                    <Text style={{
-                                        fontSize: 16,
-                                        fontFamily: 'Montserrat-Medium',
-                                        color: "#000000"
-                                    }}>Hello World!</Text>
-                                </Col>
-                                <Col>
-                                    <Text style={{
-                                        fontSize: 16,
-                                        fontFamily: 'Montserrat-Medium',
-                                        color: "#000000"
-                                    }}>Hello World!</Text>
-                                </Col>
-                            </Row>
-                        </View>
-                        <View style={{ width: "100%", marginTop: "20%", alignItems: "center" }}>
-                            <View style={{
-                                marginTop: 5,
-                                backgroundColor: "#EC2227",
-                                height: 50,
-                                justifyContent: "center",
-                                alignItems: "center",
-                                alignContent: "center",
-                                width: "90%",
 
-                            }}>
+                                <Row style={commonStyle.formGridLabel}>
+                                <Col>
+                                        <Text note style={commonStyle.labelStyling}>{i18nMessages.location}</Text>
+                                    </Col>
+                                </Row>
+                                <Row style={commonStyle.formGridValue}>
+                                    <Col><Text>Country AND State dropdown</Text></Col>
+                                </Row>
+
+
+                                <Row style={commonStyle.formGridLabel}>
+                                    <Col>
+                                        <Text note style={commonStyle.labelStyling}>{i18nMessages.bu_selection}</Text>
+                                </Col>
+                                </Row>
+                                <Row style={commonStyle.formGridValue}>
+                                    <Col><Text>BU and Rep dropdown</Text></Col>
+                                </Row>
+                                <Row style={commonStyle.formGridLabel}>
+                                <Col>
+                                        <Text note style={commonStyle.labelStyling}>{i18nMessages.industry}</Text>
+                                    </Col>
+                                </Row>
+                                <Row style={commonStyle.formGridValue}>
+                                    <Col><Text>Industry dropdown</Text></Col>
+                                </Row>
+
+
+                                <Row style={commonStyle.formGridLabel}>
+                                    <Col>
+                                        <Text note style={commonStyle.labelStyling}>{i18nMessages.source_type}</Text>
+                                </Col>
+                            </Row>
+                                <Row style={commonStyle.formGridValue}>
+                                    <Col><Text>source dropdown</Text></Col>
+                                </Row>
+                            </Grid>
+                        </View>
+
+                        <View style={commonStyle.modalFooter}>
+                            <View style={commonStyle.modalButtonContent}>
+                                <View style={{width: "40%"}}>
+                                    <TouchableHighlight
+                                        onPress={() => {  }}>
+                                        <Text style={[commonStyle.modalTwoButtons, commonStyle.secondaryButton]}>Reset</Text>
+                                    </TouchableHighlight>
+                                </View>
+                                <View style={{width: "40%"}}>
                                 <TouchableHighlight
-                                    onPress={() => {
-                                        this.filerBtnToggled();
-                                    }}>
-                                    <Text style={{
-                                        color: "#FFFFFF",
-                                        fontSize: 16,
-                                        fontFamily: 'Montserrat-Medium'
-                                    }}>Close</Text>
+                                        onPress={() => {  }}>
+                                        <Text style={[commonStyle.modalTwoButtons, commonStyle.primaryButton]}>Apply</Text>
                                 </TouchableHighlight>
+                                </View>
                             </View>
                         </View>
                     </View>

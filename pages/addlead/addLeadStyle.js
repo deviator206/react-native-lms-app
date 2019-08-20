@@ -51,7 +51,8 @@ const styleContent = StyleSheet.create({
     datePickerStyle:{
        color:"#616161",
        fontSize:14,
-       fontFamily: 'Montserrat-Medium'
+       fontFamily: 'Montserrat-SemiBold',
+       lineHeight: 15
     },
     textAreaStyling:{
         width: '95%'

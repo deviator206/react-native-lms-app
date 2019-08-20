@@ -4,7 +4,14 @@ const i18nMessages = {
     "source_type":"SOURCE",
     "customer_name_lbl":"Customer Name",
     "requirement_project_lbl": "Requirements / Project",
+    "description": "Description",
+    "type": "Type",
     "tenure_lbl": "Tenure", 
+    "status": "Status",
+    "project_name": "Project name",
+    "location": "Location",
+    "bu_selection": "BU Selection",
+    "industry": "Industry",
     "lbl_contact_info":"Contact Information",
     "lbl_contact_name":" Name",
     "lbl_contact_email":" Email",
@@ -23,7 +30,7 @@ const i18nMessages = {
     "lbl_modify_bu":"Modify BU",
     "lbl_notify_bu":"Notify BU",
     "ERROR_MSG_FORBIDDEN":" Invalid credentials, Please try with correct ones.",
-    "ERROR_MSG_CREDENTIALS_MISSING": "Please enter Username and Password"
+    "ERROR_MSG_CREDENTIALS_MISSING": "Please enter Username and Password",
 
 }
 

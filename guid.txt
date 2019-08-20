@@ -1,8 +1,7 @@
 
 GD
-https://xd.adobe.com/spec/21c796a3-7084-42c2-5cb9-56b8bf8bab04-57f6/screen/2a17a233-d255-44f7-aea0-b0ab309d0742/iPhone-X-XS-3
+https://xd.adobe.com/spec/e36440c5-a45b-43a6-7fcf-288685bd75e4-9555/screen/2d03f669-aa97-4335-8428-0f8c15a72665/iPhone-X-XS-7
 
-https://xd.adobe.com/spec/21c796a3-7084-42c2-5cb9-56b8bf8bab04-57f6/screen/2a17a233-d255-44f7-aea0-b0ab309d0742/iPhone-X-XS-3
 
 components
 https://docs.nativebase.io/Components.html#checkbox-headref
@@ -34,6 +33,55 @@ changes
 https://github.com/GeekyAnts/NativeBase-KitchenSink/blob/9eb8c7cb9195055f0d5f5e9c09065c2b524b6003/android/settings.gradle
 https://github.com/GeekyAnts/NativeBase-KitchenSink/blob/9eb8c7cb9195055f0d5f5e9c09065c2b524b6003/android/app/build.gradle
 
-But not really required
+
+Error Handling
+Images 
+
+Forgot Password
+ > Rest Replacement
+ > Email Sending
+
+View Lead
+ > Listing with REST integration 
+ > Filters
+ > Pagination
+
+
+ Add Lead
+  > Thank You Modal
+  > is Self Approved
+
+
+Lead Details View
+ > All Information to be displayed
+ > Side Information as well to be displayed
+ > Actions to be handled
+
+Market Intelligence
+ > Listing of MI 
+ > Filters
+ > Pagination
+ 
+
+Add MI
+ > Add REST integration 
+ > Modal thank you
+
+MI Details 
+> Full screen
+> Actions on it 
+> Thank Your Modal 
+> Continue the flow
+
+Notifications
+ > See Notifications
+ > See Details
+
+Logout
+
+Personal Details 
+> View Details
+> Update Details
+
 
 

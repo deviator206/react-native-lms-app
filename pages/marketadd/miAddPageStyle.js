@@ -41,8 +41,8 @@ const styleContent = StyleSheet.create({
         width: "90%",
     },
     gridWrapper: {
-        width: "96%",
-        marginTop: "2%",
+        width: "92%",
+        marginHorizontal: "4%",
         alignSelf: "center"
     },
     gridCardWrapper: {

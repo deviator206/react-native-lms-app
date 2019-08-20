@@ -459,7 +459,7 @@ class AddLeadPage extends React.Component {
                           <FeatherIcon name="calendar" style={styleContent.calenderIcon} />
                         </Col>
                         <Col style={{
-                          width: "80%"
+                          width: "88%"
                         }}>
                           {this.getDatePickerView()}
                         </Col>
@@ -632,7 +632,10 @@ class AddLeadPage extends React.Component {
                         width: "80%",
                         backgroundColor: "#EC2227",
                         marginTop: "25%",
-                        marginLeft: "10%"
+                        marginLeft: "10%",
+                        flexDirection: "row",
+                        alignItems: "flex-start",
+                        paddingTop: 10
                       }}
                       onPress={this.onBuSelectionConfirmed}
                     >
@@ -648,6 +651,7 @@ class AddLeadPage extends React.Component {
                             paddingLeft: "0%",
                             fontSize: 14,
                             fontFamily: 'Montserrat-Medium',
+                            paddingTop: 3
                           }
                         }
                       > {i18nMessages.lbl_add_bu}</Text>

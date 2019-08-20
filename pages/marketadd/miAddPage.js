@@ -6,6 +6,7 @@ import appConfig from '../common/config';
 import HeaderComponent from '../common/headerComponent';
 import i18nMessages from '../common/i18n';
 import styleContent from './miAddPageStyle';
+import { default as commonStyle } from '../common/commonStyling';
 
 export default class MiAddPage extends React.Component {
     constructor(props) {
@@ -76,7 +77,7 @@ export default class MiAddPage extends React.Component {
                     <Grid style={styleContent.gridWrapper}>
                         <Row >
                             <Col style={{ marginTop: "5%"}}>
-                                <Label style={styleContent.secondaryLabel}>{i18nMessages.customer_name_lbl}</Label>
+                                <Label style={commonStyle.labelStyling}>{i18nMessages.type}</Label>
                             </Col>
                         </Row>
                         <Row >
@@ -86,22 +87,10 @@ export default class MiAddPage extends React.Component {
                             </Col>
                         </Row>
 
-                        <Row><Col><Text note style={styleContent.labelStyling} >{i18nMessages.requirement_project_lbl} </Text></Col></Row>
+                        <Row><Col><Text note style={commonStyle.labelStyling} >{i18nMessages.requirement_project_lbl} </Text></Col></Row>
 
-                        <Row>
-                            <Col>
-                                <Item>
-                                    <Textarea
-                                        style={styleContent.dynamicComponentTextStyle}
-                                        rowSpan={4} style={styleContent.textAreaStyling}
-                                        bordered
-                                    />
 
-                                </Item>
-                            </Col>
-                        </Row>
 
-                        <Row><Col><Text note style={styleContent.labelStyling} >{i18nMessages.requirement_project_lbl} </Text></Col></Row>
                         <Row>
                             <Col>
                                 <Item style={{height: 50,  width: "95%"}}>
@@ -111,6 +100,18 @@ export default class MiAddPage extends React.Component {
                                         clearButtonMode="always"
                                         autoCapitalize="none"
                                         autoCorrect={false}
+                                    />
+                                </Item>
+                            </Col>
+                        </Row>
+                        <Row style={{marginTop: 20}}><Col><Text note style={commonStyle.labelStyling} >{i18nMessages.description} </Text></Col></Row>
+                        <Row>
+                            <Col>
+                                <Item>
+                                    <Textarea
+                                        style={styleContent.dynamicComponentTextStyle}
+                                        rowSpan={4} style={styleContent.textAreaStyling}
+                                        bordered
                                     />
                                 </Item>
                             </Col>
