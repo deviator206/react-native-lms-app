@@ -306,9 +306,7 @@ class AddLeadPage extends React.Component {
   getHeaderSection() {
     const { navigation } = this.props;
     return (
-      <HeaderComponent title="Add Lead" navigation={navigation} showSideMenuBtn={true} sideMenuClickHandler={() => {
-        alert("TEST")
-      }} />
+      <HeaderComponent title="Add Lead" navigation={navigation} />
     )
   }
 

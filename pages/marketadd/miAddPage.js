@@ -2,11 +2,11 @@ import { Button, Col, Container, Content, Footer, Grid, Input, Item, Label, Pick
 import React from 'react';
 import { Alert, Modal, TouchableHighlight, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { default as commonStyle } from '../common/commonStyling';
 import appConfig from '../common/config';
 import HeaderComponent from '../common/headerComponent';
 import i18nMessages from '../common/i18n';
 import styleContent from './miAddPageStyle';
-import { default as commonStyle } from '../common/commonStyling';
 
 export default class MiAddPage extends React.Component {
     constructor(props) {
@@ -70,9 +70,10 @@ export default class MiAddPage extends React.Component {
 
     render() {
         const uri = "https://facebook.github.io/react-native/docs/assets/favicon.png";
+        const { navigation } = this.props;
         return (
             <Container>
-                <HeaderComponent title="Add Market Intelligence" showSideMenuBtn={true} sideMenuClickHandler={this.sideMenuClickHandler} />
+                <HeaderComponent  navigation={navigation}  title="Add Market Intelligence" showSideMenuBtn={true} sideMenuClickHandler={this.sideMenuClickHandler} />
                 <Content style={styleContent.mainContent}>
                     <Grid style={styleContent.gridWrapper}>
                         <Row >

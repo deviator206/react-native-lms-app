@@ -1,13 +1,13 @@
 import { Button, Card, Col, Container, Content, Grid, Item, Picker, Row, Text, View } from 'native-base';
 import React from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { default as commonStyle } from '../common/commonStyling';
 import appConfig from '../common/config';
+import { default as AppConst } from '../common/consts';
 import FooterComponent from '../common/footerComponent';
 import HeaderComponent from '../common/headerComponent';
 import SpinnerComponent from '../common/spinnerComponent';
-import { default as commonStyle } from '../common/commonStyling';
 import styleContent from './dashboardStyle';
-import {default as AppConst} from '../common/consts';
 export default class DashboardPage extends React.Component {
     constructor(props) {
         super(props);
@@ -97,8 +97,8 @@ export default class DashboardPage extends React.Component {
     }
 
     getHeaderSection() {
-
-        return (<HeaderComponent title="Dashboard" showSideMenuBtn={true} hamburger={true} sideMenuClickHandler={this.sideMenuClicked} />);
+        const { navigation } = this.props;
+        return (<HeaderComponent navigation={navigation} title="Dashboard" showSideMenuBtn={true} hamburger={true} sideMenuClickHandler={this.sideMenuClicked} />);
 
         /*
           return (

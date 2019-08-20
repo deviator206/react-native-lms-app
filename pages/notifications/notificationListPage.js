@@ -132,9 +132,10 @@ export default class NotificationListPage extends React.Component {
     }
     render() {
         const uri = "https://facebook.github.io/react-native/docs/assets/favicon.png";
+        const { navigation } = this.props;
         return (
             <Container>
-                <HeaderComponent title="Notifications" />
+                <HeaderComponent navigation={navigation}   title="Notifications" />
                 
                 <Content style={styleContent.mainContent}>
                     <Tabs   tabBarUnderlineStyle={{backgroundColor:'red', height:3}} tabBarPosition="overlayTop">

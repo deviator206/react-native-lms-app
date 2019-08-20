@@ -132,9 +132,10 @@ export default class MiListPage extends React.Component {
     }
     render() {
         const uri = "https://facebook.github.io/react-native/docs/assets/favicon.png";
+        const { navigation } = this.props;
         return (
             <Container>
-                <HeaderComponent title="Market Intelligence" showSideMenuBtn={true} sideMenuClickHandler={ this.sideMenuClickHandler} />
+                <HeaderComponent  navigation={navigation}  title="Market Intelligence" />
                 <Content style={styleContent.mainContent}>
                     <Grid >
                         <Row style={styleContent.searchAndFilterWrapper}>

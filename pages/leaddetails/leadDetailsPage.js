@@ -391,10 +391,11 @@ class LeadDetailsPage extends React.Component {
 
   render() {
     // {this.getActionsInfo()}
+    const { navigation } = this.props;
     return (
       <Container>
 
-        <HeaderComponent title="Leads Detail" showSideMenuBtn={true} sideMenuClickHandler={this.sideMenuClickHandler} />
+        <HeaderComponent navigation={navigation} title="Leads Detail"  />
         <Content style={styleContent.mainContent}>
           <Grid style={styleContent.gridWrapper} >
             {this.getCustomerInfo()}
