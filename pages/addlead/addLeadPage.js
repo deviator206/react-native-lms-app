@@ -11,6 +11,7 @@ import appConstant from '../common/consts';
 import DropDownComponent from '../common/dropdownComponent';
 import HeaderComponent from '../common/headerComponent';
 import i18nMessages from '../common/i18n';
+import ModalComponent from '../common/modalComponent';
 import SpinnerComponent from '../common/spinnerComponent';
 import { default as Utils } from '../common/Util';
 import styleContent from './addLeadStyle';
@@ -58,7 +59,9 @@ class AddLeadPage extends React.Component {
 
     this.inputTextFieldChanged = this.inputTextFieldChanged.bind(this);
     this.onStateLoaded = this.onStateLoaded.bind(this);
+    this.overlayScreenView = this.overlayScreenView.bind(this);
 
+    this.onFPModalClosed = this.onFPModalClosed.bind(this);
   }
 
 
@@ -78,6 +81,7 @@ class AddLeadPage extends React.Component {
       spinner: false
     });
   }
+
 
 
   onResponseFromReferenceData(resp) {
@@ -152,11 +156,17 @@ class AddLeadPage extends React.Component {
     }
 
     this.setState({
+      showOverlay: true
+    });
+
+    /*
+
+    this.setState({
       spinner: true
     });
     
     this.props.submitLead(inputPayload).then(this.onResponseSubmitLead).catch(this.onErrorResponseSubmitLead);
-
+  */
   }
   shouldComponentUpdate(nextProps, nextState) {
     const { TENURE,
@@ -172,8 +182,8 @@ class AddLeadPage extends React.Component {
       CONTACT_PHONE,
       ESTIMATE,
       STATE
-      
-     } = this.state;
+
+    } = this.state;
     if (nextState &&
       (
         (TENURE !== nextState.TENURE) ||
@@ -188,7 +198,7 @@ class AddLeadPage extends React.Component {
         (CONTACT_EMAIL !== nextState.CONTACT_EMAIL) ||
         (CONTACT_PHONE !== nextState.CONTACT_PHONE) ||
         (ESTIMATE !== nextState.ESTIMATE) ||
-        (STATE  !== nextState.STATE) 
+        (STATE !== nextState.STATE)
       )
     ) {
       return false;
@@ -196,19 +206,19 @@ class AddLeadPage extends React.Component {
     return true
   }
 
-  onStateLoaded (resp) {
-    const {dynamic_state_ref} = this.state;
+  onStateLoaded(resp) {
+    const { dynamic_state_ref } = this.state;
     this.setState({
       spinner: false,
-      dynamic_state_list : resp[dynamic_state_ref],
-      
+      dynamic_state_list: resp[dynamic_state_ref],
+
     });
 
     // NON render set state
     this.setState({
       STATE: (resp[dynamic_state_ref] && resp[dynamic_state_ref][0] && resp[dynamic_state_ref][0].code) ? resp[dynamic_state_ref][0].code : ''
     });
-    
+
   }
 
   getDropdownForState() {
@@ -226,16 +236,16 @@ class AddLeadPage extends React.Component {
   }
 
   onDropDownChange({ type, value }) {
-    const {referenceData =[]} = this.state;
-    
+    const { referenceData = [] } = this.state;
+
     this.setState({
       [type]: value
     });
 
     if (type === appConstant.DROP_DOWN_TYPE.COUNTRY) {
-      const dynamic_state_ref =  value+"_"+appConstant.DROP_DOWN_TYPE.STATE;
+      const dynamic_state_ref = value + "_" + appConstant.DROP_DOWN_TYPE.STATE;
       let dynamic_state_list = [];
-      if(referenceData[dynamic_state_ref] && referenceData[dynamic_state_ref].length <= 0 ) {
+      if (referenceData[dynamic_state_ref] && referenceData[dynamic_state_ref].length <= 0) {
         dynamic_state_list = referenceData[dynamic_state_ref];
         this.setState({
           dynamic_state_list,
@@ -246,10 +256,10 @@ class AddLeadPage extends React.Component {
           spinner: true,
           dynamic_state_ref
         });
-        this.props.loadRefData("type="+dynamic_state_ref).then(this.onStateLoaded).catch(this.onErrorResponseFromReferenceData);
+        this.props.loadRefData("type=" + dynamic_state_ref).then(this.onStateLoaded).catch(this.onErrorResponseFromReferenceData);
       }
     }
-    
+
   }
 
   componentDidMount() {
@@ -273,7 +283,9 @@ class AddLeadPage extends React.Component {
     });
   }
 
-
+  onFPModalClosed() {
+    this.props.navigation.goBack();
+  }
 
   getHeaderSection() {
     const { navigation } = this.props;
@@ -299,6 +311,28 @@ class AddLeadPage extends React.Component {
       />
 
     )
+  }
+
+  overlayScreenView() {
+    const { showOverlay = false } = this.state;
+
+    const loaderView = (
+      <ModalComponent
+        modalTitle="Thank You!"
+        showSecondaryForgotPassword={false}
+        showSecondaryInput={false}
+        modalPrimaryText="Lead has been created successfully"
+        showHeaderCloseBtn={false}
+        onCloseCallBackhandler={this.onFPModalClosed}
+        showRegularModalButton={true}
+        regularModalButtonLabel="Navigate To Previous Screen"
+      />
+    );
+    const nonLoaderView = null;
+    if (showOverlay) {
+      return loaderView;
+    }
+    return nonLoaderView;
   }
   getSpinnerComponentView() {
     const { spinner } = this.state;
@@ -727,7 +761,9 @@ class AddLeadPage extends React.Component {
             <Icon name="arrow-forward" style={{ color: "white", fontSize: 20 }} />
           </Button >
         </Footer>
+        {this.overlayScreenView()}
         {this.getSpinnerComponentView()}
+
 
       </Container>
     );
@@ -746,10 +782,10 @@ function mapDispatchToProps(dispatch) {
         return resp;
       })
     },
-    
+
     loadRefData: (inputParams) => {
       return refDataApi.fetchRefData({
-        params: (inputParams)  ? inputParams : "type=SOURCE,CURRENCY,TENURE,COUNTRY,INDUSTRY,BU"
+        params: (inputParams) ? inputParams : "type=SOURCE,CURRENCY,TENURE,COUNTRY,INDUSTRY,BU"
       }).then(result => {
         const refInfo = {};
         if (result && result.data) {
