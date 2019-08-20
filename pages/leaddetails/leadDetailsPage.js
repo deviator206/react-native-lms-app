@@ -5,9 +5,12 @@ import { default as MaterialIcon } from 'react-native-vector-icons/MaterialIcons
 import { default as FeatherIcon } from 'react-native-vector-icons/SimpleLineIcons';
 import { connect } from 'react-redux';
 import LeadApi from '../../services/LeadApi';
+import RefDataApi from '../../services/RefDataApi';
+import UserApi from '../../services/UserApi';
 import CheckBoxComponent from '../common/checkBoxComponent';
 import { default as commonStyle } from '../common/commonStyling';
 import appConfig from '../common/config';
+import { default as appConstant } from '../common/consts';
 import DropDownComponent from '../common/dropdownComponent';
 import HeaderComponent from '../common/headerComponent';
 import i18nMessages from '../common/i18n';
@@ -15,6 +18,8 @@ import SpinnerComponent from '../common/spinnerComponent';
 import styleContent from './leadDetailsPageStyle';
 
 const leadApi = new LeadApi({ state: {} });
+const userApi = new UserApi({ state: {} });
+const refDataApi = new RefDataApi({ state: {} });
 
 class LeadDetailsPage extends React.Component {
   constructor(props) {
@@ -36,20 +41,29 @@ class LeadDetailsPage extends React.Component {
     this.onLeadResponseSuccess = this.onLeadResponseSuccess.bind(this);
     this.onLeadResponseError = this.onLeadResponseError.bind(this);
     this.getFormattedAddress = this.getFormattedAddress.bind(this);
+    this.getDropdownForSplType = this.getDropdownForSplType.bind(this);
+    this.getDropdownFor = this.getDropdownFor.bind(this);
+    this.onUserListLoaded = this.onUserListLoaded.bind(this);
+    this.onUserListLoadedError = this.onUserListLoadedError.bind(this);
+
+    this.onResponseFromReferenceData = this.onResponseFromReferenceData.bind(this);
+    this.onErrorResponseFromReferenceData = this.onErrorResponseFromReferenceData.bind(this);
+    this.onDropDownChange = this.onDropDownChange.bind(this);
+
     this.willFocusSubscription = null;
 
   }
 
 
   getFormattedAddress(leadContact) {
-    const { state, country }= leadContact;
-    let address ='';
-    if(state && state != '') {
-      address += " "+ state
+    const { state, country } = leadContact;
+    let address = '';
+    if (state && state != '') {
+      address += " " + state
     }
 
-    if(country && country != '') {
-      address += " "+ country
+    if (country && country != '') {
+      address += " " + country
     }
 
     return address;
@@ -69,6 +83,76 @@ class LeadDetailsPage extends React.Component {
     });
   }
 
+  onUserListLoaded(resp) {
+    this.setState({
+      userList: resp
+    });
+
+    // NON render set state
+    this.setState({
+      SALES_REP: (resp && resp[0] && resp[0].userName) ? resp[0].userName : ''
+    });
+  }
+
+  onUserListLoadedError(resp) {
+    this.setState({
+      userList: []
+    });
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    const {
+      CURRENCY,
+      BU,
+      SALES_REP
+    } = this.state;
+    if (nextState &&
+      (
+        (CURRENCY !== nextState.CURRENCY) ||
+        (BU !== nextState.BU) ||
+        (SALES_REP !== nextState.SALES_REP)
+      )
+    ) {
+      return false;
+    }
+    return true
+  }
+
+  onResponseFromReferenceData(resp) {
+    const referenceDefaultValues = {};
+    for (let [key, value] of Object.entries(resp)) {
+      referenceDefaultValues[key] = value[0].code
+    }
+    this.setState({
+      referenceData: resp
+    });
+
+    // NON render
+    this.setState({
+      ...referenceDefaultValues
+    })
+  }
+
+  onErrorResponseFromReferenceData(resp) {
+
+  }
+
+
+  getDropdownFor(type) {
+    const { referenceData = {} } = this.state;
+    let returnedView = null;
+    let dataSource = [];
+    dataSource = (referenceData && referenceData[type]) ? referenceData[type] : [];
+    returnedView = <DropDownComponent
+      dataSource={dataSource}
+      updateToParent={this.onDropDownChange}
+      dropDownType={type}
+    />;
+    return returnedView;
+
+  }
+
+
   loadLeadDetail() {
     const { navigation } = this.props;
     const itemId = navigation.getParam('leadId', 'NO-ID');
@@ -76,14 +160,13 @@ class LeadDetailsPage extends React.Component {
     this.setState({
       spinner: true
     });
-    this.props.loadLeadDetail({ itemId }).then(this.onLeadResponseSuccess).catch(this.onLeadResponseError)
+    this.props.loadLeadDetail({ itemId }).then(this.onLeadResponseSuccess).catch(this.onLeadResponseError);
+    this.props.loadUserList().then(this.onUserListLoaded).catch(this.onUserListLoadedError);
+    this.props.loadRefData().then(this.onResponseFromReferenceData).catch(this.onErrorResponseFromReferenceData);
+
   }
   componentDidMount() {
     this.willFocusSubscription = this.props.navigation.addListener('willFocus', this.loadLeadDetail);
-    /*this.setState({
-      spinner: false,
-      leadDetails: { "id": 1, "source": "Marketing", "custName": "shicv", "description": "dingDong", "leadContact": { "name": "dingdong", "email": "a@b.com", "phoneNumber": "9764007637", "country": "India", "state": "MH" }, "leadsSummaryRes": { "businessUnits": ["marketing", "sales"], "salesRep": "shivanshu", "industry": "it" }, "deleted": false, "creatorId": "123", "creationDate": "2019-06-04" }
-    });*/
   }
 
   componentWillUnmount() {
@@ -108,6 +191,64 @@ class LeadDetailsPage extends React.Component {
   sideMenuClickHandler() {
     alert("clicked side panel")
   }
+
+  onDropDownChange({ type, value }) {
+    const { referenceData = [] } = this.state;
+
+    this.setState({
+      [type]: value
+    });
+
+    if (type === appConstant.DROP_DOWN_TYPE.COUNTRY) {
+      const dynamic_state_ref = value + "_" + appConstant.DROP_DOWN_TYPE.STATE;
+      let dynamic_state_list = [];
+      if (referenceData[dynamic_state_ref] && referenceData[dynamic_state_ref].length <= 0) {
+        dynamic_state_list = referenceData[dynamic_state_ref];
+        this.setState({
+          dynamic_state_list,
+          dynamic_state_ref
+        });
+      } else {
+        this.setState({
+          spinner: true,
+          dynamic_state_ref
+        });
+        this.props.loadRefData("type=" + dynamic_state_ref).then(this.onStateLoaded).catch(this.onErrorResponseFromReferenceData);
+      }
+    }
+
+  }
+
+
+  getDropdownForSplType(type) {
+    const { dynamic_state_list = [], userList = [] } = this.state;
+    let returnedView = null;
+    let dataSource = [];
+    switch (type) {
+      case appConstant.DROP_DOWN_TYPE.STATE:
+        dataSource = dynamic_state_list;
+        returnedView = <DropDownComponent
+          dataSource={dataSource}
+          updateToParent={this.onDropDownChange}
+          dropDownType={type}
+        />;
+        break;
+      case appConstant.DROP_DOWN_TYPE.SALES_REP:
+        dataSource = userList;
+        returnedView = <DropDownComponent
+          showAttribute='userName'
+          returnAttribute='userId'
+          dataSource={dataSource}
+          updateToParent={this.onDropDownChange}
+          dropDownType={type}
+        />;
+        break;
+      default:
+        break;
+    }
+    return returnedView;
+  }
+
 
   getStatusInfo() {
     const leadDetails = { "id": 1, "source": "Marketing", "custName": "shicv", "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.", "leadContact": { "name": "dingdong", "email": "a@b.com", "phoneNumber": "9764007637", "country": "India", "state": "MH" }, "leadsSummaryRes": { "businessUnits": ["marketing", "sales"], "salesRep": "shivanshu", "industry": "it" }, "deleted": false, "creatorId": "123", "creationDate": "2019-06-04" };
@@ -143,7 +284,86 @@ class LeadDetailsPage extends React.Component {
     return returnedView;
   }
 
+
   getActionsInfo() {
+    const { leadDetails } = this.state;
+    let returnedView;
+    if (leadDetails && leadDetails.id && leadDetails.leadsSummaryRes) {
+      returnedView = (
+        <Row>
+          <Card style={styleContent.gridCardWrapper} >
+            <CardItem>
+              <Col>
+                <Grid>
+                  <Row >
+                    <Text style={styleContent.secondaryLabel}> ESTIMATED BUDGET </Text>
+                  </Row>
+                  <Row>
+                    <Col style={{
+                      width: "50%"
+                    }}>
+                      <Item >
+                        <Input
+                          style={styleContent.secondaryDarkText}
+                          returnKeyType="next"
+                          clearButtonMode="always"
+                          autoCapitalize="none"
+                          autoCorrect={false}
+                        />
+                      </Item>
+                    </Col>
+                    <Col style={{
+                      marginTop: "3%",
+                      width: "30%",
+                      marginLeft: "10%"
+                    }}>
+                      {this.getDropdownFor(appConstant.DROP_DOWN_TYPE.CURRENCY)}
+                    </Col>
+                  </Row>
+                  <Row style={styleContent.marginTopStyling}>
+                    <Col>
+                      <CheckBoxComponent checkBoxLabel={i18nMessages.lbl_assign_rep} />
+                    </Col>
+                    <Col style={styleContent.marginTopStyling}>
+                      {this.getDropdownForSplType(appConstant.DROP_DOWN_TYPE.SALES_REP)}
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <CheckBoxComponent checkBoxLabel={i18nMessages.lbl_modify_bu} />
+                    </Col>
+                    <Col style={styleContent.marginTopStyling}>
+                      {this.getDropdownFor(appConstant.DROP_DOWN_TYPE.BU_NAME)}
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <CheckBoxComponent checkBoxLabel={i18nMessages.lbl_notify_bu} />
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <Textarea
+                        style={commonStyle.dynamicComponentTextAreaStyle}
+                        rowSpan={4}
+                        bordered
+                        placeholder="Lorem Ipsum is sim"
+                      />
+
+
+                    </Col>
+                  </Row>
+
+                </Grid>
+              </Col>
+            </CardItem>
+          </Card>
+        </Row>
+      );
+    }
+    return returnedView;
+  }
+  getActionsInfo1() {
     const leadDetails = { "id": 1, "source": "Marketing", "custName": "shicv", "description": "dingDong", "leadContact": { "name": "dingdong", "email": "a@b.com", "phoneNumber": "9764007637", "country": "India", "state": "MH" }, "leadsSummaryRes": { "businessUnits": ["marketing", "sales"], "salesRep": "shivanshu", "industry": "it" }, "deleted": false, "creatorId": "123", "creationDate": "2019-06-04" };
     let returnedView;
     if (leadDetails && leadDetails.id && leadDetails.leadsSummaryRes) {
@@ -223,7 +443,7 @@ class LeadDetailsPage extends React.Component {
 
   }
   getBusinessUnitInfo() {
-    const {leadDetails} = this.state;
+    const { leadDetails } = this.state;
     // const leadDetails = { "id": 1, "source": "Marketing", "custName": "shicv", "description": "dingDong", "leadContact": { "name": "dingdong", "email": "a@b.com", "phoneNumber": "9764007637", "country": "India", "state": "MH" }, "leadsSummaryRes": { "businessUnits": ["Spectro", "atlas"], "salesRep": "shivanshu", "industry": "it" }, "deleted": false, "creatorId": "123", "creationDate": "2019-06-04" };
     let returnedView;
     if (leadDetails && leadDetails.id && leadDetails.leadsSummaryRes && leadDetails.leadsSummaryRes.businessUnits) {
@@ -268,8 +488,8 @@ class LeadDetailsPage extends React.Component {
 
 
   getSalesRepInfo() {
-    const {leadDetails} = this.state;
-   //  const leadDetails = { "id": 1, "source": "Marketing", "custName": "shicv", "description": "dingDong", "leadContact": { "name": "dingdong", "email": "a@b.com", "phoneNumber": "9764007637", "country": "India", "state": "MH" }, "leadsSummaryRes": { "businessUnits": ["marketing", "sales"], "salesRep": "Sunayna Rao", "industry": "it" }, "deleted": false, "creatorId": "123", "creationDate": "2019-06-04" };
+    const { leadDetails } = this.state;
+    //  const leadDetails = { "id": 1, "source": "Marketing", "custName": "shicv", "description": "dingDong", "leadContact": { "name": "dingdong", "email": "a@b.com", "phoneNumber": "9764007637", "country": "India", "state": "MH" }, "leadsSummaryRes": { "businessUnits": ["marketing", "sales"], "salesRep": "Sunayna Rao", "industry": "it" }, "deleted": false, "creatorId": "123", "creationDate": "2019-06-04" };
     let returnedView;
     if (leadDetails && leadDetails.id && leadDetails.leadsSummaryRes) {
       returnedView = (
@@ -351,7 +571,7 @@ class LeadDetailsPage extends React.Component {
 
   }
   getCustomerInfo() {
-    const { leadDetails} = this.state;
+    const { leadDetails } = this.state;
     // const leadDetails = { "id": 1, "source": "Marketing", "custName": "RekTech Pvt. Ltd", "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.", "leadContact": { "name": "dingdong", "email": "a@b.com", "phoneNumber": "9764007637", "country": "India", "state": "MH" }, "leadsSummaryRes": { "businessUnits": ["marketing", "sales"], "salesRep": "shivanshu", "industry": "it" }, "deleted": false, "creatorId": "123", "creationDate": "2019-06-04" };
     let returnedView;
     if (leadDetails && leadDetails.id) {
@@ -361,7 +581,7 @@ class LeadDetailsPage extends React.Component {
             <CardItem>
               <Col>
                 <Grid>
-                <Row>
+                  <Row>
                     <Text style={styleContent.requirement} > {leadDetails.creationDate}</Text>
                   </Row>
                   <Row>
@@ -376,7 +596,7 @@ class LeadDetailsPage extends React.Component {
                   <Row>
                     <Text style={styleContent.requirement} > {leadDetails.tenure}</Text>
                   </Row>
-                 
+
                 </Grid>
               </Col>
             </CardItem>
@@ -395,7 +615,7 @@ class LeadDetailsPage extends React.Component {
     return (
       <Container>
 
-        <HeaderComponent navigation={navigation} title="Leads Detail"  />
+        <HeaderComponent navigation={navigation} title="Leads Detail" />
         <Content style={styleContent.mainContent}>
           <Grid style={styleContent.gridWrapper} >
             {this.getCustomerInfo()}
@@ -404,6 +624,7 @@ class LeadDetailsPage extends React.Component {
             {this.getSalesRepInfo()}
             {this.getBusinessUnitInfo()}
             {this.getStatusInfo()}
+            {this.getActionsInfo()}
 
           </Grid>
           <Footer>
@@ -429,7 +650,29 @@ function mapDispatchToProps(dispatch) {
       return leadApi.getLeadDetails(inputParams).then((resp) => {
         return resp;
       })
-
+    },
+    loadRefData: (inputParams) => {
+      return refDataApi.fetchRefData({
+        params: (inputParams) ? inputParams : "type=CURRENCY,BU"
+      }).then(result => {
+        const refInfo = {};
+        if (result && result.data) {
+          result.data.forEach((element) => {
+            if (element && element.type) {
+              if (!refInfo[element.type]) {
+                refInfo[element.type] = [];
+              }
+              refInfo[element.type].push(element);
+            }
+          });
+        }
+        return refInfo;
+      });
+    },
+    loadUserList: () => {
+      return userApi.getUserList().then(result => {
+        return result;
+      });
     },
     dispatchAction: (param) => {
       dispatch(param);
