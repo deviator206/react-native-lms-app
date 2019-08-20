@@ -582,7 +582,13 @@ class LeadDetailsPage extends React.Component {
               <Col>
                 <Grid>
                   <Row>
-                    <Text style={styleContent.requirement} > {leadDetails.creationDate}</Text>
+                    <Col>
+                      <Text style={styleContent.requirement} > DATE : {leadDetails.creationDate}</Text>
+                    </Col>
+                    <Col>
+                      <Text style={styleContent.requirement} > SOURCE: {leadDetails.source}</Text>
+                    </Col>
+                    
                   </Row>
                   <Row>
                     <Text style={styleContent.customerName}> {leadDetails.custName}</Text>
@@ -590,11 +596,9 @@ class LeadDetailsPage extends React.Component {
                   <Row>
                     <Text style={styleContent.requirement} > {leadDetails.description}</Text>
                   </Row>
+                  
                   <Row>
-                    <Text style={styleContent.requirement} > {leadDetails.source}</Text>
-                  </Row>
-                  <Row>
-                    <Text style={styleContent.requirement} > {leadDetails.tenure}</Text>
+                    <Text style={styleContent.requirement} > TENURE : {leadDetails.tenure}</Text>
                   </Row>
 
                 </Grid>
