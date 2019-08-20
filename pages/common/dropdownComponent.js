@@ -12,6 +12,8 @@ export default class DropDownComponent extends React.Component {
         }
         this.onSelectionChanged = this.onSelectionChanged.bind(this);
         this.getView = this.getView.bind(this);
+        this.getDropDownLabel = this.getDropDownLabel.bind(this);
+        this.getDropDownValue = this.getDropDownValue.bind(this);
     }
 
     onSelectionChanged(value) {
@@ -55,10 +57,27 @@ export default class DropDownComponent extends React.Component {
         }
     }
 
+    getDropDownValue(singleItem) {
+        const { returnAttribute } = this.props;  
+        if(returnAttribute) {
+            return singleItem[returnAttribute] ;
+        }
+        return singleItem.name
+    }
+
+
+    getDropDownLabel(singleItem) {
+        const { showAttribute, returnAttribute } = this.props;  
+        if(showAttribute) {
+            return singleItem[showAttribute] ;
+        }
+        return singleItem.name
+    }
+
     getView() {
         const { selected = '' } = this.state;
         let returnedView;
-        const { dataSource = [], onDropDownSelectionChange = this.onSelectionChanged } = this.props;
+        const { dataSource = [], onDropDownSelectionChange = this.onSelectionChanged , showAttribute, returnAttribute } = this.props;
         const pickerItemArr = [];
         const indG = 'KEY_' + parseInt(Math.random(0, 111) * 1000);
         dataSource.forEach(singleItem => {
@@ -66,7 +85,9 @@ export default class DropDownComponent extends React.Component {
             pickerItemArr.push(
                 (<Picker.Item
                     key={ind}
-                    label={singleItem.name} style={styleContent.dynamicComponentTextStyle} value={singleItem.code} />)
+                    label={this.getDropDownLabel(singleItem)} 
+                    style={styleContent.dynamicComponentTextStyle} 
+                    value={this.getDropDownValue(singleItem)} />)
             )
         });
         returnedView = (

@@ -9,7 +9,8 @@ const SERVICE_URL = {
     'REF_DATA':'refdata/',
     'CREATE_LEAD':'rootlead/',
     'GET_LEADS':'leads/',
-    'LEAD_DETAILS': 'lead/'
+    'LEAD_DETAILS': 'lead/',
+    'GET_USERS':'users/'
 }
 
 const axiosInstance = axios.create({
@@ -56,6 +57,10 @@ class ServiceClass {
 
     static async getLeadDetails({itemId}) {
         return await axiosInstance.get(SERVICE_URL['LEAD_DETAILS']+itemId);
+    }
+
+    static async getUsers(){
+        return await axiosInstance.get(SERVICE_URL['GET_USERS']);
     }
 }
 export default ServiceClass;

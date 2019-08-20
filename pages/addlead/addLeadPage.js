@@ -5,9 +5,10 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { connect } from 'react-redux';
 import LeadApi from '../../services/LeadApi';
 import RefDataApi from '../../services/RefDataApi';
+import UserApi from '../../services/UserApi';
 import { default as commonStyle } from '../common/commonStyling';
 import appConfig from '../common/config';
-import appConstant from '../common/consts';
+import { default as appConstant, default as appconstant } from '../common/consts';
 import DropDownComponent from '../common/dropdownComponent';
 import HeaderComponent from '../common/headerComponent';
 import i18nMessages from '../common/i18n';
@@ -20,6 +21,7 @@ import BUListComponent from './BUListComponent';
 
 const refDataApi = new RefDataApi({ state: {} });
 const leadApi = new LeadApi({ state: {} });
+const userApi = new UserApi({ state: {} });
 
 
 class AddLeadPage extends React.Component {
@@ -45,7 +47,7 @@ class AddLeadPage extends React.Component {
     this.getDatePickerView = this.getDatePickerView.bind(this);
 
     this.getDropdownFor = this.getDropdownFor.bind(this);
-    this.getDropdownForState = this.getDropdownForState.bind(this);
+    this.getDropdownForSplType = this.getDropdownForSplType.bind(this);
     this.getUnitAddedList = this.getUnitAddedList.bind(this);
     this.onBuSelectionConfirmed = this.onBuSelectionConfirmed.bind(this);
     this.updateBuRmoval = this.updateBuRmoval.bind(this);
@@ -62,6 +64,8 @@ class AddLeadPage extends React.Component {
     this.overlayScreenView = this.overlayScreenView.bind(this);
 
     this.onFPModalClosed = this.onFPModalClosed.bind(this);
+    this.onUserListLoaded = this.onUserListLoaded.bind(this);
+    this.onUserListLoadedError = this.onUserListLoadedError.bind(this);
   }
 
 
@@ -73,7 +77,8 @@ class AddLeadPage extends React.Component {
 
   onResponseSubmitLead() {
     this.setState({
-      spinner: false
+      spinner: false,
+      showOverlay: true
     });
   }
   onErrorResponseSubmitLead(resp) {
@@ -127,6 +132,7 @@ class AddLeadPage extends React.Component {
       CONTACT_PHONE,
       ESTIMATE,
       STATE,
+      SALES_REP,
       selectedBuList = []
     } = this.state;
     const { userId = "8" } = this.props;
@@ -145,7 +151,7 @@ class AddLeadPage extends React.Component {
       },
       "leadsSummaryRes": {
         "businessUnits": selectedBuList,
-        "salesRep": "shivanshu",
+        "salesRep": SALES_REP,
         "industry": INDUSTRY,
         "estimate": ESTIMATE,
         "currency": CURRENCY
@@ -156,17 +162,10 @@ class AddLeadPage extends React.Component {
     }
 
     this.setState({
-      showOverlay: true
-    });
-
-    /*
-
-    this.setState({
       spinner: true
     });
     
     this.props.submitLead(inputPayload).then(this.onResponseSubmitLead).catch(this.onErrorResponseSubmitLead);
-  */
   }
   shouldComponentUpdate(nextProps, nextState) {
     const { TENURE,
@@ -181,8 +180,8 @@ class AddLeadPage extends React.Component {
       CONTACT_EMAIL,
       CONTACT_PHONE,
       ESTIMATE,
-      STATE
-
+      STATE,
+      SALES_REP
     } = this.state;
     if (nextState &&
       (
@@ -198,7 +197,8 @@ class AddLeadPage extends React.Component {
         (CONTACT_EMAIL !== nextState.CONTACT_EMAIL) ||
         (CONTACT_PHONE !== nextState.CONTACT_PHONE) ||
         (ESTIMATE !== nextState.ESTIMATE) ||
-        (STATE !== nextState.STATE)
+        (STATE !== nextState.STATE) || 
+        (SALES_REP !== nextState.SALES_REP)
       )
     ) {
       return false;
@@ -221,18 +221,33 @@ class AddLeadPage extends React.Component {
 
   }
 
-  getDropdownForState() {
-    const { dynamic_state_list = [] } = this.state;
+  getDropdownForSplType(type) {
+    const { dynamic_state_list = [], userList = [] } = this.state;
     let returnedView = null;
     let dataSource = [];
-    dataSource = dynamic_state_list;
-    returnedView = <DropDownComponent
-      dataSource={dataSource}
-      updateToParent={this.onDropDownChange}
-      dropDownType={appConstant.DROP_DOWN_TYPE.STATE}
-    />;
+    switch (type) {
+      case appConstant.DROP_DOWN_TYPE.STATE:
+        dataSource = dynamic_state_list;
+        returnedView = <DropDownComponent
+          dataSource={dataSource}
+          updateToParent={this.onDropDownChange}
+          dropDownType={type}
+        />;
+        break;
+      case appconstant.DROP_DOWN_TYPE.SALES_REP:
+        dataSource = userList;
+        returnedView = <DropDownComponent
+          showAttribute='userName'
+          returnAttribute='userId'
+          dataSource={dataSource}
+          updateToParent={this.onDropDownChange}
+          dropDownType={type}
+        />;
+        break;
+      default:
+        break;
+    }
     return returnedView;
-
   }
 
   onDropDownChange({ type, value }) {
@@ -268,6 +283,7 @@ class AddLeadPage extends React.Component {
       spinner: true,
       currentSelectedBU: appConfig.BU_LIST[0],
       selectedBuList: [],
+      showOverlay: false,
       isSelfApproved: false,
       leadCreatedDate: new Date(2018, 4, 4)
     });
@@ -392,12 +408,37 @@ class AddLeadPage extends React.Component {
     )
   }
 
-  onSelfApprovedClicked() {
-    const { isSelfApproved = false } = this.state;
+  onUserListLoaded(resp) {
     this.setState({
-      isSelfApproved: !isSelfApproved
+      spinner: false,
+      userList: resp
     });
 
+    // NON render set state
+    this.setState({
+      SALES_REP: (resp && resp[0] && resp[0].userName) ? resp[0].userName : ''
+    });
+  }
+
+  onUserListLoadedError(resp) {
+    this.setState({
+      spinner: false,
+      userList: []
+    });
+  }
+
+  onSelfApprovedClicked() {
+    const { isSelfApproved = false, userList = [] } = this.state;
+    let newObject = {
+      isSelfApproved: !isSelfApproved
+    }
+    if (userList.length <= 0 && !isSelfApproved) {
+      newObject['spinner'] = true;
+      this.props.loadUserList().then(this.onUserListLoaded).catch(this.onUserListLoadedError);
+    }
+    this.setState({
+      ...newObject
+    });
   }
 
   getViewForSelfApproval() {
@@ -439,7 +480,7 @@ class AddLeadPage extends React.Component {
       >
         <Text note style={commonStyle.labelStyling} >{i18nMessages.lbl_select_rep} </Text>
         <Item >
-          {this.getDropdownFor('SALES_REP')}
+          {this.getDropdownForSplType(appConstant.DROP_DOWN_TYPE.SALES_REP)}
         </Item>
       </Col>
     )
@@ -643,7 +684,7 @@ class AddLeadPage extends React.Component {
                   <Col>
                     <Text note style={commonStyle.labelStyling} >{i18nMessages.lbl_contact_state} </Text>
                     <Item >
-                      {this.getDropdownForState()}
+                      {this.getDropdownForSplType(appConstant.DROP_DOWN_TYPE.STATE)}
                     </Item>
                   </Col>
                 </Row>
@@ -799,6 +840,12 @@ function mapDispatchToProps(dispatch) {
           });
         }
         return refInfo;
+      });
+    },
+
+    loadUserList: () => {
+      return userApi.getUserList().then(result => {
+        return result;
       });
     },
     dispatchAction: (param) => {

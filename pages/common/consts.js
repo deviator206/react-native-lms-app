@@ -12,7 +12,8 @@ const appconstant = {
         INDUSTRY: 'INDUSTRY',
         COUNTRY: 'COUNTRY',
         BU_NAME: 'BU',
-        STATE: 'STATE'
+        STATE: 'STATE',
+        SALES_REP:'SALES_REP'
     }
 }
 
