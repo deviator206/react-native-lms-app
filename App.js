@@ -14,6 +14,7 @@ import DashboardPage from './pages/dashboard/dashboard';
 import LeadDetailsPage from './pages/leaddetails/leadDetailsPage';
 import LoginPage from './pages/login/loginPage';
 import MiAddPage from './pages/marketadd/miAddPage';
+import MiDetailsPage from './pages/marketdetails/miDetailsPage';
 import MiListPage from './pages/marketlist/miListPage';
 import NotificationListPage from './pages/notifications/notificationListPage';
 import SideMenuBar from './pages/sidemenu/sideMenu';
@@ -23,7 +24,7 @@ import { default as configureStore } from './storage/store/createAppStore';
 console.disableYellowBox = true;
 const SideDrawerNavigator = createDrawerNavigator(
   {
-    
+
     dashboard: {
       screen: DashboardPage,
       drawerLabel: "Demo Screen 3"
@@ -36,6 +37,9 @@ const SideDrawerNavigator = createDrawerNavigator(
     },
     miadd: {
       screen: MiAddPage
+    },
+    midetails: {
+      screen: MiDetailsPage
     },
     drawer: {
       screen: SideMenuBar
@@ -51,18 +55,18 @@ const SideDrawerNavigator = createDrawerNavigator(
   }
 );
 
-  
+
 const AppNavigator = createStackNavigator({
   bootstap: {
     screen: AppBootstrap,
-    
+
     navigationOptions: () => ({
       header: null
     })
   },
   login: {
     screen: LoginPage,
-    key:'login',
+    key: 'login',
     navigationOptions: () => ({
       header: null
     })
@@ -72,14 +76,11 @@ const AppNavigator = createStackNavigator({
   },
   viewlead: {
     screen: ViewLeadPage,
-    key:'view_lead',
-  },
-  miadd: {
-    screen: MiAddPage
+    key: 'view_lead',
   },
   leaddetails: {
     screen: LeadDetailsPage,
-    key:'lead_details',
+    key: 'lead_details',
   },
   addlead: {
     screen: AddLeadPage
@@ -87,10 +88,6 @@ const AppNavigator = createStackNavigator({
   notificationlist: {
     screen: NotificationListPage
   },
-  milist: {
-    screen: MiListPage
-  },
-
   drawer: {
     screen: SideMenuBar
   }
@@ -112,7 +109,7 @@ class App extends React.Component {
     this.handleNavigationChange = this.handleNavigationChange.bind(this);
   }
 
-  handleNavigationChange (prevState, newState, action) {
+  handleNavigationChange(prevState, newState, action) {
     console.log(prevState, newState, action);
   }
   componentDidMount() {
@@ -120,11 +117,11 @@ class App extends React.Component {
   }
   render() {
     return (
-      <Provider store={ newStore }>
-      <AppContainer 
-      
-      />
-     </Provider>
+      <Provider store={newStore}>
+        <AppContainer
+
+        />
+      </Provider>
     );
   }
 }

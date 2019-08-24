@@ -28,7 +28,7 @@ class MiListPage extends React.Component {
 
         this.onLoadAllMarketInt = this.onLoadAllMarketInt.bind(this);
         this.getSpinnerComponentView = this.getSpinnerComponentView.bind(this);
-        this.onSearchButtonClicked =  this.onSearchButtonClicked.bind(this);
+        this.onSearchButtonClicked = this.onSearchButtonClicked.bind(this);
         this.onSearchTextChange = this.onSearchTextChange.bind(this);
         this.onResponseSuccess = this.onResponseSuccess.bind(this);
         this.onResponseError = this.onResponseError.bind(this);
@@ -100,9 +100,9 @@ class MiListPage extends React.Component {
     }
 
     onSearchButtonClicked() {
-        const {searchInput = ''} = this.state;
-        if(searchInput && searchInput !== '') {
-            this.onLoadAllMarketInt({}) 
+        const { searchInput = '' } = this.state;
+        if (searchInput && searchInput !== '') {
+            this.onLoadAllMarketInt({})
         }
     }
     onLoadAllMarketInt(filterParams) {
@@ -147,9 +147,9 @@ class MiListPage extends React.Component {
 
 
     getStatusStyle(status) {
-        if(status === appConstant.MI_STATUS.CLOSED) {
+        if (status === appConstant.MI_STATUS.CLOSED) {
             return styleContent.closedStatus;
-        } 
+        }
         return styleContent.pendingStatus;
     }
 
@@ -162,7 +162,15 @@ class MiListPage extends React.Component {
                 <FlatList
                     data={resultSet}
                     renderItem={({ item }) =>
-                        <Row>
+                        <Row
+                            button
+                            onPress={() => {
+                                // item.id
+                                this.props.navigation.navigate("midetails", {
+                                    miId: item.id
+                                });
+                            }}
+                        >
                             <Card style={styleContent.gridCardWrapper} >
                                 <CardItem>
                                     <Col>
@@ -187,7 +195,7 @@ class MiListPage extends React.Component {
 
                                                 </Col>
                                                 <Col style={styleContent.colValue} >
-                                                
+
                                                     <Text style={this.getStatusStyle(item.status)} > {item.status}  </Text>
                                                 </Col>
 
@@ -216,12 +224,12 @@ class MiListPage extends React.Component {
                         <Row style={styleContent.searchAndFilterWrapper}>
                             <Col style={styleContent.searchBarWrapper} >
                                 <Item searchBar rounded style={styleContent.searchBarStyling}>
-                                    <Input 
+                                    <Input
                                         placeholder="Search"
-                                        onChangeText={(value)=>{
+                                        onChangeText={(value) => {
                                             this.onSearchTextChange(value);
                                         }}
-                                         />
+                                    />
                                     <Button transparent
                                         onPress={() => {
                                             this.onSearchButtonClicked();

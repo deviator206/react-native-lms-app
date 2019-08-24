@@ -1,6 +1,5 @@
 import { Button, Col, Container, Content, Footer, Grid, Input, Item, Label, Row, Text, Textarea } from 'native-base';
 import React from 'react';
-import { Alert, Modal, TouchableHighlight, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { connect } from 'react-redux';
 import MarketIntelligenceApi from '../../services/MarketIntelligenceApi';
@@ -12,12 +11,12 @@ import i18nMessages from '../common/i18n';
 import ModalComponent from '../common/modalComponent';
 import SpinnerComponent from '../common/spinnerComponent';
 import { default as Utils } from '../common/Util';
-import styleContent from './miAddPageStyle';
+import styleContent from './miDetailsPageStyle';
 
 const marketIntelligenceApi = new MarketIntelligenceApi({ state: {} });
 
 
-class MiAddPage extends React.Component {
+class MiDetailsPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -53,7 +52,7 @@ class MiAddPage extends React.Component {
 
 
     onFPModalClosed() {
-        this.props.navigation.navigate("dashboard");
+        this.props.navigation.goBack();
     }
 
 
@@ -260,8 +259,17 @@ class MiAddPage extends React.Component {
                         <Icon name="arrow-forward" style={{ color: "white", fontSize: 20 }} />
                     </Button >
                 </Footer>
+                {this.overlayScreenView()}
+                {this.getSpinnerComponentView()}
+            </Container>
+        )
+    }
+}
 
-                <Modal
+/**
+ * 
+ 
+<Modal
                     animationType="slide"
                     transparent={false}
                     visible={this.state.filterVisible}
@@ -296,16 +304,9 @@ class MiAddPage extends React.Component {
                     </Content>
 
                 </Modal>
+                
 
-
-                {this.overlayScreenView()}
-                {this.getSpinnerComponentView()}
-            </Container>
-        )
-    }
-}
-
-
+ */
 
 // This function provides a means of sending actions so that data in the Redux store
 // can be modified. In this example, calling this.props.addToCounter() will now dispatch
@@ -334,4 +335,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(MiAddPage)
+export default connect(mapStateToProps, mapDispatchToProps)(MiDetailsPage)
