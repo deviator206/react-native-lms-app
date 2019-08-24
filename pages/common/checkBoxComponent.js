@@ -6,16 +6,41 @@ import { default as commonStyle } from './commonStyling';
 export default class CheckBoxComponent extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            checkedState: false
+        }
         this.onSelectionChanged = this.onSelectionChanged.bind(this);
+        this.getView = this.getView.bind(this);
     }
 
+
+    componentDidMount() {
+        const {  updateToParent, controlType } = this.props;
+        this.setState({
+            checkedState: false
+        });
+        if (updateToParent) {
+            updateToParent({ type: controlType, value:false })
+        }
+    }
+
+  
     onSelectionChanged() {
+        const { updateToParent,controlType } = this.props;
+        const {checkedState} = this.state;
+        this.setState({
+            checkedState: !checkedState
+        });
+        if (updateToParent) {
+            updateToParent({ type: controlType, value: !checkedState })
+        }
 
     }
 
     getView() {
         let returnedView;
-        const { checkedState = false, checkBoxLabel = "DDE" } = this.props;
+        const { checkedState = false} = this.state;
+        const {  checkBoxLabel = "DDE" , onCheckBoxChanged = this.onSelectionChanged } = this.props;
         returnedView = (
             <ListItem
                 style={{
@@ -26,7 +51,7 @@ export default class CheckBoxComponent extends React.Component {
                 }}
                 button
                 onPress={() => {
-                    alert("CLICKED ")
+                    onCheckBoxChanged()
                 }}
             >
                 <CheckBox checked={checkedState} color="black" style={{

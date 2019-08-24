@@ -10,7 +10,8 @@ const SERVICE_URL = {
     'CREATE_LEAD':'rootlead/',
     'GET_LEADS':'leads/',
     'LEAD_DETAILS': 'lead/',
-    'GET_USERS':'users/'
+    'GET_USERS':'users/',
+    'UPDATE_LEAD':'lead/',
 }
 
 const axiosInstance = axios.create({
@@ -57,6 +58,10 @@ class ServiceClass {
 
     static async getLeadDetails({itemId}) {
         return await axiosInstance.get(SERVICE_URL['LEAD_DETAILS']+itemId);
+    }
+
+    static async postUpdateLead({itemId, payload}) {
+        return await axiosInstance.put(SERVICE_URL['UPDATE_LEAD']+itemId, payload);
     }
 
     static async getUsers(){

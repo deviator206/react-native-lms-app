@@ -85,3 +85,110 @@ Personal Details
 
 
 
+spring.datasource.driver-class-name=com.mysql.jdbc.Driver
+spring.datasource.url=jdbc:mysql://localhost:3306/leadManagement
+spring.datasource.username=leadManagement
+spring.datasource.password=lms.App=Am2tek
+#spring.datasource.defaultAutoCommit=false
+
+
+
+
+[ec2-user@ip-172-31-42-121 ~]$  history 1000
+    1  sudo yum update
+    2  java -version
+    3  clear
+    4  yum list java*
+    5  sudo yum install java-1.8.0
+    6  sudo /usr/sbin/alternatives --config java
+    7  sudo /usr/sbin/alternatives --config javac
+    8  jaav -version
+    9  java -version
+   10  clear
+   11  yum list tomcat*
+   12  sudo yum install tomcat8
+   13  clear
+   14  yum list tomcat*
+   15  sudo yum install tomcat8-admin-webapps
+   16  sudo service tomcat8 status
+   17  sudo service tomcat8 start
+   18  sudo service tomcat8 status
+   19  sudo service tomcat8 stop
+   20  sudo service tomcat8 start
+   21  clear
+   22  whereis  tomcat8
+   23  cd  /usr/share/tomcat8
+   24  ls -lrt
+   25  cd conf/
+   26  ls -lrt
+   27  sudo vi tomcat-users.xml
+   28  clear
+   29  sudo vi tomcat-users.xml
+   30  sudo service tomcat8 restart
+   31  clear
+   32  ls -lrt
+   33  cd ..
+   34  cd webapps/
+   35  ls -lrt
+   36  cd  manager/
+   37  cd META-INF/
+   38  sudo vi context.xml
+   39  sudo service tomcat8 restart
+   40  cd..
+   41  cd ..
+   42  cd conf/
+   43  sudo vi tomcat-users.xml
+   44  sudo yum install mysql
+   45  sudo service mysqld start
+   46  sudo service mysql start
+   47  mysqld: unrecognized service
+   48  yum list installed | grep MySQL
+   49  yum list mysql*
+   50  clear
+   51  sudo yum install mysql-server
+   52  sudo service mysql start
+   53  sudo service mysqld start
+   54  sudo service mysqld status
+   55  clear
+   56  whereis mysql
+   57  whereis mysql_secure
+   58  whereis mysql_secure*
+   59  whereis mysql_secure_installation
+   60  sudo /usr/bin/mysql_secure_installation
+   61  mysql -u root -p
+   62  mysql -u leadManagement -p
+   63  mysql -u leadManagement -p leadManagement < /home/ec2-user/db.sql
+   64  clear
+   65  mysql -u leadManagement -p leadManagement < /home/ec2-user/db.sql
+   66  mysql -u leadManagement -p
+   67  wcd /usr/share/tomcat8/
+   68  cd /usr/share/tomcat8/
+   69  cd logs/
+   70  tail -f catalina.out
+   71  sudo tail -f catalina.out
+   72  whereis tomcat8
+   73  sudo tail  -f /usr/share/tomcat8/logs/catalina.o
+   74  sudo tail  -f /usr/share/tomcat8/logs/catalina.out
+   75  cd /usr/share/tomcat8/logs/
+   76  ls -lrt
+   77  tail -f localhost.2019-08-19.log
+   78  sudo tail -f catalina.out
+   79  whereis tomcat8
+   80  cd /usr/share/tomcat8/
+   81  ls -lrt
+   82  cd logs/
+   83  ls -lrt
+   84  sudo cd logs/
+   85  cd logs
+   86  sudo chmod 777 logs
+   87  cd logs/
+   88  ls -lrt
+   89  tail -f catalina.0
+   90  tail -f catalina.out
+   91  sudo tail -f catalina.out
+   92  sudo service tomcat8 status
+   93  sudo service tomcat8 stop
+   94  sudo service tomcat8 start
+   95  mysql --user="leadManagement" --database="leadManagement" -p < "/home/ec2-user/db.sql";
+   96  mysql --user=leadManagement --database=leadManagement -p < /home/ec2-user/db.sql;
+   97  mysql --user='leadManagement' --database=leadManagement -p < /home/ec2-user/db.sql;

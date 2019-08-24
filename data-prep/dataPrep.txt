@@ -57,6 +57,13 @@ INDUSTRY:[{"code":"QLY","name":"Quality","type":"INDUSTRY"},{"code":"ENGG","name
 
 
 
+Login
+http://52.66.164.208:8080/lmsApp-0.1.0/login
+{ "userName" : "a", "password" : "a" }
+{"accessToken":"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyMiIsImlhdCI6MTU2NjYwODkzMCwiZXhwIjoxNTY3MjEzNzMwfQ.D_KjSIa5L18olEVW8gyywGdqOEGdAXcqcNLW451MYupmwHvZiGus4tvBgU3Z7lSmjnLW-82BSzO5wxQ2r6QFdQ","tokenType":"Bearer","userInfo":{"policies":{"salesRepList":"DISABLE","userList":"SHOW"},"userId":22,"userName":"y","userDisplayName":"Thomas","businessUnit":"SP","roles":["ADMIN"]}}
+
+
+
 
 User Listing
 http://52.66.164.208:8080/lmsApp-0.1.0/users
@@ -68,12 +75,12 @@ Lead Creation
 http://52.66.164.208:8080/lmsApp-0.1.0/rootlead 
 {
   "source": "WEB",
-  "custName": "shicv",
-  "description": "dingDong",
+  "custName": "CM TEck",
+  "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, w",
   "tenure": "LT1Y",
   "leadContact": {
-    "name": "dingdong",
-    "email": "a@b.com",
+    "name": "Mr K Murhty",
+    "email": "kmurhty@cmtek.com",
     "phoneNumber": "9764007637",
     "country": "IND",
     "state": "KAR"
@@ -83,39 +90,55 @@ http://52.66.164.208:8080/lmsApp-0.1.0/rootlead
       "ART",
       "ATL"
     ],
-    "salesRep": "shivanshu",
+    "budget":"12000",
+    "currency":"USD",
+    "salesRep": "Thomas",
     "industry": "QLY"
   },
   "deleted": false,
-  "creatorId": "8",
+  "creatorId": "22",
   "creationDate": "2019-06-04"
 }
 
 Create User 
 http://52.66.164.208:8080/lmsApp-0.1.0/user
 {
-  "userName": "x",
-  "password": "x",
-  "email": "a1@b.com"
+  "userName": "y", 
+  "password":"y",
+  "email":"y@b.com" ,
+  "userDisplayName":"Thomas",
+  "businessUnit":"SP",
+  "roles":[
+  "ADMIN"
+  ]
 }
 
 
-CONTACT_EMAIL: "a@a.fin"
-CONTACT_NAME: "suresh chauhan"
-CONTACT_PHONE: "983733"
-COUNTRY: "CND"
-CURRENCY: "INR"
-CUSTOMER_NAME: "FM REK"
-ESTIMATE: "767676"
-INDUSTRY: "ENGG"
-REQUIREMENT: "Here's text area to play around"
-SOURCE: "NEWSPAPER"
-TENURE: "LT1Y"
-currentSelectedBU: "SPECTRO"
+POST -- search capabilities
+http://52.66.164.208:8080/lmsApp-0.1.0/leads
+{
+ 
+  "custName": "CM"
+}
 
-CUSTOMER_NAME
-REQUIREMENT
-CONTACT_NAME
-CONTACT_EMAIL
-CONTACT_PHONE
-ESTIMATE
+
+leads Details
+http://52.66.164.208:8080/lmsApp-0.1.0/lead/4
+
+{"id":4,"source":"WEB","custName":"CM TEck","description":"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, w","leadContact":{"id":14,"name":"Mr K Murhty","email":"kmurhty@cmtek.com","phoneNumber":"9764007637","state":"KAR","country":"IND","designation":null},"leadsSummaryRes":{"businessUnits":["ART"],"rootLeadId":5,"salesRep":"Thomas","industry":null,"budget":12999.0,"currency":"USD"},"updateDate":null,"updatorId":0,"creationDate":"2019-06-04","inactiveDuration":0,"tenure":"LT1Y","status":"ACK","deleted":false,"message":null,"creatorId":22}
+
+
+Update Lead
+http://52.66.164.208:8080/lmsApp-0.1.0/lead/4
+{
+  "id":4,
+  "leadsSummaryRes": {
+    "budget":"12999",
+    "currency":"USD"
+  },
+  "status":"ACK"
+  
+}
+
+
+

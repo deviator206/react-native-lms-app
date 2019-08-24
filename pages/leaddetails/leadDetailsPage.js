@@ -9,13 +9,14 @@ import RefDataApi from '../../services/RefDataApi';
 import UserApi from '../../services/UserApi';
 import CheckBoxComponent from '../common/checkBoxComponent';
 import { default as commonStyle } from '../common/commonStyling';
-import appConfig from '../common/config';
 import { default as appConstant } from '../common/consts';
 import DropDownComponent from '../common/dropdownComponent';
 import HeaderComponent from '../common/headerComponent';
 import i18nMessages from '../common/i18n';
+import ModalComponent from '../common/modalComponent';
 import SpinnerComponent from '../common/spinnerComponent';
 import styleContent from './leadDetailsPageStyle';
+
 
 const leadApi = new LeadApi({ state: {} });
 const userApi = new UserApi({ state: {} });
@@ -26,7 +27,8 @@ class LeadDetailsPage extends React.Component {
     super(props);
     this.state = {
       spinner: false,
-      leadDetails: undefined
+      leadDetails: undefined,
+      [appConstant.UPDATE_LEAD.BUDGET]: ''
     }
     this.getSpinnerComponentView = this.getSpinnerComponentView.bind(this);
     this.sideMenuClickHandler = this.sideMenuClickHandler.bind(this);
@@ -37,6 +39,9 @@ class LeadDetailsPage extends React.Component {
     this.getActionsInfo = this.getActionsInfo.bind(this);
     this.getStatusInfo = this.getStatusInfo.bind(this);
     this.loadLeadDetail = this.loadLeadDetail.bind(this);
+    this.overlayScreenView = this.overlayScreenView.bind(this);
+    this.onFPModalClosed = this.onFPModalClosed.bind(this);
+
 
     this.onLeadResponseSuccess = this.onLeadResponseSuccess.bind(this);
     this.onLeadResponseError = this.onLeadResponseError.bind(this);
@@ -50,10 +55,119 @@ class LeadDetailsPage extends React.Component {
     this.onErrorResponseFromReferenceData = this.onErrorResponseFromReferenceData.bind(this);
     this.onDropDownChange = this.onDropDownChange.bind(this);
 
+
+    this.inputElementChanged = this.inputElementChanged.bind(this);
+    this.onCheckBoxChanged = this.onCheckBoxChanged.bind(this);
+    this.onLeadUpdate = this.onLeadUpdate.bind(this);
     this.willFocusSubscription = null;
 
+
+    this.onResponseUpdatedLead = this.onResponseUpdatedLead.bind(this);
+    this.onErrorResponseUpdatedLead = this.onErrorResponseUpdatedLead.bind(this);
   }
 
+  onResponseUpdatedLead() {
+    this.setState({
+      spinner: false,
+      showOverlay: true
+    });
+  }
+
+  onErrorResponseUpdatedLead(resp) {
+    this.setState({
+      spinner: false
+    });
+  }
+
+
+
+
+  onLeadUpdate() {
+    const { navigation } = this.props;
+    const itemId = navigation.getParam('leadId', 'NO-ID');
+
+    const {
+      leadDetails,
+      CURRENCY,
+      SALES_REP,
+      selectedBuList = [],
+      NOTIFY_TEXT,
+      ASSIGN_REP,
+      MODIFY_BU,
+      NOTIFY_BU,
+    } = this.state;
+    const { userId = "8" } = this.props;
+
+    let tempSummaryRes = {};
+    if (MODIFY_BU) {
+      tempSummaryRes = {
+        "businessUnits": selectedBuList
+      }
+    }
+
+    if (NOTIFY_BU) {
+      tempSummaryRes = {
+        ...tempSummaryRes,
+        "notificationText": NOTIFY_TEXT
+      }
+    }
+
+    if (ASSIGN_REP) {
+      tempSummaryRes = {
+        ...tempSummaryRes,
+        "salesRep": SALES_REP,
+      }
+    }
+
+    if (leadDetails && leadDetails.leadsSummaryRes && leadDetails.leadsSummaryRes.budget) {
+      tempSummaryRes = {
+        ...tempSummaryRes,
+        "budget": leadDetails.leadsSummaryRes.budget,
+      }
+    }
+
+    const inputPayload = {
+      "id": itemId,
+      "leadsSummaryRes": {
+        ...tempSummaryRes,
+        "currency": CURRENCY
+      },
+      "creatorId": userId
+    }
+
+    this.setState({
+      spinner: true
+    });
+
+    this.props.updateLead({ itemId: itemId, payload: inputPayload }).then(this.onResponseUpdatedLead).catch(this.onErrorResponseUpdatedLead);
+  }
+
+
+  onFPModalClosed() {
+    this.props.navigation.goBack();
+  }
+
+  overlayScreenView() {
+    const { showOverlay = false } = this.state;
+
+    const loaderView = (
+      <ModalComponent
+        modalTitle="Thank You!"
+        showSecondaryForgotPassword={false}
+        showSecondaryInput={false}
+        modalPrimaryText="Lead has been updated successfully"
+        showHeaderCloseBtn={false}
+        onCloseCallBackhandler={this.onFPModalClosed}
+        showRegularModalButton={true}
+        regularModalButtonLabel="Navigate To Previous Screen"
+      />
+    );
+    const nonLoaderView = null;
+    if (showOverlay) {
+      return loaderView;
+    }
+    return nonLoaderView;
+  }
 
   getFormattedAddress(leadContact) {
     const { state, country } = leadContact;
@@ -72,7 +186,7 @@ class LeadDetailsPage extends React.Component {
   onLeadResponseSuccess(resp) {
     this.setState({
       spinner: false,
-      leadDetails: resp
+      leadDetails: resp,
     });
   }
 
@@ -100,17 +214,21 @@ class LeadDetailsPage extends React.Component {
     });
   }
 
+  onCheckBoxChanged({ type, value }) {
+    this.setState({
+      [type]: value
+    });
+  }
+
   shouldComponentUpdate(nextProps, nextState) {
     const {
       CURRENCY,
-      BU,
-      SALES_REP
+      BU
     } = this.state;
     if (nextState &&
       (
         (CURRENCY !== nextState.CURRENCY) ||
-        (BU !== nextState.BU) ||
-        (SALES_REP !== nextState.SALES_REP)
+        (BU !== nextState.BU)
       )
     ) {
       return false;
@@ -139,14 +257,27 @@ class LeadDetailsPage extends React.Component {
 
 
   getDropdownFor(type) {
-    const { referenceData = {} } = this.state;
+    const { referenceData = {}, leadDetails } = this.state;
     let returnedView = null;
+
+    let defaultSelection;
+    if (type === appConstant.DROP_DOWN_TYPE.CURRENCY) {
+      const { leadsSummaryRes } = leadDetails;
+      const currency = leadsSummaryRes.currency;
+      defaultSelection = currency;
+    }
+
+
     let dataSource = [];
     dataSource = (referenceData && referenceData[type]) ? referenceData[type] : [];
     returnedView = <DropDownComponent
       dataSource={dataSource}
       updateToParent={this.onDropDownChange}
       dropDownType={type}
+      showAttribute='name'
+      returnAttribute='code'
+      defaultSelection={defaultSelection}
+
     />;
     return returnedView;
 
@@ -158,11 +289,36 @@ class LeadDetailsPage extends React.Component {
     const itemId = navigation.getParam('leadId', 'NO-ID');
 
     this.setState({
-      spinner: true
+      spinner: true,
+      [appConstant.UPDATE_LEAD.BUDGET]: ''
     });
     this.props.loadLeadDetail({ itemId }).then(this.onLeadResponseSuccess).catch(this.onLeadResponseError);
     this.props.loadUserList().then(this.onUserListLoaded).catch(this.onUserListLoadedError);
     this.props.loadRefData().then(this.onResponseFromReferenceData).catch(this.onErrorResponseFromReferenceData);
+  }
+
+  inputElementChanged(type, value) {
+    const { leadDetails } = this.state;
+    switch (type) {
+      case appConstant.UPDATE_LEAD.BUDGET:
+        let lesSummary = leadDetails.leadsSummaryRes;
+        let tempLeadDetails = {
+          ...leadDetails,
+          leadsSummaryRes: {
+            ...lesSummary,
+            budget: value
+          }
+        }
+        this.setState({
+          leadDetails: tempLeadDetails
+        });
+        break;
+      default:
+        this.setState({
+          [type]: value
+        });
+        break;
+    }
 
   }
   componentDidMount() {
@@ -280,13 +436,15 @@ class LeadDetailsPage extends React.Component {
         </Row>
       )
     }
-    //alert(":: ",spinner)
     return returnedView;
   }
 
 
+
+
+
   getActionsInfo() {
-    const { leadDetails } = this.state;
+    const { leadDetails, MODIFY_BU = false, ASSIGN_REP = false, NOTIFY_BU = false } = this.state;
     let returnedView;
     if (leadDetails && leadDetails.id && leadDetails.leadsSummaryRes) {
       returnedView = (
@@ -309,6 +467,11 @@ class LeadDetailsPage extends React.Component {
                           clearButtonMode="always"
                           autoCapitalize="none"
                           autoCorrect={false}
+                          value={this.state && this.state.leadDetails && this.state.leadDetails.leadsSummaryRes && this.state.leadDetails.leadsSummaryRes.budget && (this.state.leadDetails.leadsSummaryRes.budget).toString()}
+                          onChangeText={(text) => {
+                            this.inputElementChanged(appConstant.UPDATE_LEAD.BUDGET, text);
+                          }}
+
                         />
                       </Item>
                     </Col>
@@ -322,38 +485,51 @@ class LeadDetailsPage extends React.Component {
                   </Row>
                   <Row style={styleContent.marginTopStyling}>
                     <Col>
-                      <CheckBoxComponent checkBoxLabel={i18nMessages.lbl_assign_rep} />
-                    </Col>
-                    <Col style={styleContent.marginTopStyling}>
-                      {this.getDropdownForSplType(appConstant.DROP_DOWN_TYPE.SALES_REP)}
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col>
-                      <CheckBoxComponent checkBoxLabel={i18nMessages.lbl_modify_bu} />
-                    </Col>
-                    <Col style={styleContent.marginTopStyling}>
-                      {this.getDropdownFor(appConstant.DROP_DOWN_TYPE.BU_NAME)}
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col>
-                      <CheckBoxComponent checkBoxLabel={i18nMessages.lbl_notify_bu} />
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col>
-                      <Textarea
-                        style={commonStyle.dynamicComponentTextAreaStyle}
-                        rowSpan={4}
-                        bordered
-                        placeholder="Lorem Ipsum is sim"
+                      <CheckBoxComponent
+                        checkBoxLabel={i18nMessages.lbl_assign_rep}
+                        controlType={appConstant.UPDATE_LEAD.ASSIGN_REP}
+                        updateToParent={this.onCheckBoxChanged}
                       />
-
-
+                    </Col>
+                    <Col style={styleContent.marginTopStyling}>
+                      {ASSIGN_REP && this.getDropdownForSplType(appConstant.DROP_DOWN_TYPE.SALES_REP)}
                     </Col>
                   </Row>
-
+                  <Row>
+                    <Col>
+                      <CheckBoxComponent
+                        checkBoxLabel={i18nMessages.lbl_modify_bu}
+                        controlType={appConstant.UPDATE_LEAD.MODIFY_BU}
+                        updateToParent={this.onCheckBoxChanged} />
+                    </Col>
+                    <Col style={styleContent.marginTopStyling}>
+                      {MODIFY_BU && this.getDropdownFor(appConstant.DROP_DOWN_TYPE.BU_NAME)}
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <CheckBoxComponent
+                        checkBoxLabel={i18nMessages.lbl_notify_bu}
+                        controlType={appConstant.UPDATE_LEAD.NOTIFY_BU}
+                        updateToParent={this.onCheckBoxChanged}
+                      />
+                    </Col>
+                  </Row>
+                  {NOTIFY_BU && (
+                    <Row>
+                      <Col>
+                        <Textarea
+                          style={commonStyle.dynamicComponentTextAreaStyle}
+                          rowSpan={4}
+                          bordered
+                          placeholder="Lorem Ipsum is sim"
+                          onChangeText={(text) => {
+                            this.inputElementChanged(appConstant.UPDATE_LEAD.NOTIFY_TEXT, text);
+                          }}
+                        />
+                      </Col>
+                    </Row>
+                  )}
                 </Grid>
               </Col>
             </CardItem>
@@ -363,85 +539,7 @@ class LeadDetailsPage extends React.Component {
     }
     return returnedView;
   }
-  getActionsInfo1() {
-    const leadDetails = { "id": 1, "source": "Marketing", "custName": "shicv", "description": "dingDong", "leadContact": { "name": "dingdong", "email": "a@b.com", "phoneNumber": "9764007637", "country": "India", "state": "MH" }, "leadsSummaryRes": { "businessUnits": ["marketing", "sales"], "salesRep": "shivanshu", "industry": "it" }, "deleted": false, "creatorId": "123", "creationDate": "2019-06-04" };
-    let returnedView;
-    if (leadDetails && leadDetails.id && leadDetails.leadsSummaryRes) {
-      returnedView = (
-        <Row>
-          <Card style={styleContent.gridCardWrapper} >
-            <CardItem>
-              <Col>
-                <Grid>
-                  <Row >
-                    <Text style={styleContent.secondaryLabel}> ESTIMATED BUDGET </Text>
-                  </Row>
-                  <Row>
-                    <Col style={{
-                      width: "50%"
-                    }}>
-                      <Item >
-                        <Input
-                          style={styleContent.secondaryDarkText}
-                          returnKeyType="next"
-                          clearButtonMode="always"
-                          autoCapitalize="none"
-                          autoCorrect={false}
-                        />
-                      </Item>
-                    </Col>
-                    <Col style={{
-                      marginTop: "3%",
-                      width: "30%",
-                      marginLeft: "10%"
-                    }}>
-                      <DropDownComponent dataSource={appConfig.SUPPORTED_CURRENCY} />
-                    </Col>
-                  </Row>
-                  <Row style={styleContent.marginTopStyling}>
-                    <Col>
-                      <CheckBoxComponent checkBoxLabel={i18nMessages.lbl_assign_rep} />
-                    </Col>
-                    <Col style={styleContent.marginTopStyling}>
-                      <DropDownComponent dataSource={appConfig.SALES_REP_LIST} />
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col>
-                      <CheckBoxComponent checkBoxLabel={i18nMessages.lbl_modify_bu} />
-                    </Col>
-                    <Col style={styleContent.marginTopStyling}>
-                      <DropDownComponent dataSource={appConfig.BU_LIST} />
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col>
-                      <CheckBoxComponent checkBoxLabel={i18nMessages.lbl_notify_bu} />
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col>
-                      <Textarea
-                        style={commonStyle.dynamicComponentTextAreaStyle}
-                        rowSpan={4}
-                        bordered
-                        placeholder="Lorem Ipsum is sim"
-                      />
 
-
-                    </Col>
-                  </Row>
-                </Grid>
-              </Col>
-            </CardItem>
-          </Card>
-        </Row>
-      )
-    }
-    //alert(":: ",spinner)
-    return returnedView;
-
-  }
   getBusinessUnitInfo() {
     const { leadDetails } = this.state;
     // const leadDetails = { "id": 1, "source": "Marketing", "custName": "shicv", "description": "dingDong", "leadContact": { "name": "dingdong", "email": "a@b.com", "phoneNumber": "9764007637", "country": "India", "state": "MH" }, "leadsSummaryRes": { "businessUnits": ["Spectro", "atlas"], "salesRep": "shivanshu", "industry": "it" }, "deleted": false, "creatorId": "123", "creationDate": "2019-06-04" };
@@ -588,7 +686,7 @@ class LeadDetailsPage extends React.Component {
                     <Col>
                       <Text style={styleContent.requirement} > SOURCE: {leadDetails.source}</Text>
                     </Col>
-                    
+
                   </Row>
                   <Row>
                     <Text style={styleContent.customerName}> {leadDetails.custName}</Text>
@@ -596,7 +694,7 @@ class LeadDetailsPage extends React.Component {
                   <Row>
                     <Text style={styleContent.requirement} > {leadDetails.description}</Text>
                   </Row>
-                  
+
                   <Row>
                     <Text style={styleContent.requirement} > TENURE : {leadDetails.tenure}</Text>
                   </Row>
@@ -632,12 +730,16 @@ class LeadDetailsPage extends React.Component {
 
           </Grid>
           <Footer>
-            <Button style={styleContent.addLeadFooter}>
+            <Button
+              style={styleContent.addLeadFooter}
+              onPress={this.onLeadUpdate}
+            >
               <Text style={styleContent.addLeadFooterText}>UPDATE LEAD </Text>
               <MaterialIcon name="arrow-forward" style={{ color: "white", fontSize: 20 }} />
             </Button >
           </Footer>
         </Content>
+        {this.overlayScreenView()}
         {this.getSpinnerComponentView()}
       </Container>
     );
@@ -650,6 +752,13 @@ class LeadDetailsPage extends React.Component {
 // (send) an action so that the reducer can update the Redux state.
 function mapDispatchToProps(dispatch) {
   return {
+
+    updateLead: (params) => {
+      return leadApi.updateLead(params).then((resp) => {
+        return resp;
+      })
+    },
+
     loadLeadDetail: (inputParams) => {
       return leadApi.getLeadDetails(inputParams).then((resp) => {
         return resp;

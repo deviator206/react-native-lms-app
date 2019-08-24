@@ -232,6 +232,8 @@ class AddLeadPage extends React.Component {
           dataSource={dataSource}
           updateToParent={this.onDropDownChange}
           dropDownType={type}
+          showAttribute='name'
+          returnAttribute='code'
         />;
         break;
       case appconstant.DROP_DOWN_TYPE.SALES_REP:
@@ -371,6 +373,8 @@ class AddLeadPage extends React.Component {
       dataSource={dataSource}
       updateToParent={this.onDropDownChange}
       dropDownType={type}
+      showAttribute='name'
+      returnAttribute='code'
     />;
     return returnedView;
 

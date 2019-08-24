@@ -28,8 +28,9 @@ export default class DropDownComponent extends React.Component {
     }
 
     componentDidMount() {
-        const { dataSource, updateToParent, dropDownType } = this.props;
-        const value = (dataSource && dataSource[0] && dataSource[0].code) ? dataSource[0].code : '';
+        const { dataSource, updateToParent, dropDownType , defaultSelection} = this.props;
+        const defaultAutoSelectedValue = (dataSource && dataSource[0] && dataSource[0].code) ? dataSource[0].code : '';
+        const value = (defaultSelection) ? defaultSelection : defaultAutoSelectedValue;
         this.setState({
             selected: value
         });
@@ -67,7 +68,7 @@ export default class DropDownComponent extends React.Component {
 
 
     getDropDownLabel(singleItem) {
-        const { showAttribute, returnAttribute } = this.props;  
+        const { showAttribute } = this.props;  
         if(showAttribute) {
             return singleItem[showAttribute] ;
         }
