@@ -9,6 +9,7 @@ const SERVICE_URL = {
     'REF_DATA':'refdata/',
     'CREATE_LEAD':'rootlead/',
     'GET_LEADS':'leads/',
+    'GET_MI':'leads/',
     'LEAD_DETAILS': 'lead/',
     'GET_USERS':'users/',
     'UPDATE_LEAD':'lead/',
@@ -66,6 +67,10 @@ class ServiceClass {
 
     static async getUsers(){
         return await axiosInstance.get(SERVICE_URL['GET_USERS']);
+    }
+
+    static async getMI(params) {
+        return await axiosInstance.get(SERVICE_URL['GET_MI']);
     }
 }
 export default ServiceClass;

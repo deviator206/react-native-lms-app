@@ -34,6 +34,10 @@ const appconstant = {
         MODIFY_BU: 'MODIFY_BU',
         NOTIFY_BU: 'NOTIFY_BU',
         NOTIFY_TEXT:'NOTIFY_TEXT'
+    },
+    MI_STATUS: {
+        CLOSED: 'CLOSED',
+        OPEN: 'OPEN'
     }
 
 }

@@ -3,46 +3,45 @@ import React from 'react';
 import { Alert, FlatList, Modal, TouchableHighlight, View } from 'react-native';
 import { default as FilterIcon } from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { connect } from 'react-redux';
+import MarketIntelligenceApi from '../../services/MarketIntelligenceApi';
+import { default as appConstant } from '../common/consts';
 import FooterComponent from '../common/footerComponent';
 import HeaderComponent from '../common/headerComponent';
+import SpinnerComponent from '../common/spinnerComponent';
 import styleContent from './miListPageStyle';
 
 
+const marketIntelligenceApi = new MarketIntelligenceApi({ state: {} });
 
-export default class MiListPage extends React.Component {
+
+
+class MiListPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            filterVisible: false
+            filterVisible: false,
+            spinner: false
         };
         this.filerBtnToggled = this.filerBtnToggled.bind(this);
-        this.sideMenuClickHandler = this.sideMenuClickHandler.bind(this);
+        this.willFocusSubscription = null;
+
+        this.onLoadAllMarketInt = this.onLoadAllMarketInt.bind(this);
+        this.getSpinnerComponentView = this.getSpinnerComponentView.bind(this);
+        this.onSearchButtonClicked =  this.onSearchButtonClicked.bind(this);
+        this.onSearchTextChange = this.onSearchTextChange.bind(this);
+        this.onResponseSuccess = this.onResponseSuccess.bind(this);
+        this.onResponseError = this.onResponseError.bind(this);
+        this.getStatusStyle = this.getStatusStyle.bind(this);
     }
 
-    sideMenuClickHandler() {
-        alert("clicked side panel")
-    }
-
-    filerBtnToggled() {
-        const { filterVisible } = this.state;
-        console.log(filterVisible);
-        this.setState({
-            filterVisible: !filterVisible
-        });
-    }
-    componentDidMount() {
-        this.setState({
-            filterVisible: false
-        });
-    }
-
-    getViewLeads() {
-        const dataR = [
+    onResponseSuccess(resp) {
+        const resultSetLocal = [
             {
                 miId: "MI#779",
                 type: "New Item",
                 description: "This is likely happening when upgrading React Native from below 0.60 to 0.60 or above. Going forward",
-                status: "CLOSED"
+                status: "OPEN"
 
             }, {
                 miId: "MI#779",
@@ -82,67 +81,156 @@ export default class MiListPage extends React.Component {
                 description: "This is likely happening when upgrading React Native from below 0.60 to 0.60 or above. Going forward",
                 status: "CLOSED"
             }];
+        this.setState({
+            spinner: false,
+            resultSet: resultSetLocal
+        });
+    }
 
-        const returnedView = (
-            <FlatList
-                data={dataR}
-                renderItem={({ item }) =>
-                    <Row>
-                        <Card style={styleContent.gridCardWrapper} >
-                            <CardItem>
-                                <Col>
-                                    <Grid>
-                                        <Row>
-                                            <Col>
-                                                <Text style={styleContent.cardViewMainTitle} > {item.miId} </Text>
-                                            </Col>
-                                            <Col style={{ flexDirection: "row" }}>
-                                                <Text style={styleContent.cardViewSecondaryInfo}  > Type:  </Text>
-                                                <Text style={styleContent.cardViewPrimaryValue}  >  {item.type} </Text>
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            <Col>
-                                                <Text style={styleContent.cardViewSecondaryInfo}  > {item.description} </Text>
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            <Col style={styleContent.colLabelOnly} >
-                                                <Text style={styleContent.cardViewPrimaryLabel}  > Status: </Text>
+    onResponseError() {
+        this.setState({
+            spinner: false
+        });
+    }
 
-                                            </Col>
-                                            <Col style={styleContent.colValue} >
-                                                <Text style={styleContent.cardViewPrimaryValue} > {item.status}  </Text>
-                                            </Col>
+    onSearchTextChange(value) {
+        this.setState({
+            searchInput: value
+        })
+    }
 
-                                        </Row>
-                                    </Grid>
+    onSearchButtonClicked() {
+        const {searchInput = ''} = this.state;
+        if(searchInput && searchInput !== '') {
+            this.onLoadAllMarketInt({}) 
+        }
+    }
+    onLoadAllMarketInt(filterParams) {
+        this.setState({
+            spinner: true
+        });
+        this.props.loadAllMI({}).then(this.onResponseSuccess).catch(this.onResponseError)
+    }
 
-                                </Col>
-                            </CardItem>
-                        </Card>
-                    </Row>
-                }
-            >
 
-            </FlatList>
-        );
+    filerBtnToggled() {
+        const { filterVisible } = this.state;
+        console.log(filterVisible);
+        this.setState({
+            filterVisible: !filterVisible
+        });
+    }
+    componentDidMount() {
+        this.setState({
+            filterVisible: false
+        });
+        this.willFocusSubscription = this.props.navigation.addListener('willFocus', this.onLoadAllMarketInt);
+    }
 
+    componentWillUnmount() {
+        if (this.willFocusSubscription) {
+            this.willFocusSubscription.remove();
+        }
+    }
+
+    getSpinnerComponentView() {
+        const { spinner } = this.state;
+
+        const loaderView = (<SpinnerComponent />);
+        const nonLoaderView = null;
+        if (spinner) {
+            return loaderView;
+        }
+        return nonLoaderView;
+    }
+
+
+
+    getStatusStyle(status) {
+        if(status === appConstant.MI_STATUS.CLOSED) {
+            return styleContent.closedStatus;
+        } 
+        return styleContent.pendingStatus;
+    }
+
+
+    getViewLeads() {
+        const { resultSet = [] } = this.state;
+        let returnedView
+        if (resultSet && resultSet.length > 0) {
+            returnedView = (
+                <FlatList
+                    data={resultSet}
+                    renderItem={({ item }) =>
+                        <Row>
+                            <Card style={styleContent.gridCardWrapper} >
+                                <CardItem>
+                                    <Col>
+                                        <Grid>
+                                            <Row>
+                                                <Col>
+                                                    <Text style={styleContent.cardViewMainTitle} > {item.miId} </Text>
+                                                </Col>
+                                                <Col style={{ flexDirection: "row" }}>
+                                                    <Text style={styleContent.cardViewSecondaryInfo}  > Type:  </Text>
+                                                    <Text style={styleContent.cardViewPrimaryValue}  >  {item.type} </Text>
+                                                </Col>
+                                            </Row>
+                                            <Row>
+                                                <Col>
+                                                    <Text style={styleContent.cardViewSecondaryInfo}  > {item.description} </Text>
+                                                </Col>
+                                            </Row>
+                                            <Row>
+                                                <Col style={styleContent.colLabelOnly} >
+                                                    <Text style={styleContent.cardViewPrimaryLabel}  > Status: </Text>
+
+                                                </Col>
+                                                <Col style={styleContent.colValue} >
+                                                
+                                                    <Text style={this.getStatusStyle(item.status)} > {item.status}  </Text>
+                                                </Col>
+
+                                            </Row>
+                                        </Grid>
+
+                                    </Col>
+                                </CardItem>
+                            </Card>
+                        </Row>
+                    }
+                >
+
+                </FlatList>
+            );
+        }
         return returnedView;
     }
     render() {
-        const uri = "https://facebook.github.io/react-native/docs/assets/favicon.png";
         const { navigation } = this.props;
         return (
             <Container>
-                <HeaderComponent  navigation={navigation}  title="Market Intelligence" />
+                <HeaderComponent navigation={navigation} title="Market Intelligence" />
                 <Content style={styleContent.mainContent}>
                     <Grid >
                         <Row style={styleContent.searchAndFilterWrapper}>
                             <Col style={styleContent.searchBarWrapper} >
                                 <Item searchBar rounded style={styleContent.searchBarStyling}>
-                                    <Input placeholder="Search"  />
-                                    <Icon name="search" style={[styleContent.iconStyling, styleContent.searchIcon]} />
+                                    <Input 
+                                        placeholder="Search"
+                                        onChangeText={(value)=>{
+                                            this.onSearchTextChange(value);
+                                        }}
+                                         />
+                                    <Button transparent
+                                        onPress={() => {
+                                            this.onSearchButtonClicked();
+                                        }}
+                                    >
+                                        <Icon name="search"
+                                            style={[styleContent.iconStyling, styleContent.searchIcon]}
+                                        />
+                                    </Button>
                                 </Item>
                             </Col>
                             <Col  >
@@ -150,10 +238,7 @@ export default class MiListPage extends React.Component {
                                     transparent
                                     onPress={() => {
                                         this.filerBtnToggled();
-                                    }
-
-
-                                    }
+                                    }}
                                 >
                                     <FilterIcon name="filter-outline" style={styleContent.iconStylingBigger} />
                                 </Button>
@@ -165,19 +250,19 @@ export default class MiListPage extends React.Component {
                         {this.getViewLeads()}
                     </Grid>
                 </Content>
-                <Button 
-                    style={styleContent.floatingButton} 
+                <Button
+                    style={styleContent.floatingButton}
                     button
-                    onPress={()=>{
+                    onPress={() => {
                         this.props.navigation.navigate('miadd');
                     }} >
-                            <Icon name="add" style={{ 
-                                color: "white", 
-                                fontSize: 30,
-                                marginLeft: 15
-                                }} />
+                    <Icon name="add" style={{
+                        color: "white",
+                        fontSize: 30,
+                        marginLeft: 15
+                    }} />
                 </Button>
-               <FooterComponent />
+                <FooterComponent />
 
                 <Modal
                     animationType="slide"
@@ -214,8 +299,40 @@ export default class MiListPage extends React.Component {
                     </Content>
 
                 </Modal>
-
+                {this.getSpinnerComponentView()}
             </Container>
         )
     }
 }
+
+
+
+// This function provides a means of sending actions so that data in the Redux store
+// can be modified. In this example, calling this.props.addToCounter() will now dispatch
+// (send) an action so that the reducer can update the Redux state.
+function mapDispatchToProps(dispatch) {
+    return {
+        loadAllMI: (inputParams) => {
+            return marketIntelligenceApi.getMI({
+                params: inputParams
+            }).then((resp) => {
+                return resp;
+            })
+
+        },
+        dispatchAction: (param) => {
+            dispatch(param);
+        }
+    }
+}
+
+// This function provides access to data in the Redux state in the React component
+// In this example, the value of this.props.count will now always have the same value
+// As the count value in the Redux state
+function mapStateToProps(state) {
+    return {
+        count: state.count
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(MiListPage);

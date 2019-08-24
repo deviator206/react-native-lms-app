@@ -69,7 +69,19 @@ const styleContent = StyleSheet.create({
     cardViewPrimaryValue: {
         fontSize: 14,
         fontFamily: 'Montserrat-SemiBold',
-        color: "#21A50E"
+        color: "black"
+    },
+    closedStatus: {
+        fontSize: 14,
+        fontFamily: 'Montserrat-SemiBold',
+        color: "#21A50E",
+        textTransform:"uppercase"
+    },
+    pendingStatus: {
+        fontSize: 14,
+        fontFamily: 'Montserrat-SemiBold',
+        color: "#F37C57",
+        textTransform:"uppercase"
     },
     addLeadFooter: {
         backgroundColor: '#ec2227',
