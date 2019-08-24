@@ -6,11 +6,12 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { connect } from 'react-redux';
 import LeadApi from '../../services/LeadApi';
 import { default as commonStyle } from '../common/commonStyling';
+import { default as appConstant } from '../common/consts';
 import FooterComponent from '../common/footerComponent';
 import HeaderComponent from '../common/headerComponent';
+import i18nMessages from '../common/i18n';
 import SpinnerComponent from '../common/spinnerComponent';
 import styleContent from './viewLeadStyle';
-import i18nMessages from '../common/i18n';
 
 const leadApi = new LeadApi({ state: {} });
 
@@ -29,6 +30,7 @@ class ViewLeadPage extends React.Component {
 
         this.onLeadResponseSuccess = this.onLeadResponseSuccess.bind(this);
         this.onLeadResponseError = this.onLeadResponseError.bind(this);
+        this.getStatusCircle = this.getStatusCircle.bind(this);
     }
 
     getSpinnerComponentView() {
@@ -95,6 +97,22 @@ class ViewLeadPage extends React.Component {
         return styleContent.cardViewSecondaryInfo;
 
     }
+
+    getStatusCircle(status) {
+        if (status === appConstant.LEAD_STATUS.APPROVED) {
+            return styleContent.approvedStatusCircle;
+        }
+
+        if (status === appConstant.LEAD_STATUS.REJECTED) {
+            return styleContent.rejectedStatusCircle;
+        }
+
+        if (status === appConstant.LEAD_STATUS.PENDING) {
+            return styleContent.pendingStatusCircle;
+        }
+        return styleContent.needMoreStatusCircle
+    }
+
 
     getViewLeads() {
         const { resultSet } = this.state;
@@ -195,11 +213,11 @@ class ViewLeadPage extends React.Component {
                                             </Col>
                                             <Col style={styleContent.colValue} >
                                                 <Text style={styleContent.cardViewPrimaryValue} >:   </Text>
-                                                <Text style={this.getStatusClass(item.status)} > {item.status}  </Text>
+                                                <Text style={this.getStatusClass(item.status)} > {item.status && appConstant.DECODED_LEAD_STATUS[(item.status).toUpperCase()]}  </Text>
 
                                             </Col>
                                             <Col style={styleContent.colValueThird} >
-                                                <View style={styleContent.approvedStatusCircle} />
+                                                <View style={this.getStatusCircle(item.status)} />
                                             </Col>
 
                                         </Row>
@@ -312,22 +330,22 @@ class ViewLeadPage extends React.Component {
                     onRequestClose={() => {
                         Alert.alert('Modal has been closed.');
                     }}>
-                    <View style={{ width: '100%', height: "100%"}}>
+                    <View style={{ width: '100%', height: "100%" }}>
                         <View style={commonStyle.modalHeaderDiv}>
                             <View><Text note style={commonStyle.modalHeader}> Filter View Leads </Text></View>
                             <View>
-                            <TouchableHighlight
-                                onPress={() => {
-                                    this.filerBtnToggled();
-                                }}>
-                                <Icon name="close" style={commonStyle.modalCloseBtn} />
-                            </TouchableHighlight>
+                                <TouchableHighlight
+                                    onPress={() => {
+                                        this.filerBtnToggled();
+                                    }}>
+                                    <Icon name="close" style={commonStyle.modalCloseBtn} />
+                                </TouchableHighlight>
                             </View>
                         </View>
-                        <View style={{flex: 1, padding: 20}}>
+                        <View style={{ flex: 1, padding: 20 }}>
                             <Grid style={commonStyle.formGrid}>
                                 <Row style={commonStyle.formGridLabel}>
-                                <Col>
+                                    <Col>
                                         <Text note style={commonStyle.labelStyling}>{i18nMessages.status}</Text>
                                     </Col>
                                     <Col>
@@ -337,14 +355,14 @@ class ViewLeadPage extends React.Component {
                                 <Row style={commonStyle.formGridValue}>
                                     <Col>
                                         <Text>Status dropdown</Text>
-                                </Col>
-                                <Col>
+                                    </Col>
+                                    <Col>
                                         <Text>Tenure dropdown</Text>
-                                </Col>
-                            </Row>
+                                    </Col>
+                                </Row>
 
                                 <Row style={commonStyle.formGridLabel}>
-                                <Col>
+                                    <Col>
                                         <Text note style={commonStyle.labelStyling}>{i18nMessages.location}</Text>
                                     </Col>
                                 </Row>
@@ -356,13 +374,13 @@ class ViewLeadPage extends React.Component {
                                 <Row style={commonStyle.formGridLabel}>
                                     <Col>
                                         <Text note style={commonStyle.labelStyling}>{i18nMessages.bu_selection}</Text>
-                                </Col>
+                                    </Col>
                                 </Row>
                                 <Row style={commonStyle.formGridValue}>
                                     <Col><Text>BU and Rep dropdown</Text></Col>
                                 </Row>
                                 <Row style={commonStyle.formGridLabel}>
-                                <Col>
+                                    <Col>
                                         <Text note style={commonStyle.labelStyling}>{i18nMessages.industry}</Text>
                                     </Col>
                                 </Row>
@@ -374,8 +392,8 @@ class ViewLeadPage extends React.Component {
                                 <Row style={commonStyle.formGridLabel}>
                                     <Col>
                                         <Text note style={commonStyle.labelStyling}>{i18nMessages.source_type}</Text>
-                                </Col>
-                            </Row>
+                                    </Col>
+                                </Row>
                                 <Row style={commonStyle.formGridValue}>
                                     <Col><Text>source dropdown</Text></Col>
                                 </Row>
@@ -384,17 +402,17 @@ class ViewLeadPage extends React.Component {
 
                         <View style={commonStyle.modalFooter}>
                             <View style={commonStyle.modalButtonContent}>
-                                <View style={{width: "40%"}}>
+                                <View style={{ width: "40%" }}>
                                     <TouchableHighlight
-                                        onPress={() => {  }}>
+                                        onPress={() => { }}>
                                         <Text style={[commonStyle.modalTwoButtons, commonStyle.secondaryButton]}>Reset</Text>
                                     </TouchableHighlight>
                                 </View>
-                                <View style={{width: "40%"}}>
-                                <TouchableHighlight
-                                        onPress={() => {  }}>
+                                <View style={{ width: "40%" }}>
+                                    <TouchableHighlight
+                                        onPress={() => { }}>
                                         <Text style={[commonStyle.modalTwoButtons, commonStyle.primaryButton]}>Apply</Text>
-                                </TouchableHighlight>
+                                    </TouchableHighlight>
                                 </View>
                             </View>
                         </View>

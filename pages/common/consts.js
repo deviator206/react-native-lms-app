@@ -13,7 +13,20 @@ const appconstant = {
         COUNTRY: 'COUNTRY',
         BU_NAME: 'BU',
         STATE: 'STATE',
-        SALES_REP: 'SALES_REP'
+        SALES_REP: 'SALES_REP',
+        LEAD_STATUS:'LEAD_STATUS'
+    },
+    LEAD_STATUS: {
+        APPROVED: 'APP',
+        REJECTED: 'REJ',
+        PENDING: 'DRAFT',
+        NEED_MORE:'NMI'
+    },
+    DECODED_LEAD_STATUS:{
+        APP:'Approved',
+        REJ:'Rejected',
+        DRAFT:'Pending',
+        NMI:'Need More Info',
     },
     UPDATE_LEAD: {
         BUDGET: 'BUDGET',

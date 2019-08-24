@@ -9,6 +9,7 @@ import RefDataApi from '../../services/RefDataApi';
 import UserApi from '../../services/UserApi';
 import CheckBoxComponent from '../common/checkBoxComponent';
 import { default as commonStyle } from '../common/commonStyling';
+import appConfig from '../common/config';
 import { default as appConstant } from '../common/consts';
 import DropDownComponent from '../common/dropdownComponent';
 import HeaderComponent from '../common/headerComponent';
@@ -64,6 +65,7 @@ class LeadDetailsPage extends React.Component {
 
     this.onResponseUpdatedLead = this.onResponseUpdatedLead.bind(this);
     this.onErrorResponseUpdatedLead = this.onErrorResponseUpdatedLead.bind(this);
+    this.getStatusCircle = this.getStatusCircle.bind(this);
   }
 
   onResponseUpdatedLead() {
@@ -90,6 +92,7 @@ class LeadDetailsPage extends React.Component {
       leadDetails,
       CURRENCY,
       SALES_REP,
+      LEAD_STATUS,
       selectedBuList = [],
       NOTIFY_TEXT,
       ASSIGN_REP,
@@ -132,6 +135,7 @@ class LeadDetailsPage extends React.Component {
         ...tempSummaryRes,
         "currency": CURRENCY
       },
+      status: LEAD_STATUS,
       "creatorId": userId
     }
 
@@ -268,6 +272,7 @@ class LeadDetailsPage extends React.Component {
     }
 
 
+
     let dataSource = [];
     dataSource = (referenceData && referenceData[type]) ? referenceData[type] : [];
     returnedView = <DropDownComponent
@@ -377,7 +382,7 @@ class LeadDetailsPage extends React.Component {
 
 
   getDropdownForSplType(type) {
-    const { dynamic_state_list = [], userList = [] } = this.state;
+    const { dynamic_state_list = [], userList = [], leadDetails } = this.state;
     let returnedView = null;
     let dataSource = [];
     switch (type) {
@@ -399,17 +404,46 @@ class LeadDetailsPage extends React.Component {
           dropDownType={type}
         />;
         break;
+      case appConstant.DROP_DOWN_TYPE.LEAD_STATUS:
+        let defaultSelection;
+        const status = leadDetails.status;
+        defaultSelection = status;
+        dataSource = appConfig.LEAD_STATUS;
+        returnedView = <DropDownComponent
+          showAttribute='name'
+          returnAttribute='code'
+          dataSource={dataSource}
+          updateToParent={this.onDropDownChange}
+          dropDownType={type}
+          defaultSelection={defaultSelection}
+        />;
+        break;
       default:
         break;
     }
     return returnedView;
   }
 
+  getStatusCircle(status) {
+    if (status === appConstant.LEAD_STATUS.APPROVED) {
+      return styleContent.approvedStatusCircle;
+    }
+
+    if (status === appConstant.LEAD_STATUS.REJECTED) {
+      return styleContent.rejectedStatusCircle;
+    }
+
+    if (status === appConstant.LEAD_STATUS.PENDING) {
+      return styleContent.pendingStatusCircle;
+    }
+    return styleContent.needMoreStatusCircle
+  }
 
   getStatusInfo() {
-    const leadDetails = { "id": 1, "source": "Marketing", "custName": "shicv", "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.", "leadContact": { "name": "dingdong", "email": "a@b.com", "phoneNumber": "9764007637", "country": "India", "state": "MH" }, "leadsSummaryRes": { "businessUnits": ["marketing", "sales"], "salesRep": "shivanshu", "industry": "it" }, "deleted": false, "creatorId": "123", "creationDate": "2019-06-04" };
+    const { leadDetails } = this.state;
+    // const leadDetails = { "id": 1, "source": "Marketing", "custName": "shicv", "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.", "leadContact": { "name": "dingdong", "email": "a@b.com", "phoneNumber": "9764007637", "country": "India", "state": "MH" }, "leadsSummaryRes": { "businessUnits": ["marketing", "sales"], "salesRep": "shivanshu", "industry": "it" }, "deleted": false, "creatorId": "123", "creationDate": "2019-06-04" };
     let returnedView;
-    if (leadDetails && leadDetails.id && leadDetails.leadsSummaryRes) {
+    if (leadDetails && leadDetails.id && leadDetails.status) {
       returnedView = (
         <Row>
           <Card style={styleContent.gridCardWrapper} >
@@ -420,11 +454,12 @@ class LeadDetailsPage extends React.Component {
                     <Text style={styleContent.secondaryLabel}> STATUS</Text>
                   </Row>
                   <Row>
-                    <Col style={styleContent.colValue}>
-                      <Text style={styleContent.primaryText}> [TODO: PENDING] </Text>
+                    <Col >
+                      {this.getDropdownForSplType(appConstant.DROP_DOWN_TYPE.LEAD_STATUS)}
                     </Col>
-                    <Col style={styleContent.colValueThird} >
-                      <View style={styleContent.approvedStatusCircle} />
+                    <Col >
+
+                      <View style={this.getStatusCircle(leadDetails.status)} />
                     </Col>
 
                   </Row>

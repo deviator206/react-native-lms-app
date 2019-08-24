@@ -90,8 +90,27 @@ const styleContent = StyleSheet.create({
         width: 20,
         height: 20,
         borderRadius: 20/2,
+        backgroundColor:"#21A50E",
+    },
+
+    rejectedStatusCircle: {
+        width: 20,
+        height: 20,
+        borderRadius: 20/2,
         backgroundColor: 'red',
-        
-    }
+    },
+    needMoreStatusCircle: {
+        width: 20,
+        height: 20,
+        borderRadius: 20/2,
+        backgroundColor: 'black',
+    },
+
+    pendingStatusCircle: {
+        width: 20,
+        height: 20,
+        borderRadius: 20/2,
+        backgroundColor: "#F37C57",
+    },
 });
 export default styleContent;

@@ -68,7 +68,8 @@ const styleContent = StyleSheet.create({
     colValue: {
         flexDirection: 'row', 
         flexWrap: 'wrap',
-        marginBottom:"2%"       
+        marginBottom:"2%" ,   
+        backgroundColor:"red"
     },
     iconStyling: {
         fontSize: 20
@@ -96,8 +97,27 @@ const styleContent = StyleSheet.create({
         width: 20,
         height: 20,
         borderRadius: 20/2,
+        backgroundColor:"#21A50E",
+    },
+
+    rejectedStatusCircle: {
+        width: 20,
+        height: 20,
+        borderRadius: 20/2,
         backgroundColor: 'red',
-        
+    },
+    needMoreStatusCircle: {
+        width: 20,
+        height: 20,
+        borderRadius: 20/2,
+        backgroundColor: 'black',
+    },
+
+    pendingStatusCircle: {
+        width: 20,
+        height: 20,
+        borderRadius: 20/2,
+        backgroundColor: "#F37C57",
     },
     addLeadFooter:{
         backgroundColor: '#ec2227',
