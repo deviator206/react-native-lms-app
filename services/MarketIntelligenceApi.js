@@ -15,7 +15,7 @@ class MarketIntelligenceApi {
             }).catch((err) => {
                 reject({ message: "RESPONSE IS NOT AS EXPECTED", error: "INVALID" });
             })
-        }); 
+        });
     }
 
     getLeadDetails(params) {
@@ -29,11 +29,11 @@ class MarketIntelligenceApi {
             }).catch((err) => {
                 reject({ message: "RESPONSE IS NOT AS EXPECTED", error: "INVALID" });
             })
-        }); 
+        });
     }
 
 
-    getMI({params}) {
+    getMI({ params }) {
         return new Promise(function (resolve, reject) {
             ServiceClass.getMI(params).then((resp) => {
                 if (resp && resp.data) {
@@ -44,12 +44,14 @@ class MarketIntelligenceApi {
             }).catch((err) => {
                 reject({ message: "RESPONSE IS NOT AS EXPECTED", error: "INVALID" });
             })
-        }); 
+        });
     }
 
-    createLead({ params}) {
+    createNewMI({ params }) {
         return new Promise(function (resolve, reject) {
-            ServiceClass.createLead(params).then((resp) => {
+            resolve({});
+            /*
+            ServiceClass.createNewMI(params).then((resp) => {
                 if (resp && resp.data) {
                     resolve(resp.data)
                 } else {
@@ -57,7 +59,7 @@ class MarketIntelligenceApi {
                 }
             }).catch((err) => {
                 reject({ message: "RESPONSE IS NOT AS EXPECTED", error: "INVALID" });
-            })
+            })*/
         });
     }
 }

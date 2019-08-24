@@ -13,6 +13,7 @@ const SERVICE_URL = {
     'LEAD_DETAILS': 'lead/',
     'GET_USERS':'users/',
     'UPDATE_LEAD':'lead/',
+    'CREATE_NEW_MI': 'lead/'
 }
 
 const axiosInstance = axios.create({
@@ -51,6 +52,11 @@ class ServiceClass {
 
     static async createLead(params) {
         return await axiosInstance.post(SERVICE_URL['CREATE_LEAD'], params);
+    }
+
+    
+    static async createNewMI(params) {
+        return await axiosInstance.post(SERVICE_URL['CREATE_NEW_MI'], params);
     }
 
     static async getLeads(params) {
