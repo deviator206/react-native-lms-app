@@ -350,19 +350,7 @@ class MiDetailsPage extends React.Component {
                                 </Col>
                             </Row>
                         )}
-                        {ADD_MORE_INFO && (
-                            <Row>
-                                <Col>
-                                    <Button
-                                        style={styleContent.addFooter}
-                                        onPress={this.initiateMICreation}
-                                    >
-                                        <Text style={styleContent.addFooterText}>Send </Text>
-                                    </Button >
-                                </Col>
-                            </Row>
-                        )}
-
+                       
                         <Row>
                             <Col>
                                 <CheckBoxComponent
