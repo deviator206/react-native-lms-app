@@ -1,4 +1,4 @@
-import { Button, Col, Container, Content, Footer, Grid, Row, Text, Textarea } from 'native-base';
+import { Button, Col, Image, Container, Content, Footer, Grid, Row, Text, Textarea } from 'native-base';
 import React from 'react';
 import { FlatList } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -213,6 +213,7 @@ class MiDetailsPage extends React.Component {
             returnedView = (
                 <FlatList
                     data={resultSet}
+                    style={{ height: "auto"}}
                     renderItem={({ item }) =>
                         <Row
                             style={styleContent.gridCardWrapper}
@@ -230,21 +231,22 @@ class MiDetailsPage extends React.Component {
 
                                     <Row style={
                                         {
-                                            borderTopColor: "black",
-                                            borderTopWidth: 3
+                                            borderTopColor: "#616161",
+                                            borderTopWidth: 1,
+                                            paddingTop: 8
                                         }
                                     }>
-                                        <Col>
-                                            <Text style={styleContent.cardViewSecondaryInfo} > {item.name} </Text>
-                                        </Col>
-                                        <Col style={{ flexDirection: "row" }}>
-                                            <Text style={styleContent.cardViewSecondaryInfo}  > Date:  </Text>
-                                            <Text style={styleContent.cardViewPrimaryValue}  >  {item.date} </Text>
-                                        </Col>
+                                        <Col style={styleContent.profilePic}></Col>
+                                        <Col style={styleContent.profileDetails}>
+                                            <Row style={styleContent.profileDetailsRow}>
+                                                <Col><Text style={styleContent.profileDetailsLabel}> {item.name} </Text></Col>
+                                                <Col style={styleContent.alignItemTOEnd}><Text style={styleContent.profileDetailsValue}>  {item.date} </Text></Col>
                                     </Row>
                                     <Row>
                                         <Col>
-                                            <Text style={styleContent.cardViewSecondaryInfo}  > {item.info} </Text>
+                                                    <Text style={[styleContent.cardViewSecondaryInfo, styleContent.profileDetailsInfo]}> {item.info} </Text>
+                                                </Col>
+                                            </Row>
                                         </Col>
                                     </Row>
                                 </Grid>
@@ -276,8 +278,8 @@ class MiDetailsPage extends React.Component {
                 <HeaderComponent navigation={navigation} title="Market Intelligence" />
                 <Content style={styleContent.mainContent}>
 
-                    <Grid style={styleContent.gridWrapper}>
-                        <Row style={styleContent.gridCardWrapper}>
+                    <Grid style={commonStyle.gridWrapper}>
+                        <Row style={commonStyle.gridCardWrapper}>
                             <Col>
                                 <Grid>
                                     <Row>
@@ -294,12 +296,12 @@ class MiDetailsPage extends React.Component {
                                             <Text style={styleContent.cardViewSecondaryInfo}  > {item.description} </Text>
                                         </Col>
                                     </Row>
-                                    <Row>
-                                        <Col style={styleContent.colLabelOnly} >
+                                    <Row style={{ marginTop: 10, height: 50 }}>
+                                        <Col style={styleContent.colWidth30 } >
                                             <Text style={styleContent.cardViewPrimaryLabel}  > Status: </Text>
 
                                         </Col>
-                                        <Col style={styleContent.colValue} >
+                                        <Col style={ styleContent.colWidth70} >
 
                                             <Text style={this.getStatusStyle(item.status)} > {item.status}  </Text>
                                         </Col>
@@ -313,21 +315,17 @@ class MiDetailsPage extends React.Component {
                     </Grid>
 
                     <Grid style={[styleContent.gridWrapper, {
-                        height: 400,
-                        backgroundColor: "yellow"
+                       height: "auto"
                     }]} >
                         {this.getListedInfo()}
                     </Grid>
 
-                </Content>
-                <Footer style={{
-                    height: 300,
-                    backgroundColor: "white"
-                }}>
+               
+               
 
-                    <Grid>
+                    <Grid style={{ marginTop: 10 }}>
                         <Row>
-                            <Col>
+                            <Col style={{ marginLeft: 10 }}>
                                 <CheckBoxComponent
                                     checkBoxLabel={i18nMessages.lbl_mi_info_add_more_info}
                                     controlType={appConstant.MI_INFO.ADD_MORE_INFO}
@@ -351,8 +349,8 @@ class MiDetailsPage extends React.Component {
                             </Row>
                         )}
                        
-                        <Row>
-                            <Col>
+                        <Row style={{ marginTop: 15 }}>
+                            <Col style={{ marginLeft: 10 }}>
                                 <CheckBoxComponent
                                     checkBoxLabel={i18nMessages.lbl_mi_info_convert_to_lead}
                                     controlType={appConstant.MI_INFO.CONVERT_TO_LEAD}
@@ -362,8 +360,8 @@ class MiDetailsPage extends React.Component {
                         </Row>
                         {CONVERT_TO_LEAD && (
                             <Row>
-                                <Col>
-                                    <Text> Customer Name </Text>
+                                <Col style={styleContent.marginHorizontalRow}>
+                                    <Text style={commonStyle.darkLabelStyling}> Add Company Name </Text>
                                 </Col>
                             </Row>
                         )}
@@ -385,13 +383,13 @@ class MiDetailsPage extends React.Component {
 
                         {CONVERT_TO_LEAD && (
                             <Row>
-                                <Col>
-                                    <Text> Requirements </Text>
+                                <Col style={styleContent.marginHorizontalRow}>
+                                    <Text style={commonStyle.darkLabelStyling}> Add final Description / Requirements </Text>
                                 </Col>
                             </Row>
                         )}
                         {CONVERT_TO_LEAD && (
-                            <Row>
+                            <Row  style={{ marginBottom: 50 }}>
                                 <Col>
                                     <Textarea
                                         style={commonStyle.dynamicComponentTextAreaStyle}
@@ -406,8 +404,9 @@ class MiDetailsPage extends React.Component {
                             </Row>
                         )}
                         {CONVERT_TO_LEAD && (
-                            <Row>
-                                <Col>
+                             <Footer style={{
+                                backgroundColor: "yellow"
+                            }}>
                                     <Button
                                         style={styleContent.addFooter}
                                         onPress={this.initiateMICreation}
@@ -415,13 +414,12 @@ class MiDetailsPage extends React.Component {
                                         <Text style={styleContent.addFooterText}>CONVERT TO LEAD </Text>
                                         <Icon name="arrow-forward" style={{ color: "white", fontSize: 20 }} />
                                     </Button >
-                                </Col>
-                            </Row>
+                                    </Footer>
                         )}
                     </Grid>
+                    </Content>
 
-
-                </Footer>
+               
                 {this.overlayScreenView()}
                 {this.getSpinnerComponentView()}
             </Container>

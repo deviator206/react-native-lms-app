@@ -322,9 +322,7 @@ class AddLeadPage extends React.Component {
 
   getDatePickerView() {
     return (
-
       <DatePicker
-
         defaultDate={this.state.leadCreatedDate}
         textStyle={styleContent.datePickerStyle}
         placeHolderTextStyle={styleContent.datePickerStyle}
@@ -332,7 +330,6 @@ class AddLeadPage extends React.Component {
         placeHolderText={i18nMessages.select_date_lbl}
         onDateChange={this.onLeadAddDateSelected}
       />
-
     )
   }
 

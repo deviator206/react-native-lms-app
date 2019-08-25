@@ -5,6 +5,9 @@ const styleContent = StyleSheet.create({
         flex: 1,
         backgroundColor:"#E8E8E8"
     },
+    inputBox: {
+        paddingLeft: 20
+    },
     iconStylingBigger: {
         fontSize: 25
     },
@@ -15,8 +18,9 @@ const styleContent = StyleSheet.create({
         paddingRight: 5
     },
     searchBarStyling: {
-        width: "80%",
-        alignSelf: "center",
+        width: "90%",
+        marginLeft: 20,
+        //alignSelf: "center",
         backgroundColor:"#FFFFFF",
         borderWidth: 1,
         borderColor: "#999999"
@@ -24,6 +28,10 @@ const styleContent = StyleSheet.create({
     },
     searchBarWrapper: {
         width: "90%",
+        marginTop: 10
+    },
+    filterBtnIcon: {
+        marginTop: 12
     },
     gridWrapper: {
         width: "96%",
@@ -31,11 +39,11 @@ const styleContent = StyleSheet.create({
         alignSelf: "center"
     },
     gridCardWrapper: {
-        width: "90%",
+        width: "96%",
         alignSelf: "center",
-        marginTop: "5%",
-        marginLeft: "5%",
-        marginRight: "5%"
+        marginTop: "4%",
+        marginLeft: "2%",
+        marginRight: "2%"
     },
     searchAndFilterWrapper: {
         marginTop: "2%"
@@ -91,13 +99,28 @@ const styleContent = StyleSheet.create({
         borderRadius: 90
 
     },
+    calenderIcon: {
+        color: "black",
+        fontSize: 20,
+        marginTop:"30%",
+        marginLeft:"10%"
+      },
+    datePickerStyle:{
+        color:"#616161",
+        fontSize:14,
+        fontFamily: 'Montserrat-SemiBold',
+        lineHeight: 15
+     },
+    floatingButtonView: {
+        backgroundColor: "#E8E8E8"
+    },
     floatingButton: {
-        position: "absolute",
+       // position: "absolute",
         width: 60,
         height: 60,
         borderRadius: 60 / 2,
         backgroundColor: '#EC2227',
-        bottom: 60,
+        bottom: 5,
         right: 15,
         alignSelf:"flex-end",
 

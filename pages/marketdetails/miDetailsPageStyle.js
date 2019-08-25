@@ -41,19 +41,19 @@ const styleContent = StyleSheet.create({
         width: "90%",
     },
     gridWrapper: {
-        width: "92%",
-        marginHorizontal: "4%",
+        width: "96%",
+        marginHorizontal: "2%",
         alignSelf: "center"
     },
     gridCardWrapper: {
-        width: "95%",
+        width: "96%",
         alignSelf: "center",
     },
     searchAndFilterWrapper: {
         marginTop: "2%"
     },
     colLabelOnly: {
-        width: "40%",
+       // width: "40%",
     },
     colValue: {
 
@@ -78,8 +78,9 @@ const styleContent = StyleSheet.create({
     },
     cardViewSecondaryInfo: {
         fontSize: 14,
-        fontFamily: 'Montserrat-Bold',
-        color: "#AEAEAE"
+        fontFamily: 'Montserrat-Regular',
+        color: "#AEAEAE",
+        lineHeight: 18
     },
     cardViewPrimaryLabel: {
         fontSize: 14,
@@ -89,14 +90,7 @@ const styleContent = StyleSheet.create({
     cardViewPrimaryValue: {
         fontSize: 14,
         fontFamily: 'Montserrat-Bold',
-        color: "#21A50E"
-    },
-    addLeadFooter: {
-        backgroundColor: '#ec2227',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '30%',
-        borderRadius: 90
+        color: "#000000"
 
     },
     circular: {
@@ -143,5 +137,53 @@ const styleContent = StyleSheet.create({
         marginLeft: 0,
         fontFamily: 'Montserrat-Regular'
     },
+    colWidth30: {
+        width: "20%"
+    },
+    colWidth70: {
+        width: "80%"
+    },
+    profilePic: {
+        height: 60, 
+        width: 60,
+        backgroundColor: "#eee", 
+        borderColor: "#ddd", 
+        borderWidth: 1, 
+        borderRadius: 50,
+        marginTop: 7
+    },
+    profileDetails: {
+        flex: 1
+    },
+    profileDetailsRow: {
+      marginTop: 5,
+      marginLeft: 5
+    },
+    alignItemTOEnd: {
+        alignItems: "flex-end"
+    },
+    profileDetailsLabel: {
+        fontFamily: 'Montserrat-SemiBold',
+        fontSize: 16,
+        color: "#000000"
+    },
+    profileDetailsValue: {
+        fontFamily: 'Montserrat-Medium',
+        fontSize: 14,
+        color: "#616161",
+        alignItems: "flex-end"
+    },
+    profileDetailsInfo: {
+        lineHeight: 18,
+        fontSize: 15,
+        marginLeft: 5,
+        marginBottom: 10,
+        marginTop: 10
+    },
+    marginHorizontalRow: {
+        marginHorizontal: 18,
+        marginTop: 15,
+        marginBottom: 5
+    }
 });
 export default styleContent;

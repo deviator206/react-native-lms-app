@@ -44,18 +44,28 @@ const appconstant = {
         INVESTMENT:'INVESTMENT',
         NEWSITEM:'NEWSITEM'
     },
+    MI_STATUS_DROP_DOWN:[
+        {
+            name: 'Open For Discussion',
+            code: 'open'
+        },
+        {
+            name: 'Converted to Lead',
+            code: 'closed'
+        }
+    ],
     MI_TYPE: [
         {
             name: 'Project',
-            code: 'PROJECT'
+            code: 'project'
         },
         {
             name: 'Investment',
-            code: 'INVESTMENT'
+            code: 'investment'
         },
         {
             name: 'News Item',
-            code: 'NEWSITEM'
+            code: 'newsitem'
         }
     ],
     MI_INFO:{

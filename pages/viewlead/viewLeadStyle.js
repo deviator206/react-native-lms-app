@@ -27,21 +27,22 @@ const styleContent = StyleSheet.create({
         alignSelf: "center"
     },
     gridCardWrapper: {
-        width: "90%",
+        width: "96%",
         alignSelf: "center",
         marginTop: "5%",
-        marginLeft: "5%",
-        marginRight: "5%"
+        marginLeft: "2%",
+        marginRight: "2%"
     },
     searchAndFilterWrapper: {
         marginTop: "5%"
     },
     colLabelOnly: {
-        width: "40%",
+        width: "42%",
+        height: 25
     },
     colValue: {
         flexDirection: 'row', flexWrap: 'wrap',
-        width:"55%"
+        width:"54%"
     },
     colValueThird: {
        

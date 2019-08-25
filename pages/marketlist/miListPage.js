@@ -1,12 +1,12 @@
-import { Button, Card, CardItem, Col, Container, Content, Grid, Input, Item, Row, Text } from 'native-base';
+import { Button, Card, CardItem, Col, Container, Content, Grid, Input, Item, Row, Text, View } from 'native-base';
 import React from 'react';
 import { FlatList } from 'react-native';
 import { default as FilterIcon } from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { connect } from 'react-redux';
 import MarketIntelligenceApi from '../../services/MarketIntelligenceApi';
+import { default as commonStyle } from '../common/commonStyling';
 import { default as appConstant } from '../common/consts';
-import FooterComponent from '../common/footerComponent';
 import HeaderComponent from '../common/headerComponent';
 import SpinnerComponent from '../common/spinnerComponent';
 import { default as FilterComponent } from './miFilterComponent';
@@ -36,7 +36,7 @@ class MiListPage extends React.Component {
         this.getStatusStyle = this.getStatusStyle.bind(this);
         this.triggerFilterBasedSearch = this.triggerFilterBasedSearch.bind(this);
         this.triggerResetFilterBasedSearch = this.triggerResetFilterBasedSearch.bind(this);
-        
+
     }
 
     onResponseSuccess(resp) {
@@ -103,26 +103,61 @@ class MiListPage extends React.Component {
         })
     }
 
-    triggerResetFilterBasedSearch () {
-        alert("REset is being clicked");
-    }
-    
-    triggerFilterBasedSearch (filterPayload) {
-        alert("APply  is being clicked")
-        /*
+    triggerResetFilterBasedSearch() {
         this.setState({
-            spinner: true
+            filterVisible: false,
+            filterState: {}
+        });
+        this.onLoadAllMarketInt();
+    }
+
+    triggerFilterBasedSearch(filterState) {
+        const { MI_TYPE_DROP_DOWN, START_DATE, MI_STATUS_DROP_DOWN, END_DATE } = filterState;
+        let filterPayload = {};
+
+        if (MI_TYPE_DROP_DOWN) {
+            filterPayload = {
+                ...filterPayload,
+                type: MI_TYPE_DROP_DOWN
+            }
+        }
+
+        if (MI_STATUS_DROP_DOWN) {
+            filterPayload = {
+                ...filterPayload,
+                status: MI_STATUS_DROP_DOWN
+            }
+        }
+
+        if (START_DATE) {
+            filterPayload = {
+                ...filterPayload,
+                startDate: START_DATE
+            }
+        }
+
+        if (END_DATE) {
+            filterPayload = {
+                ...filterPayload,
+                endDate: END_DATE
+            }
+        }
+
+        this.setState({
+            filterVisible: false,
+            spinner: true,
+            filterState
         });
         this.props.searchMIList(filterPayload).then(this.onResponseSuccess).catch(this.onResponseError);
-        */
     }
+
     onSearchButtonClicked() {
         const { searchInput = '' } = this.state;
         if (searchInput && searchInput !== '') {
             const filterPayload = {
                 "searchText": searchInput
             }
-            this.triggerFilterBasedSearch(filterPayload)
+           //  this.triggerFilterBasedSearch(filterPayload)
         }
     }
     onLoadAllMarketInt() {
@@ -142,7 +177,8 @@ class MiListPage extends React.Component {
     }
     componentDidMount() {
         this.setState({
-            filterVisible: false
+            filterVisible: false,
+            filterState: {}
         });
         this.willFocusSubscription = this.props.navigation.addListener('willFocus', this.onLoadAllMarketInt);
     }
@@ -295,11 +331,12 @@ class MiListPage extends React.Component {
                 <HeaderComponent navigation={navigation} title="Market Intelligence" />
                 <Content style={styleContent.mainContent}>
                     <Grid >
-                        <Row style={styleContent.searchAndFilterWrapper}>
-                            <Col style={styleContent.searchBarWrapper} >
-                                <Item searchBar rounded style={styleContent.searchBarStyling}>
+                        <Row style={commonStyle.searchAndFilterWrapper}>
+                            <Col style={commonStyle.searchBarWrapper} >
+                                <Item searchBar rounded style={commonStyle.searchBarStyling}>
                                     <Input
                                         placeholder="Search"
+                                        style={commonStyle.inputBox}
                                         onChangeText={(value) => {
                                             this.onSearchTextChange(value);
                                         }}
@@ -310,7 +347,7 @@ class MiListPage extends React.Component {
                                         }}
                                     >
                                         <Icon name="search"
-                                            style={[styleContent.iconStyling, styleContent.searchIcon]}
+                                            style={[styleContent.iconStyling, commonStyle.searchIcon]}
                                         />
                                     </Button>
                                 </Item>
@@ -318,6 +355,7 @@ class MiListPage extends React.Component {
                             <Col  >
                                 <Button
                                     transparent
+                                    style={styleContent.filterBtnIcon}
                                     onPress={() => {
                                         this.filerBtnToggled();
                                     }}
@@ -332,26 +370,28 @@ class MiListPage extends React.Component {
                         {this.getViewLeads()}
                     </Grid>
                 </Content>
-                <Button
-                    style={styleContent.floatingButton}
-                    button
-                    onPress={() => {
-                        this.props.navigation.navigate('miadd');
-                    }} >
-                    <Icon name="add" style={{
-                        color: "white",
-                        fontSize: 30,
-                        marginLeft: 15
-                    }} />
-                </Button>
-                <FooterComponent  />
+                <View style={styleContent.floatingButtonView}>
+                    <Button
+                        style={styleContent.floatingButton}
+                        button
+                        onPress={() => {
+                            this.props.navigation.navigate('miadd');
+                        }} >
+                        <Icon name="add" style={{
+                            color: "white",
+                            fontSize: 30,
+                            marginLeft: 15
+                        }} />
+                    </Button>
+                </View>
 
-                <FilterComponent  
+                <FilterComponent
+                    savedState={this.state.filterState}
                     showModal={this.state.filterVisible}
                     toggleHandler={this.filerBtnToggled}
                     applyFilterHandler={this.triggerFilterBasedSearch}
                     resetFilterHandler={this.triggerResetFilterBasedSearch}
-                     />
+                />
                 {this.getSpinnerComponentView()}
             </Container>
         )
@@ -374,9 +414,7 @@ function mapDispatchToProps(dispatch) {
 
         },
         searchMIList: (filterPayload) => {
-            return marketIntelligenceApi.searchMIList({
-                params: filterPayload
-            }).then((resp) => {
+            return marketIntelligenceApi.searchMIList(filterPayload).then((resp) => {
                 return resp;
             })
 

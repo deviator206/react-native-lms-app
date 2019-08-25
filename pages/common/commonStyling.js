@@ -24,6 +24,18 @@ const styleContent = StyleSheet.create({
         width: "100%",
         padding: "1%"
     },
+    gridWrapper: {
+        width: "96%",
+        marginTop: "2%",
+        alignSelf: "center"
+    },
+    gridCardWrapper: {
+        width: "96%",
+        alignSelf: "center",
+        marginTop: "5%",
+        marginLeft: "2%",
+        marginRight: "2%"
+    },
     footerSection: {
         backgroundColor: "#FFFFFF",
         width: "100%"
@@ -44,7 +56,9 @@ const styleContent = StyleSheet.create({
         fontFamily: 'Montserrat-Regular',
         textTransform: "uppercase",
         fontWeight: "100",
-        width: '95%'
+        width: '90%',
+        marginRight: "5%",
+        marginLeft: "5%"
     },
     dynamicComponentTextStyle: {
         color: "#000000",
@@ -86,6 +100,26 @@ const styleContent = StyleSheet.create({
         color: "#1A1A1A",
         fontSize: 15,
         fontFamily: 'Montserrat-Medium'
+    },
+    secondaryLabel: {
+        fontSize: 14,
+        fontFamily: 'Montserrat-SemiBold',
+        color: "#616161",
+        marginBottom: "3%",
+        textTransform:"uppercase"
+    },
+    secondaryTextDesignation:{
+        fontSize: 12,
+        fontFamily: 'Montserrat-Medium',
+        color: "#AEAEAE",
+        marginTop:"1%"
+    },
+    secondaryText: {
+        fontSize: 12,
+        lineHeight:18,
+        fontFamily: 'Montserrat-Medium',
+        color: "#AEAEAE",
+        marginBottom: "3%"
     },
     textUppercase: {
         textTransform: "uppercase"
@@ -155,6 +189,41 @@ const styleContent = StyleSheet.create({
     formGridValue: {
         height: 60,
         marginBottom: 10
+    },
+    searchAndFilterWrapper: {
+        marginTop: "2%"
+    },
+    inputBox: {
+        paddingLeft: 20
+    },
+    iconStylingBigger: {
+        fontSize: 25
+    },
+    iconStyling: {
+        fontSize: 25
+    },
+    searchIcon: {
+        paddingRight: 5
+    },
+    searchBarStyling: {
+        width: "90%",
+        marginLeft: 20,
+        backgroundColor:"#FFFFFF",
+        borderWidth: 1,
+        borderColor: "#999999"
+    },
+    searchBarWrapper: {
+        width: "90%",
+        marginTop: 10
+    },
+    filterBtnIcon: {
+        marginTop: 12
+    },
+    justifySSS: {
+        justifyContent: "flex-start"
+    },
+    camelCase: {
+        textTransform: "capitalize"
     }
 });
 export default styleContent;

@@ -98,7 +98,7 @@ export default class DashboardPage extends React.Component {
 
     getHeaderSection() {
         const { navigation } = this.props;
-        return (<HeaderComponent navigation={navigation} title="Dashboard" showSideMenuBtn={true} hamburger={true} sideMenuClickHandler={this.sideMenuClicked} />);
+        return (<HeaderComponent navigation={navigation} title="Dashboard"  hamburger={true} sideMenuClickHandler={this.sideMenuClicked} />);
 
         /*
           return (

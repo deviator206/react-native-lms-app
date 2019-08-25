@@ -29,7 +29,8 @@ const styleContent = StyleSheet.create({
         fontSize: 18,
         fontFamily: 'Montserrat-SemiBold',
         color: "#000000",
-        marginBottom:"3%"
+        marginVertical:"2%",
+        textTransform: "capitalize"
     },
     requirement: {
         fontSize: 14,
@@ -63,8 +64,7 @@ const styleContent = StyleSheet.create({
         fontFamily: 'Montserrat-Medium',
         color: "#1A1A1A",
         marginLeft:"3%"
-    }
-    ,
+    },
     colValue: {
         flexDirection: 'row', 
         flexWrap: 'wrap',
@@ -131,6 +131,9 @@ const styleContent = StyleSheet.create({
         fontFamily: 'Montserrat-Regular',
         fontSize: 16,
     },
-
+    modalSm: {
+        height: "40%",
+        backgroundColor: "yellow"
+    }
 });
 export default styleContent;

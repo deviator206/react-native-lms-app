@@ -104,6 +104,13 @@ class MiAddPage extends React.Component {
             INPUT_INVESTMENT,
             INPUT_DESCRIPTION
         } = this.state;
+        if (INPUT_DESCRIPTION || INPUT_DESCRIPTION === '') {
+            this.setState({
+                INPUT_DESCRIPTION_MISSING: true
+            });
+            return false;
+        }
+
         let inputPayload = {
             "type": MI_TYPE,
             "date": Utils.getFormattedDate(new Date()),
@@ -165,16 +172,16 @@ class MiAddPage extends React.Component {
         });
     }
     componentDidMount() {
-       // this.willBlurSubscription =  this.props.navigation.addListener('onDidBlur', this.componentWillUnmount);
+        // this.willBlurSubscription =  this.props.navigation.addListener('onDidBlur', this.componentWillUnmount);
         this.setState({
             filterVisible: false,
             spinner: false,
-            showOverlay: false
-
+            showOverlay: false,
+            INPUT_DESCRIPTION_MISSING: false
         });
     }
 
-    componentWillUnmount(){
+    componentWillUnmount() {
         console.log(" UN mounting the MI ADD PAGE!! ");
     }
     getSectionLabel() {

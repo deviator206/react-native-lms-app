@@ -1,14 +1,80 @@
-import { Col, Grid, Row, Text } from 'native-base';
+import { Col, DatePicker, Grid, Row, Text } from 'native-base';
 import React from 'react';
 import { Alert, Modal, TouchableHighlight, View } from 'react-native';
+import { default as FeatherIcon } from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { default as commonStyle } from '../common/commonStyling';
+import { default as appConstant } from '../common/consts';
+import DropDownComponent from '../common/dropdownComponent';
 import i18nMessages from '../common/i18n';
+import styleContent from './miListPageStyle';
 
 export default class miFilterComponent extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+
+        };
+        this.getDropdownFor = this.getDropdownFor.bind(this);
+        this.onDropDownChange = this.onDropDownChange.bind(this);
+        this.getDatePickerView = this.getDatePickerView.bind(this);
+        this.onDateSelected = this.onDateSelected.bind(this);
+    }
+
+    onDateSelected(type, selectedDate) {
+        this.setState({
+            [type]: selectedDate
+        });
+    }
+
+    getDatePickerView(type) {
+        return (
+            <DatePicker
+                defaultDate={this.state[type]}
+                textStyle={styleContent.datePickerStyle}
+                placeHolderTextStyle={styleContent.datePickerStyle}
+                animationType={"fade"}
+                placeHolderText={i18nMessages.select_date_lbl}
+                onDateChange={(dateInfo) => {
+                    this.onDateSelected(type, dateInfo)
+                }}
+            />
+        )
+    }
+
+    onDropDownChange({ type, value }) {
+        this.setState({
+            [type]: value
+        });
+    }
+
+    getDropdownFor(type) {
+        let returnedView = null;
+        let dataSource = [];
+        switch (type) {
+            case 'MI_TYPE_DROP_DOWN':
+                dataSource = (appConstant.MI_TYPE) ? appConstant.MI_TYPE : [];
+                break;
+            case 'MI_STATUS_DROP_DOWN':
+                dataSource = (appConstant.MI_STATUS_DROP_DOWN) ? appConstant.MI_STATUS_DROP_DOWN : [];
+                break;
+            default:
+                break;
+        }
+        if (dataSource.length > 0) {
+            returnedView = <DropDownComponent
+                dataSource={dataSource}
+                updateToParent={this.onDropDownChange}
+                dropDownType={type}
+                showAttribute='name'
+                returnAttribute='code'
+            />;
+        }
+        return returnedView;
+    }
 
     render() {
-        const { showModal = false, toggleHandler, applyFilterHandler, resetFilterHandler } = this.props;
+        const { showModal = false, toggleHandler, applyFilterHandler, resetFilterHandler , savedState ={}} = this.props;
         return (
             <Modal
                 animationType="slide"
@@ -19,7 +85,7 @@ export default class miFilterComponent extends React.Component {
                 }}>
                 <View style={{ width: '100%', height: "100%" }}>
                     <View style={commonStyle.modalHeaderDiv}>
-                        <View><Text note style={commonStyle.modalHeader}> Filter View Leads </Text></View>
+                        <View><Text note style={commonStyle.modalHeader}> Filter  </Text></View>
                         <View>
                             <TouchableHighlight
                                 onPress={() => {
@@ -35,56 +101,56 @@ export default class miFilterComponent extends React.Component {
                         <Grid style={commonStyle.formGrid}>
                             <Row style={commonStyle.formGridLabel}>
                                 <Col>
-                                    <Text note style={commonStyle.labelStyling}>{i18nMessages.status}</Text>
-                                </Col>
-                                <Col>
-                                    <Text note style={commonStyle.labelStyling}>{i18nMessages.tenure_lbl}</Text>
+                                    <Text note style={commonStyle.labelStyling}>{i18nMessages.lbl_mi_list_filter_type}</Text>
                                 </Col>
                             </Row>
                             <Row style={commonStyle.formGridValue}>
                                 <Col>
-                                    <Text>Status dropdown</Text>
-                                </Col>
-                                <Col>
-                                    <Text>Tenure dropdown</Text>
+                                    {this.getDropdownFor('MI_TYPE_DROP_DOWN')}
                                 </Col>
                             </Row>
 
                             <Row style={commonStyle.formGridLabel}>
                                 <Col>
-                                    <Text note style={commonStyle.labelStyling}>{i18nMessages.location}</Text>
+                                    <Text note style={commonStyle.labelStyling}>{i18nMessages.lbl_mi_list_filter_status}</Text>
                                 </Col>
                             </Row>
                             <Row style={commonStyle.formGridValue}>
-                                <Col><Text>Country AND State dropdown</Text></Col>
+                                <Col>
+                                    {this.getDropdownFor('MI_STATUS_DROP_DOWN')}
+                                </Col>
                             </Row>
 
 
                             <Row style={commonStyle.formGridLabel}>
                                 <Col>
-                                    <Text note style={commonStyle.labelStyling}>{i18nMessages.bu_selection}</Text>
+                                    <Text note style={commonStyle.labelStyling}>{i18nMessages.lbl_filter_start_date}</Text>
                                 </Col>
                             </Row>
                             <Row style={commonStyle.formGridValue}>
-                                <Col><Text>BU and Rep dropdown</Text></Col>
+                                <Col>
+                                    <FeatherIcon name="calendar" style={styleContent.calenderIcon} />
+                                </Col>
+                                <Col style={{
+                                    width: "88%"
+                                }}>
+                                    {this.getDatePickerView('START_DATE')}
+                                </Col>
                             </Row>
                             <Row style={commonStyle.formGridLabel}>
                                 <Col>
-                                    <Text note style={commonStyle.labelStyling}>{i18nMessages.industry}</Text>
+                                    <Text note style={commonStyle.labelStyling}>{i18nMessages.lbl_filter_end_date}</Text>
                                 </Col>
                             </Row>
                             <Row style={commonStyle.formGridValue}>
-                                <Col><Text>Industry dropdown</Text></Col>
-                            </Row>
-
-
-                            <Row style={commonStyle.formGridLabel}>
                                 <Col>
-                                    <Text note style={commonStyle.labelStyling}>{i18nMessages.source_type}</Text>
+                                    <FeatherIcon name="calendar" style={styleContent.calenderIcon} />
                                 </Col>
-                            </Row>
-                            <Row style={commonStyle.formGridValue}>
-                                <Col><Text>source dropdown</Text></Col>
+                                <Col style={{
+                                    width: "88%"
+                                }}>
+                                    {this.getDatePickerView('END_DATE')}
+                                </Col>
                             </Row>
                         </Grid>
                     </View>
@@ -105,7 +171,7 @@ export default class miFilterComponent extends React.Component {
                                 <TouchableHighlight
                                     onPress={() => {
                                         if (applyFilterHandler) {
-                                            applyFilterHandler();
+                                            applyFilterHandler(this.state);
                                         }
                                     }}>
                                     <Text style={[commonStyle.modalTwoButtons, commonStyle.primaryButton]}>Apply</Text>

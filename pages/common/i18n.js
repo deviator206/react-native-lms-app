@@ -34,7 +34,11 @@ const i18nMessages = {
     "lbl_project_name_mi": "Project Name",
     "lbl_investment_mi": "Investment",
     "lbl_mi_info_add_more_info": "Add More Information",
-    "lbl_mi_info_convert_to_lead": "Convert To Lead"
+    "lbl_mi_info_convert_to_lead": "Convert To Lead",
+    "lbl_mi_list_filter_type":"MI Type",
+    "lbl_mi_list_filter_status":"MI Status",
+    "lbl_filter_start_date":"Start Date",
+    "lbl_filter_end_date":"End Date",
 
 }
 

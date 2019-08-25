@@ -159,7 +159,7 @@ class LeadDetailsPage extends React.Component {
         modalTitle="Thank You!"
         showSecondaryForgotPassword={false}
         showSecondaryInput={false}
-        modalPrimaryText="Lead has been updated successfully"
+        modalPrimaryText="Lead has been updated successfully..."
         showHeaderCloseBtn={false}
         onCloseCallBackhandler={this.onFPModalClosed}
         showRegularModalButton={true}
@@ -454,11 +454,11 @@ class LeadDetailsPage extends React.Component {
                     <Text style={styleContent.secondaryLabel}> STATUS</Text>
                   </Row>
                   <Row>
-                    <Col >
+                    <Col style={{ width: "60%" }}>
                       {this.getDropdownForSplType(appConstant.DROP_DOWN_TYPE.LEAD_STATUS)}
                     </Col>
-                    <Col >
-
+                    <Col style={{ width: "30%" }}></Col>
+                    <Col style={{ width: "10%" }}>
                       <View style={this.getStatusCircle(leadDetails.status)} />
                     </Col>
 
@@ -716,10 +716,12 @@ class LeadDetailsPage extends React.Component {
                 <Grid>
                   <Row>
                     <Col>
-                      <Text style={styleContent.requirement} > DATE : {leadDetails.creationDate}</Text>
+                      <Text style={styleContent.secondaryLabel} > DATE : </Text>
+                      <Text style={styleContent.requirement} > {leadDetails.creationDate} </Text>
                     </Col>
                     <Col>
-                      <Text style={styleContent.requirement} > SOURCE: {leadDetails.source}</Text>
+                      <Text style={styleContent.secondaryLabel} > SOURCE: </Text>
+                      <Text style={styleContent.requirement} > {leadDetails.source} </Text>
                     </Col>
 
                   </Row>
@@ -731,7 +733,8 @@ class LeadDetailsPage extends React.Component {
                   </Row>
 
                   <Row>
-                    <Text style={styleContent.requirement} > TENURE : {leadDetails.tenure}</Text>
+                    <Col style={{width: "25%" }}><Text style={styleContent.secondaryLabel} > TENURE : </Text></Col>
+                    <Col style={{width: "75%" }}><Text style={styleContent.requirement} > {leadDetails.tenure} </Text></Col>
                   </Row>
 
                 </Grid>

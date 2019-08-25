@@ -47,9 +47,9 @@ class MarketIntelligenceApi {
         });
     }
 
-    searchMIList({ params }) {
+    searchMIList(filterPayload) {
         return new Promise(function (resolve, reject) {
-            ServiceClass.searchMIList(params).then((resp) => {
+            ServiceClass.searchMIList(filterPayload).then((resp) => {
                 if (resp && resp.data) {
                     resolve(resp.data)
                 } else {

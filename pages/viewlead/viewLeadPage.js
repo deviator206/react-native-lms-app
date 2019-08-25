@@ -187,7 +187,7 @@ class ViewLeadPage extends React.Component {
                                     <Grid>
                                         <Row>
                                             <Col>
-                                                <Text style={styleContent.cardViewMainTitle} > {item.custName} </Text>
+                                                <Text style={[styleContent.cardViewMainTitle, commonStyle.camelCase]} > {item.custName} </Text>
                                             </Col>
                                         </Row>
                                         <Row>
