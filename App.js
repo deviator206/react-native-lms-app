@@ -18,6 +18,7 @@ import MiDetailsPage from './pages/marketdetails/miDetailsPage';
 import MiListPage from './pages/marketlist/miListPage';
 import NotificationListPage from './pages/notifications/notificationListPage';
 import SideMenuBar from './pages/sidemenu/sideMenu';
+import UserListPage from './pages/users/userListPage';
 import ViewLeadPage from './pages/viewlead/viewLeadPage';
 import { default as configureStore } from './storage/store/createAppStore';
 
@@ -37,6 +38,9 @@ const SideDrawerNavigator = createDrawerNavigator(
     },
     miadd: {
       screen: MiAddPage
+    },
+    userlist:{
+      screen: UserListPage
     },
     midetails: {
       screen: MiDetailsPage
@@ -95,7 +99,7 @@ const AppNavigator = createStackNavigator({
     screen: SideMenuBar
   }
 }, {
-    initialRouteName: "midetails",
+    initialRouteName: "login",
     mode: 'modal',
     headerMode: 'none',
     initialRouteParams: { someParam: 'Bonjour' }

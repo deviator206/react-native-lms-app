@@ -21,6 +21,11 @@ const routes = [
         icon: 'local-atm'
     },
     {
+        key: "userlist",
+        caption: "App User",
+        icon: 'people-outline'
+    },
+    {
         key: "login",
         caption: "Logout",
         icon: 'exit-to-app'
