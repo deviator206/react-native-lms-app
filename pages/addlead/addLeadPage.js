@@ -135,8 +135,15 @@ class AddLeadPage extends React.Component {
       SALES_REP,
       selectedBuList = []
     } = this.state;
-    const { userId = "8" } = this.props;
+    // const { userId = "8" } = this.props;
+    const userId = (window.userInformation &&
+      window.userInformation.userInfo &&
+      window.userInformation.userInfo.userId) ? window.userInformation.userInfo.userId : -1;
 
+      if(!userId || userId == -1) {
+        alert("User Id is not Valid")
+        return true;
+      }
     const inputPayload = {
       "source": SOURCE,
       "custName": CUSTOMER_NAME,
@@ -164,7 +171,7 @@ class AddLeadPage extends React.Component {
     this.setState({
       spinner: true
     });
-    
+
     this.props.submitLead(inputPayload).then(this.onResponseSubmitLead).catch(this.onErrorResponseSubmitLead);
   }
   shouldComponentUpdate(nextProps, nextState) {
@@ -197,7 +204,7 @@ class AddLeadPage extends React.Component {
         (CONTACT_EMAIL !== nextState.CONTACT_EMAIL) ||
         (CONTACT_PHONE !== nextState.CONTACT_PHONE) ||
         (ESTIMATE !== nextState.ESTIMATE) ||
-        (STATE !== nextState.STATE) || 
+        (STATE !== nextState.STATE) ||
         (SALES_REP !== nextState.SALES_REP)
       )
     ) {

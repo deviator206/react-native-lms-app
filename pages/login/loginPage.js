@@ -140,7 +140,8 @@ export default class LoginPage extends Component {
     }
 
     onLoginSuccess(data) {
-        console.log("RESP:", data);
+        window.userInformation = data;
+        console.log("RESP:", window.userInformation);
         this.setState({
             spinner: false,
             userNameMissing: false,
