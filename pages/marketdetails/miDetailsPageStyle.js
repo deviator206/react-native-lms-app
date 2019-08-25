@@ -48,7 +48,6 @@ const styleContent = StyleSheet.create({
     gridCardWrapper: {
         width: "95%",
         alignSelf: "center",
-        backgroundColor: "yellow"
     },
     searchAndFilterWrapper: {
         marginTop: "2%"
@@ -58,6 +57,18 @@ const styleContent = StyleSheet.create({
     },
     colValue: {
 
+    },
+    closedStatus: {
+        fontSize: 14,
+        fontFamily: 'Montserrat-SemiBold',
+        color: "#21A50E",
+        textTransform:"uppercase"
+    },
+    pendingStatus: {
+        fontSize: 14,
+        fontFamily: 'Montserrat-SemiBold',
+        color: "#F37C57",
+        textTransform:"uppercase"
     },
     cardViewMainTitle: {
         fontSize: 18,

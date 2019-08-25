@@ -74,6 +74,9 @@ const AppNavigator = createStackNavigator({
   dashboard: {
     screen: SideDrawerNavigator
   },
+  midetails: {
+    screen: MiDetailsPage
+  },
   viewlead: {
     screen: ViewLeadPage,
     key: 'view_lead',
@@ -92,7 +95,7 @@ const AppNavigator = createStackNavigator({
     screen: SideMenuBar
   }
 }, {
-    initialRouteName: "login",
+    initialRouteName: "midetails",
     mode: 'modal',
     headerMode: 'none',
     initialRouteParams: { someParam: 'Bonjour' }

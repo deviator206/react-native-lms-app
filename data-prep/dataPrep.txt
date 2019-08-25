@@ -142,3 +142,9 @@ http://52.66.164.208:8080/lmsApp-0.1.0/lead/4
 
 
 
+COPY DATA FROM 1 TABLE TO ANOTHER
+ insert into ref_data (code, name, type) select * from REF_DATA;
+ 
+
+
+

@@ -1,8 +1,10 @@
-import { Button, Col, Container, Content, Footer, Grid, Input, Item, Label, Row, Text, Textarea } from 'native-base';
+import { Button, Col, Container, Content, Footer, Grid, Row, Text, Textarea } from 'native-base';
 import React from 'react';
+import { FlatList } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { connect } from 'react-redux';
 import MarketIntelligenceApi from '../../services/MarketIntelligenceApi';
+import CheckBoxComponent from '../common/checkBoxComponent';
 import { default as commonStyle } from '../common/commonStyling';
 import { default as appConstant } from '../common/consts';
 import DropDownComponent from '../common/dropdownComponent';
@@ -10,7 +12,6 @@ import HeaderComponent from '../common/headerComponent';
 import i18nMessages from '../common/i18n';
 import ModalComponent from '../common/modalComponent';
 import SpinnerComponent from '../common/spinnerComponent';
-import { default as Utils } from '../common/Util';
 import styleContent from './miDetailsPageStyle';
 
 const marketIntelligenceApi = new MarketIntelligenceApi({ state: {} });
@@ -25,9 +26,8 @@ class MiDetailsPage extends React.Component {
         this.filerBtnToggled = this.filerBtnToggled.bind(this);
         this.getDropdownFor = this.getDropdownFor.bind(this);
         this.onDropDownChange = this.onDropDownChange.bind(this);
-        this.getSectionLabel = this.getSectionLabel.bind(this);
         this.onInputTextChanged = this.onInputTextChanged.bind(this);
-        this.getSectionInput = this.getSectionInput.bind(this);
+
         this.initiateMICreation = this.initiateMICreation.bind(this);
 
         this.onSuccessHandler = this.onSuccessHandler.bind(this);
@@ -36,6 +36,26 @@ class MiDetailsPage extends React.Component {
         this.onFPModalClosed = this.onFPModalClosed.bind(this);
         this.getSpinnerComponentView = this.getSpinnerComponentView.bind(this);
 
+
+        this.getStatusStyle = this.getStatusStyle.bind(this);
+        this.getListedInfo = this.getListedInfo.bind(this);
+        this.onCheckBoxChanged = this.onCheckBoxChanged.bind(this);
+
+
+
+    }
+
+    onCheckBoxChanged({ type, value }) {
+        this.setState({
+            [type]: value
+        });
+    }
+
+    getStatusStyle(status) {
+        if (status === appConstant.MI_STATUS.CLOSED) {
+            return styleContent.closedStatus;
+        }
+        return styleContent.pendingStatus;
     }
 
     getSpinnerComponentView() {
@@ -77,7 +97,7 @@ class MiDetailsPage extends React.Component {
                 modalTitle="Thank You!"
                 showSecondaryForgotPassword={false}
                 showSecondaryInput={false}
-                modalPrimaryText="Market Intelligence Item has been created successfully"
+                modalPrimaryText="Info has been added successfully"
                 showHeaderCloseBtn={false}
                 onCloseCallBackhandler={this.onFPModalClosed}
                 showRegularModalButton={true}
@@ -92,7 +112,7 @@ class MiDetailsPage extends React.Component {
     }
 
     initiateMICreation() {
-        const {
+       /* const {
             MI_TYPE,
             INPUT_PROJECT,
             INPUT_INVESTMENT,
@@ -115,12 +135,13 @@ class MiDetailsPage extends React.Component {
                 "Investment": INPUT_INVESTMENT
             }
         }
+        */
 
         this.setState({
             spinner: true
         });
 
-        this.props.createMI(inputPayload).then(this.onSuccessHandler).catch(this.onErrorHandler);
+        this.props.createMI({}).then(this.onSuccessHandler).catch(this.onErrorHandler);
     }
 
     onInputTextChanged(type, value) {
@@ -165,45 +186,75 @@ class MiDetailsPage extends React.Component {
         });
     }
 
-    getSectionLabel() {
-        const { MI_TYPE } = this.state;
-        let returnedView;
-        if (MI_TYPE === appConstant.MI_TYPE_CONST.PROJECT) {
-            returnedView = (
-                <Row><Col><Text note style={commonStyle.labelStyling} >{i18nMessages.lbl_project_name_mi} </Text></Col></Row>
-            )
-        }
-        else if (MI_TYPE === appConstant.MI_TYPE_CONST.INVESTMENT) {
-            returnedView = (
-                <Row><Col><Text note style={commonStyle.labelStyling} >{i18nMessages.lbl_investment_mi} </Text></Col></Row>
-            )
-        }
-        return returnedView;
-    }
 
 
-    getSectionInput() {
-        const { MI_TYPE } = this.state;
-        let returnedView;
-        if (MI_TYPE === appConstant.MI_TYPE_CONST.PROJECT || MI_TYPE === appConstant.MI_TYPE_CONST.INVESTMENT) {
+
+    getListedInfo() {
+        // const { resultSet = [] } = this.state;
+        const resultSet = [
+            {
+                name: "John",
+                info: "ke if you want to access manager app on all machines. Go to {Tomcat_ins",
+                date: "24-09-2019"
+            },
+            {
+                name: "Olive",
+                info: "ke if you want to access manager app on all machines. Go to {Tomcat_ins",
+                date: "24-09-2019"
+            },
+            {
+                name: "Mustang",
+                info: "ke if you want to access manager app on all machines. Go to {Tomcat_ins",
+                date: "24-09-2019"
+            }
+        ];
+        let returnedView
+        if (resultSet && resultSet.length > 0) {
             returnedView = (
-                <Row>
-                    <Col>
-                        <Item style={{ height: 50, width: "95%" }}>
-                            <Input
-                                style={styleContent.dynamicTextStyle}
-                                returnKeyType="next"
-                                clearButtonMode="always"
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                onChangeText={(value) => {
-                                    this.onInputTextChanged(MI_TYPE, value);
-                                }}
-                            />
-                        </Item>
-                    </Col>
-                </Row>
-            )
+                <FlatList
+                    data={resultSet}
+                    renderItem={({ item }) =>
+                        <Row
+                            style={styleContent.gridCardWrapper}
+                            button
+                            onPress={() => {
+                                // item.id
+                                this.props.navigation.navigate("midetails", {
+                                    miId: item.id
+                                });
+                            }}
+                        >
+
+                            <Col>
+                                <Grid>
+
+                                    <Row style={
+                                        {
+                                            borderTopColor: "black",
+                                            borderTopWidth: 3
+                                        }
+                                    }>
+                                        <Col>
+                                            <Text style={styleContent.cardViewSecondaryInfo} > {item.name} </Text>
+                                        </Col>
+                                        <Col style={{ flexDirection: "row" }}>
+                                            <Text style={styleContent.cardViewSecondaryInfo}  > Date:  </Text>
+                                            <Text style={styleContent.cardViewPrimaryValue}  >  {item.date} </Text>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col>
+                                            <Text style={styleContent.cardViewSecondaryInfo}  > {item.info} </Text>
+                                        </Col>
+                                    </Row>
+                                </Grid>
+                            </Col>
+                        </Row>
+                    }
+                >
+
+                </FlatList>
+            );
         }
         return returnedView;
     }
@@ -211,53 +262,177 @@ class MiDetailsPage extends React.Component {
 
 
     render() {
+
+        const { ADD_MORE_INFO = false, CONVERT_TO_LEAD = false, } = this.state;
         const { navigation } = this.props;
+        const item = {
+            miId: "MI#779",
+            type: "New Item",
+            description: "This is likely happening when upgrading React Native from below 0.60 to 0.60 or above. Going forward",
+            status: "OPEN"
+        };
         return (
             <Container>
-                <HeaderComponent navigation={navigation} title="Add Market Intelligence" />
+                <HeaderComponent navigation={navigation} title="Market Intelligence" />
                 <Content style={styleContent.mainContent}>
-                    <Grid style={styleContent.gridWrapper}>
-                        <Row >
-                            <Col style={{ marginTop: "5%" }}>
-                                <Label style={commonStyle.labelStyling}>{i18nMessages.type}</Label>
-                            </Col>
-                        </Row>
-                        <Row >
-                            <Col style={{ marginBottom: "5%" }}>
-                                {this.getDropdownFor('MI_TYPE')}
 
-                            </Col>
-                        </Row>
-                        {this.getSectionLabel()}
-                        {this.getSectionInput()}
-                        <Row style={{ marginTop: 20 }}><Col><Text note style={commonStyle.labelStyling} >{i18nMessages.description} </Text></Col></Row>
-                        <Row>
+                    <Grid style={styleContent.gridWrapper}>
+                        <Row style={styleContent.gridCardWrapper}>
                             <Col>
-                                <Item>
-                                    <Textarea
-                                        style={styleContent.dynamicComponentTextStyle}
-                                        rowSpan={4} style={styleContent.textAreaStyling}
-                                        bordered
-                                        onChangeText={(value) => {
-                                            this.onInputTextChanged('DESCRIPTION', value);
-                                        }}
-                                    />
-                                </Item>
+                                <Grid>
+                                    <Row>
+                                        <Col>
+                                            <Text style={styleContent.cardViewMainTitle} > {item.miId} </Text>
+                                        </Col>
+                                        <Col style={{ flexDirection: "row" }}>
+                                            <Text style={styleContent.cardViewSecondaryInfo}  > Type:  </Text>
+                                            <Text style={styleContent.cardViewPrimaryValue}  >  {item.type} </Text>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col>
+                                            <Text style={styleContent.cardViewSecondaryInfo}  > {item.description} </Text>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col style={styleContent.colLabelOnly} >
+                                            <Text style={styleContent.cardViewPrimaryLabel}  > Status: </Text>
+
+                                        </Col>
+                                        <Col style={styleContent.colValue} >
+
+                                            <Text style={this.getStatusStyle(item.status)} > {item.status}  </Text>
+                                        </Col>
+
+                                    </Row>
+                                </Grid>
+
                             </Col>
                         </Row>
 
                     </Grid>
 
+                    <Grid style={[styleContent.gridWrapper, {
+                        height: 400,
+                        backgroundColor: "yellow"
+                    }]} >
+                        {this.getListedInfo()}
+                    </Grid>
 
                 </Content>
-                <Footer>
-                    <Button
-                        style={styleContent.addFooter}
-                        onPress={this.initiateMICreation}
-                    >
-                        <Text style={styleContent.addFooterText}>ADD MI </Text>
-                        <Icon name="arrow-forward" style={{ color: "white", fontSize: 20 }} />
-                    </Button >
+                <Footer style={{
+                    height: 300,
+                    backgroundColor: "white"
+                }}>
+
+                    <Grid>
+                        <Row>
+                            <Col>
+                                <CheckBoxComponent
+                                    checkBoxLabel={i18nMessages.lbl_mi_info_add_more_info}
+                                    controlType={appConstant.MI_INFO.ADD_MORE_INFO}
+                                    updateToParent={this.onCheckBoxChanged}
+                                />
+                            </Col>
+                        </Row>
+                        {ADD_MORE_INFO && (
+                            <Row>
+                                <Col>
+                                    <Textarea
+                                        style={commonStyle.dynamicComponentTextAreaStyle}
+                                        rowSpan={4}
+                                        bordered
+                                        placeholder="Lorem Ipsum is sim"
+                                        onChangeText={(text) => {
+                                            this.onInputTextChanged(appConstant.MI_INFO.ADD_MORE_INFO, text);
+                                        }}
+                                    />
+                                </Col>
+                            </Row>
+                        )}
+                        {ADD_MORE_INFO && (
+                            <Row>
+                                <Col>
+                                    <Button
+                                        style={styleContent.addFooter}
+                                        onPress={this.initiateMICreation}
+                                    >
+                                        <Text style={styleContent.addFooterText}>Send </Text>
+                                    </Button >
+                                </Col>
+                            </Row>
+                        )}
+
+                        <Row>
+                            <Col>
+                                <CheckBoxComponent
+                                    checkBoxLabel={i18nMessages.lbl_mi_info_convert_to_lead}
+                                    controlType={appConstant.MI_INFO.CONVERT_TO_LEAD}
+                                    updateToParent={this.onCheckBoxChanged}
+                                />
+                            </Col>
+                        </Row>
+                        {CONVERT_TO_LEAD && (
+                            <Row>
+                                <Col>
+                                    <Text> Customer Name </Text>
+                                </Col>
+                            </Row>
+                        )}
+                        {CONVERT_TO_LEAD && (
+                            <Row>
+                                <Col>
+                                    <Textarea
+                                        style={commonStyle.dynamicComponentTextAreaStyle}
+                                        rowSpan={2}
+                                        bordered
+                                        placeholder="Lorem Ipsum is sim"
+                                        onChangeText={(text) => {
+                                            this.onInputTextChanged(appConstant.MI_INFO.CTL_CUSTOMER_NAME, text);
+                                        }}
+                                    />
+                                </Col>
+                            </Row>
+                        )}
+
+                        {CONVERT_TO_LEAD && (
+                            <Row>
+                                <Col>
+                                    <Text> Requirements </Text>
+                                </Col>
+                            </Row>
+                        )}
+                        {CONVERT_TO_LEAD && (
+                            <Row>
+                                <Col>
+                                    <Textarea
+                                        style={commonStyle.dynamicComponentTextAreaStyle}
+                                        rowSpan={4}
+                                        bordered
+                                        placeholder="Lorem Ipsum is sim"
+                                        onChangeText={(text) => {
+                                            this.onInputTextChanged(appConstant.MI_INFO.CTL_REQUIREMENT, text);
+                                        }}
+                                    />
+                                </Col>
+                            </Row>
+                        )}
+                        {CONVERT_TO_LEAD && (
+                            <Row>
+                                <Col>
+                                    <Button
+                                        style={styleContent.addFooter}
+                                        onPress={this.initiateMICreation}
+                                    >
+                                        <Text style={styleContent.addFooterText}>CONVERT TO LEAD </Text>
+                                        <Icon name="arrow-forward" style={{ color: "white", fontSize: 20 }} />
+                                    </Button >
+                                </Col>
+                            </Row>
+                        )}
+                    </Grid>
+
+
                 </Footer>
                 {this.overlayScreenView()}
                 {this.getSpinnerComponentView()}
@@ -265,48 +440,6 @@ class MiDetailsPage extends React.Component {
         )
     }
 }
-
-/**
- * 
- 
-<Modal
-                    animationType="slide"
-                    transparent={false}
-                    visible={this.state.filterVisible}
-                    onRequestClose={() => {
-                        Alert.alert('Modal has been closed.');
-                    }}>
-                    <Content style={{ width: '100%', marginTop: 80 }}>
-                        <Grid style={{ width: '96%', backgroundColor: 'white', marginTop: 10, padding: 10 }}>
-                            <Row><Col><Text note>Status</Text></Col><Col><Text note>Tenure</Text></Col></Row>
-                            <Row>
-                                <Col>
-                                    <Text>Hello World!</Text>
-                                </Col>
-                                <Col>
-                                    <Text>Hello World!</Text>
-                                </Col>
-                            </Row>
-                        </Grid>
-                        <View style={{ marginTop: 22 }}>
-
-                            <View>
-
-
-                                <TouchableHighlight
-                                    onPress={() => {
-                                        this.filerBtnToggled();
-                                    }}>
-                                    <Text>Hide Modal</Text>
-                                </TouchableHighlight>
-                            </View>
-                        </View>
-                    </Content>
-
-                </Modal>
-                
-
- */
 
 // This function provides a means of sending actions so that data in the Redux store
 // can be modified. In this example, calling this.props.addToCounter() will now dispatch

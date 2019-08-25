@@ -58,6 +58,12 @@ const appconstant = {
             code: 'NEWSITEM'
         }
     ],
+    MI_INFO:{
+        ADD_MORE_INFO:'ADD_MORE_INFO',
+        CONVERT_TO_LEAD:'CONVERT_TO_LEAD',
+        CTL_CUSTOMER_NAME:'CTL_CUSTOMER_NAME',
+        CTL_REQUIREMENT:'CTL_REQUIREMENT',
+    }
 
 }
 
