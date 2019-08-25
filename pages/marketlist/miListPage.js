@@ -1,6 +1,6 @@
 import { Button, Card, CardItem, Col, Container, Content, Grid, Input, Item, Row, Text } from 'native-base';
 import React from 'react';
-import { Alert, FlatList, Modal, TouchableHighlight, View } from 'react-native';
+import { FlatList } from 'react-native';
 import { default as FilterIcon } from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { connect } from 'react-redux';
@@ -9,6 +9,7 @@ import { default as appConstant } from '../common/consts';
 import FooterComponent from '../common/footerComponent';
 import HeaderComponent from '../common/headerComponent';
 import SpinnerComponent from '../common/spinnerComponent';
+import { default as FilterComponent } from './miFilterComponent';
 import styleContent from './miListPageStyle';
 
 
@@ -33,6 +34,9 @@ class MiListPage extends React.Component {
         this.onResponseSuccess = this.onResponseSuccess.bind(this);
         this.onResponseError = this.onResponseError.bind(this);
         this.getStatusStyle = this.getStatusStyle.bind(this);
+        this.triggerFilterBasedSearch = this.triggerFilterBasedSearch.bind(this);
+        this.triggerResetFilterBasedSearch = this.triggerResetFilterBasedSearch.bind(this);
+        
     }
 
     onResponseSuccess(resp) {
@@ -83,7 +87,7 @@ class MiListPage extends React.Component {
             }];
         this.setState({
             spinner: false,
-            resultSet: resultSetLocal
+            resultSet: resp
         });
     }
 
@@ -99,17 +103,33 @@ class MiListPage extends React.Component {
         })
     }
 
-    onSearchButtonClicked() {
-        const { searchInput = '' } = this.state;
-        if (searchInput && searchInput !== '') {
-            this.onLoadAllMarketInt({})
-        }
+    triggerResetFilterBasedSearch () {
+        alert("REset is being clicked");
     }
-    onLoadAllMarketInt(filterParams) {
+    
+    triggerFilterBasedSearch (filterPayload) {
+        alert("APply  is being clicked")
+        /*
         this.setState({
             spinner: true
         });
-        this.props.loadAllMI({}).then(this.onResponseSuccess).catch(this.onResponseError)
+        this.props.searchMIList(filterPayload).then(this.onResponseSuccess).catch(this.onResponseError);
+        */
+    }
+    onSearchButtonClicked() {
+        const { searchInput = '' } = this.state;
+        if (searchInput && searchInput !== '') {
+            const filterPayload = {
+                "searchText": searchInput
+            }
+            this.triggerFilterBasedSearch(filterPayload)
+        }
+    }
+    onLoadAllMarketInt() {
+        this.setState({
+            spinner: true
+        });
+        this.props.loadAllMI().then(this.onResponseSuccess).catch(this.onResponseError)
     }
 
 
@@ -177,18 +197,72 @@ class MiListPage extends React.Component {
                                         <Grid>
                                             <Row>
                                                 <Col>
-                                                    <Text style={styleContent.cardViewMainTitle} > {item.miId} </Text>
+                                                    <Text style={styleContent.cardViewMainTitle} > MI#{item.id} </Text>
                                                 </Col>
                                                 <Col style={{ flexDirection: "row" }}>
                                                     <Text style={styleContent.cardViewSecondaryInfo}  > Type:  </Text>
                                                     <Text style={styleContent.cardViewPrimaryValue}  >  {item.type} </Text>
                                                 </Col>
+
                                             </Row>
-                                            <Row>
-                                                <Col>
-                                                    <Text style={styleContent.cardViewSecondaryInfo}  > {item.description} </Text>
-                                                </Col>
-                                            </Row>
+                                            {
+                                                item && item.creationDate && (
+                                                    <Row>
+                                                        <Col>
+                                                            <Text style={styleContent.cardViewSecondaryInfo}  > Date:  </Text>
+
+                                                        </Col>
+                                                        <Col>
+                                                            <Text style={styleContent.cardViewPrimaryValue}  >  {item.creationDate} </Text>
+                                                        </Col>
+                                                    </Row>
+
+                                                )
+                                            }
+                                            {
+                                                item && item.name && (
+                                                    <Row>
+                                                        <Col>
+                                                            <Text style={styleContent.cardViewSecondaryInfo}  > Project Name:  </Text>
+                                                        </Col>
+                                                        <Col>
+                                                            <Text style={styleContent.cardViewPrimaryValue}  > {item.name} </Text>
+                                                        </Col>
+                                                    </Row>
+
+                                                )
+                                            }
+                                            {
+                                                item && item.investment && (
+                                                    <Row>
+                                                        <Col>
+                                                            <Text style={styleContent.cardViewSecondaryInfo}  >Investment: </Text>
+                                                        </Col>
+                                                        <Col>
+                                                            <Text style={styleContent.cardViewPrimaryValue}  > {item.investment} </Text>
+                                                        </Col>
+                                                    </Row>
+                                                )
+                                            }
+                                            {
+                                                item && item.description && (
+                                                    <Row>
+                                                        <Col>
+                                                            <Text style={styleContent.cardViewSecondaryInfo}  >Description: </Text>
+                                                        </Col>
+                                                    </Row>
+                                                )
+                                            }
+                                            {
+                                                item && item.description && (
+                                                    <Row>
+                                                        <Col>
+                                                            <Text style={styleContent.cardViewPrimaryValue}  > {item.description} </Text>
+                                                        </Col>
+                                                    </Row>
+                                                )
+                                            }
+
                                             <Row>
                                                 <Col style={styleContent.colLabelOnly} >
                                                     <Text style={styleContent.cardViewPrimaryLabel}  > Status: </Text>
@@ -270,43 +344,14 @@ class MiListPage extends React.Component {
                         marginLeft: 15
                     }} />
                 </Button>
-                <FooterComponent />
+                <FooterComponent  />
 
-                <Modal
-                    animationType="slide"
-                    transparent={false}
-                    visible={this.state.filterVisible}
-                    onRequestClose={() => {
-                        Alert.alert('Modal has been closed.');
-                    }}>
-                    <Content style={{ width: '100%', marginTop: 80 }}>
-                        <Grid style={{ width: '96%', backgroundColor: 'white', marginTop: 10, padding: 10 }}>
-                            <Row><Col><Text note>Status</Text></Col><Col><Text note>Tenure</Text></Col></Row>
-                            <Row>
-                                <Col>
-                                    <Text>Hello World!</Text>
-                                </Col>
-                                <Col>
-                                    <Text>Hello World!</Text>
-                                </Col>
-                            </Row>
-                        </Grid>
-                        <View style={{ marginTop: 22 }}>
-
-                            <View>
-
-
-                                <TouchableHighlight
-                                    onPress={() => {
-                                        this.filerBtnToggled();
-                                    }}>
-                                    <Text>Hide Modal</Text>
-                                </TouchableHighlight>
-                            </View>
-                        </View>
-                    </Content>
-
-                </Modal>
+                <FilterComponent  
+                    showModal={this.state.filterVisible}
+                    toggleHandler={this.filerBtnToggled}
+                    applyFilterHandler={this.triggerFilterBasedSearch}
+                    resetFilterHandler={this.triggerResetFilterBasedSearch}
+                     />
                 {this.getSpinnerComponentView()}
             </Container>
         )
@@ -328,6 +373,15 @@ function mapDispatchToProps(dispatch) {
             })
 
         },
+        searchMIList: (filterPayload) => {
+            return marketIntelligenceApi.searchMIList({
+                params: filterPayload
+            }).then((resp) => {
+                return resp;
+            })
+
+        },
+
         dispatchAction: (param) => {
             dispatch(param);
         }

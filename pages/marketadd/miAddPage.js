@@ -1,6 +1,5 @@
 import { Button, Col, Container, Content, Footer, Grid, Input, Item, Label, Row, Text, Textarea } from 'native-base';
 import React from 'react';
-import { Alert, Modal, TouchableHighlight, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { connect } from 'react-redux';
 import MarketIntelligenceApi from '../../services/MarketIntelligenceApi';
@@ -37,6 +36,8 @@ class MiAddPage extends React.Component {
         this.onFPModalClosed = this.onFPModalClosed.bind(this);
         this.getSpinnerComponentView = this.getSpinnerComponentView.bind(this);
 
+        this.willBlurSubscription = null;
+
     }
 
     getSpinnerComponentView() {
@@ -53,7 +54,11 @@ class MiAddPage extends React.Component {
 
 
     onFPModalClosed() {
-        this.props.navigation.navigate("dashboard");
+        this.setState({
+            spinner: false,
+            showOverlay: false
+        });
+        this.props.navigation.goBack();
     }
 
 
@@ -101,22 +106,21 @@ class MiAddPage extends React.Component {
         } = this.state;
         let inputPayload = {
             "type": MI_TYPE,
-            "creationDate": Utils.getFormattedDate(new Date()),
+            "date": Utils.getFormattedDate(new Date()),
             "description": INPUT_DESCRIPTION
         };
 
         if (MI_TYPE === appConstant.MI_TYPE_CONST.PROJECT) {
             inputPayload = {
                 ...inputPayload,
-                "projectName": INPUT_PROJECT
+                "name": INPUT_PROJECT
             }
         } else if (MI_TYPE === appConstant.MI_TYPE_CONST.INVESTMENT) {
             inputPayload = {
                 ...inputPayload,
-                "Investment": INPUT_INVESTMENT
+                "investment": INPUT_INVESTMENT
             }
         }
-
         this.setState({
             spinner: true
         });
@@ -161,11 +165,18 @@ class MiAddPage extends React.Component {
         });
     }
     componentDidMount() {
+       // this.willBlurSubscription =  this.props.navigation.addListener('onDidBlur', this.componentWillUnmount);
         this.setState({
-            filterVisible: false
+            filterVisible: false,
+            spinner: false,
+            showOverlay: false
+
         });
     }
 
+    componentWillUnmount(){
+        console.log(" UN mounting the MI ADD PAGE!! ");
+    }
     getSectionLabel() {
         const { MI_TYPE } = this.state;
         let returnedView;
@@ -260,43 +271,6 @@ class MiAddPage extends React.Component {
                         <Icon name="arrow-forward" style={{ color: "white", fontSize: 20 }} />
                     </Button >
                 </Footer>
-
-                <Modal
-                    animationType="slide"
-                    transparent={false}
-                    visible={this.state.filterVisible}
-                    onRequestClose={() => {
-                        Alert.alert('Modal has been closed.');
-                    }}>
-                    <Content style={{ width: '100%', marginTop: 80 }}>
-                        <Grid style={{ width: '96%', backgroundColor: 'white', marginTop: 10, padding: 10 }}>
-                            <Row><Col><Text note>Status</Text></Col><Col><Text note>Tenure</Text></Col></Row>
-                            <Row>
-                                <Col>
-                                    <Text>Hello World!</Text>
-                                </Col>
-                                <Col>
-                                    <Text>Hello World!</Text>
-                                </Col>
-                            </Row>
-                        </Grid>
-                        <View style={{ marginTop: 22 }}>
-
-                            <View>
-
-
-                                <TouchableHighlight
-                                    onPress={() => {
-                                        this.filerBtnToggled();
-                                    }}>
-                                    <Text>Hide Modal</Text>
-                                </TouchableHighlight>
-                            </View>
-                        </View>
-                    </Content>
-
-                </Modal>
-
 
                 {this.overlayScreenView()}
                 {this.getSpinnerComponentView()}

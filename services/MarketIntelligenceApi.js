@@ -47,10 +47,23 @@ class MarketIntelligenceApi {
         });
     }
 
+    searchMIList({ params }) {
+        return new Promise(function (resolve, reject) {
+            ServiceClass.searchMIList(params).then((resp) => {
+                if (resp && resp.data) {
+                    resolve(resp.data)
+                } else {
+                    reject({ message: "RESPONSE IS NOT AS EXPECTED", error: "INVALID" });
+                }
+            }).catch((err) => {
+                reject({ message: "RESPONSE IS NOT AS EXPECTED", error: "INVALID" });
+            })
+        });
+    }
+
     createNewMI({ params }) {
         return new Promise(function (resolve, reject) {
-            resolve({});
-            /*
+            console.log(params)
             ServiceClass.createNewMI(params).then((resp) => {
                 if (resp && resp.data) {
                     resolve(resp.data)
@@ -59,7 +72,7 @@ class MarketIntelligenceApi {
                 }
             }).catch((err) => {
                 reject({ message: "RESPONSE IS NOT AS EXPECTED", error: "INVALID" });
-            })*/
+            })
         });
     }
 }

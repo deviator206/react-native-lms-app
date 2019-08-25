@@ -1,6 +1,6 @@
 import { Button, Input, Item, Text } from 'native-base';
 import React from 'react';
-import { Modal, TouchableHighlight, View } from 'react-native';
+import { Alert, Modal, TouchableHighlight, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import AuthenticationApi from '../../services/AuthenticationApi';
 import BaseComponent from './BaseComponent';

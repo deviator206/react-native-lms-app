@@ -30,21 +30,6 @@ const SideDrawerNavigator = createDrawerNavigator(
       screen: DashboardPage,
       drawerLabel: "Demo Screen 3"
     },
-    milist: {
-      screen: MiListPage
-    },
-    notificationlist: {
-      screen: NotificationListPage
-    },
-    miadd: {
-      screen: MiAddPage
-    },
-    userlist:{
-      screen: UserListPage
-    },
-    midetails: {
-      screen: MiDetailsPage
-    },
     drawer: {
       screen: SideMenuBar
     }
@@ -75,11 +60,24 @@ const AppNavigator = createStackNavigator({
       header: null
     })
   },
-  dashboard: {
-    screen: SideDrawerNavigator
+  milist: {
+    screen: MiListPage
+  },
+  notificationlist: {
+    screen: NotificationListPage
+  },
+ 
+  userlist:{
+    screen: UserListPage
   },
   midetails: {
     screen: MiDetailsPage
+  },
+  miadd: {
+    screen: MiAddPage
+  },
+  dashboard: {
+    screen: SideDrawerNavigator
   },
   viewlead: {
     screen: ViewLeadPage,
@@ -91,9 +89,6 @@ const AppNavigator = createStackNavigator({
   },
   addlead: {
     screen: AddLeadPage
-  },
-  notificationlist: {
-    screen: NotificationListPage
   },
   drawer: {
     screen: SideMenuBar

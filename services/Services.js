@@ -6,14 +6,15 @@ const SERVER_CONFIG = {
 
 const SERVICE_URL = {
     'LOGIN': 'login/',
-    'REF_DATA':'refdata/',
-    'CREATE_LEAD':'rootlead/',
-    'GET_LEADS':'leads/',
-    'GET_MI':'leads/',
+    'REF_DATA': 'refdata/',
+    'CREATE_LEAD': 'rootlead/',
+    'GET_LEADS': 'leads/',
+    'GET_MI': 'marketIntelligence/',
     'LEAD_DETAILS': 'lead/',
-    'GET_USERS':'users/',
-    'UPDATE_LEAD':'lead/',
-    'CREATE_NEW_MI': 'lead/'
+    'GET_USERS': 'users/',
+    'UPDATE_LEAD': 'lead/',
+    'CREATE_NEW_MI': 'marketIntelligence/',
+    'SEARCH_MI': 'marketIntelligence/'
 }
 
 const axiosInstance = axios.create({
@@ -47,14 +48,14 @@ class ServiceClass {
         return await axiosInstance.post(SERVICE_URL['LOGIN'], params);
     }
     static async getRefData(params) {
-        return await axiosInstance.get(SERVICE_URL['REF_DATA']+'?'+params);
+        return await axiosInstance.get(SERVICE_URL['REF_DATA'] + '?' + params);
     }
 
     static async createLead(params) {
         return await axiosInstance.post(SERVICE_URL['CREATE_LEAD'], params);
     }
 
-    
+
     static async createNewMI(params) {
         return await axiosInstance.post(SERVICE_URL['CREATE_NEW_MI'], params);
     }
@@ -63,20 +64,25 @@ class ServiceClass {
         return await axiosInstance.get(SERVICE_URL['GET_LEADS']);
     }
 
-    static async getLeadDetails({itemId}) {
-        return await axiosInstance.get(SERVICE_URL['LEAD_DETAILS']+itemId);
+    static async getLeadDetails({ itemId }) {
+        return await axiosInstance.get(SERVICE_URL['LEAD_DETAILS'] + itemId);
     }
 
-    static async postUpdateLead({itemId, payload}) {
-        return await axiosInstance.put(SERVICE_URL['UPDATE_LEAD']+itemId, payload);
+    static async postUpdateLead({ itemId, payload }) {
+        return await axiosInstance.put(SERVICE_URL['UPDATE_LEAD'] + itemId, payload);
     }
 
-    static async getUsers(){
+    static async getUsers() {
         return await axiosInstance.get(SERVICE_URL['GET_USERS']);
     }
 
-    static async getMI(params) {
+    static async getMI() {
         return await axiosInstance.get(SERVICE_URL['GET_MI']);
+        // return await axiosInstance.post(SERVICE_URL['SEARCH_MI'], params);
+    }
+
+    static async searchMIList({filterPayload}) {
+        return await axiosInstance.post(SERVICE_URL['SEARCH_MI'], filterPayload);
     }
 }
 export default ServiceClass;
