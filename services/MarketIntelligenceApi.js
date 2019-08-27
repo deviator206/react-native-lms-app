@@ -4,9 +4,9 @@ class MarketIntelligenceApi {
     constructor() {
     }
 
-    updateLead(params) {
+    updateMI(params) {
         return new Promise(function (resolve, reject) {
-            ServiceClass.postUpdateLead(params).then((resp) => {
+            ServiceClass.postUpdateMI(params).then((resp) => {
                 if (resp && resp.data) {
                     resolve(resp.data)
                 } else {
@@ -18,9 +18,9 @@ class MarketIntelligenceApi {
         });
     }
 
-    getLeadDetails(params) {
+    getMIDetails(params) {
         return new Promise(function (resolve, reject) {
-            ServiceClass.getLeadDetails(params).then((resp) => {
+            ServiceClass.getMIDetails(params).then((resp) => {
                 if (resp && resp.data) {
                     resolve(resp.data)
                 } else {

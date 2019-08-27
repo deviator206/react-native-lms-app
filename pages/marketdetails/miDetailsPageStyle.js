@@ -140,6 +140,9 @@ const styleContent = StyleSheet.create({
     colWidth30: {
         width: "20%"
     },
+    colWidth50:{
+        width: "80%"
+    },
     colWidth70: {
         width: "80%"
     },

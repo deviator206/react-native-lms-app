@@ -15,9 +15,10 @@ export default class CheckBoxComponent extends React.Component {
 
 
     componentDidMount() {
-        const {  updateToParent, controlType } = this.props;
+        const {  updateToParent, controlType , currentState = false} = this.props;
+        console.log("currentState::::", currentState);
         this.setState({
-            checkedState: false
+            checkedState: currentState
         });
         if (updateToParent) {
             updateToParent({ type: controlType, value:false })
@@ -40,7 +41,8 @@ export default class CheckBoxComponent extends React.Component {
     getView() {
         let returnedView;
         const { checkedState = false} = this.state;
-        const {  checkBoxLabel = "DDE" , onCheckBoxChanged = this.onSelectionChanged } = this.props;
+        const {  checkBoxLabel = "DDE" , onCheckBoxChanged = this.onSelectionChanged, currentState } = this.props;
+        
         returnedView = (
             <ListItem
                 style={{

@@ -11,14 +11,16 @@ const SERVICE_URL = {
     'GET_LEADS': 'leads/',
     'GET_MI': 'marketIntelligence/',
     'LEAD_DETAILS': 'lead/',
+    'MI_DETAILS':'marketIntelligence/',
     'GET_USERS': 'users/',
     'UPDATE_LEAD': 'lead/',
+    'UPDATE_MI':'marketIntelligence/',
     'CREATE_NEW_MI': 'marketIntelligence/',
     'SEARCH_MI': 'search/marketIntelligence/'
 }
 
 const axiosInstance = axios.create({
-    timeout: 6000,
+    timeout: 16000,
     baseURL: SERVER_CONFIG.hostPort + SERVER_CONFIG.basePath,
     headers: {
         Accept: 'application/json',
@@ -68,8 +70,16 @@ class ServiceClass {
         return await axiosInstance.get(SERVICE_URL['LEAD_DETAILS'] + itemId);
     }
 
+    static async getMIDetails({ itemId }) {
+        return await axiosInstance.get(SERVICE_URL['MI_DETAILS'] + itemId);
+    }
+
     static async postUpdateLead({ itemId, payload }) {
         return await axiosInstance.put(SERVICE_URL['UPDATE_LEAD'] + itemId, payload);
+    }
+
+    static async postUpdateMI({ itemId, payload }) {
+        return await axiosInstance.post(SERVICE_URL['UPDATE_MI'] + itemId, payload);
     }
 
     static async getUsers() {

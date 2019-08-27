@@ -1,4 +1,4 @@
-import { Button, Col, Image, Container, Content, Footer, Grid, Row, Text, Textarea } from 'native-base';
+import { Button, Col, Container, Content, Footer, Grid, Row, Text, Textarea } from 'native-base';
 import React from 'react';
 import { FlatList } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -36,6 +36,10 @@ class MiDetailsPage extends React.Component {
         this.onFPModalClosed = this.onFPModalClosed.bind(this);
         this.getSpinnerComponentView = this.getSpinnerComponentView.bind(this);
 
+        this.loadDetail = this.loadDetail.bind(this);
+        this.onResponseSuccess = this.onResponseSuccess.bind(this);
+        this.onResponseError = this.onResponseError.bind(this);
+
 
         this.getStatusStyle = this.getStatusStyle.bind(this);
         this.getListedInfo = this.getListedInfo.bind(this);
@@ -43,6 +47,49 @@ class MiDetailsPage extends React.Component {
 
 
 
+    }
+
+
+    onResponseError() {
+        this.setState({
+            spinner: false
+        });
+    }
+    onResponseSuccess(resp) {
+        const resultSet = [
+            {
+                name: "John",
+                info: "ke if you want to access manager app on all machines. Go to {Tomcat_ins",
+                date: "24-09-2019"
+            },
+            {
+                name: "Olive",
+                info: "ke if you want to access manager app on all machines. Go to {Tomcat_ins",
+                date: "24-09-2019"
+            },
+            {
+                name: "Mustang",
+                info: "ke if you want to access manager app on all machines. Go to {Tomcat_ins",
+                date: "24-09-2019"
+            }
+        ];
+        this.setState({
+            spinner: false,
+            miDetails: resp,
+            ADD_MORE_INFO: false,
+            INPUT_ADD_MORE_INFO: ''
+        });
+    }
+
+
+
+    loadDetail() {
+        const { navigation } = this.props;
+        const itemId = navigation.getParam('miId', 'NO-ID');
+        this.setState({
+            spinner: true,
+        });
+        this.props.loadMIDetail({ itemId }).then(this.onResponseSuccess).catch(this.onResponseError);
     }
 
     onCheckBoxChanged({ type, value }) {
@@ -78,9 +125,10 @@ class MiDetailsPage extends React.Component {
 
     onSuccessHandler(resp) {
         this.setState({
-            spinner: false,
-            showOverlay: true
+            ADD_MORE_INFO: false,
+            INPUT_ADD_MORE_INFO: ''
         });
+        this.loadDetail();
     }
 
     onErrorHandler(resp) {
@@ -112,36 +160,38 @@ class MiDetailsPage extends React.Component {
     }
 
     initiateMICreation() {
-       /* const {
-            MI_TYPE,
-            INPUT_PROJECT,
-            INPUT_INVESTMENT,
-            INPUT_DESCRIPTION
+        const {
+            ADD_MORE_INFO,
+            INPUT_ADD_MORE_INFO
         } = this.state;
-        let inputPayload = {
-            "type": MI_TYPE,
-            "creationDate": Utils.getFormattedDate(new Date()),
-            "description": INPUT_DESCRIPTION
+
+        let hasInfoUpdated = false;
+
+        const { navigation } = this.props;
+        const itemId = navigation.getParam('miId', 'NO-ID');
+        let payload = {
+            "id": itemId
         };
-
-        if (MI_TYPE === appConstant.MI_TYPE_CONST.PROJECT) {
-            inputPayload = {
-                ...inputPayload,
-                "projectName": INPUT_PROJECT
-            }
-        } else if (MI_TYPE === appConstant.MI_TYPE_CONST.INVESTMENT) {
-            inputPayload = {
-                ...inputPayload,
-                "Investment": INPUT_INVESTMENT
-            }
+        if (ADD_MORE_INFO && INPUT_ADD_MORE_INFO && INPUT_ADD_MORE_INFO !== '') {
+            hasInfoUpdated = true;
+            payload["miInfoList"] = [
+                {
+                    "info": INPUT_ADD_MORE_INFO
+                }
+            ]
         }
-        */
 
-        this.setState({
-            spinner: true
-        });
+        if (hasInfoUpdated) {
+            this.setState({
+                spinner: true
+            });
 
-        this.props.createMI({}).then(this.onSuccessHandler).catch(this.onErrorHandler);
+            this.props.updateMarketIntelligence({
+                itemId,
+                payload
+            }).then(this.onSuccessHandler).catch(this.onErrorHandler);
+        }
+
     }
 
     onInputTextChanged(type, value) {
@@ -184,45 +234,30 @@ class MiDetailsPage extends React.Component {
         this.setState({
             filterVisible: false
         });
+
+        this.willFocusSubscription = this.props.navigation.addListener('willFocus', this.loadDetail);
+
     }
 
 
 
 
     getListedInfo() {
-        // const { resultSet = [] } = this.state;
-        const resultSet = [
-            {
-                name: "John",
-                info: "ke if you want to access manager app on all machines. Go to {Tomcat_ins",
-                date: "24-09-2019"
-            },
-            {
-                name: "Olive",
-                info: "ke if you want to access manager app on all machines. Go to {Tomcat_ins",
-                date: "24-09-2019"
-            },
-            {
-                name: "Mustang",
-                info: "ke if you want to access manager app on all machines. Go to {Tomcat_ins",
-                date: "24-09-2019"
-            }
-        ];
-        let returnedView
+        const { miDetails } = this.state;
+        const resultSet = (miDetails && miDetails.miInfoList) ? miDetails.miInfoList : []
+        let returnedView;
         if (resultSet && resultSet.length > 0) {
             returnedView = (
                 <FlatList
                     data={resultSet}
-                    style={{ height: "auto"}}
+                    style={{ height: "auto" }}
                     renderItem={({ item }) =>
                         <Row
                             style={styleContent.gridCardWrapper}
                             button
                             onPress={() => {
                                 // item.id
-                                this.props.navigation.navigate("midetails", {
-                                    miId: item.id
-                                });
+
                             }}
                         >
 
@@ -241,9 +276,9 @@ class MiDetailsPage extends React.Component {
                                             <Row style={styleContent.profileDetailsRow}>
                                                 <Col><Text style={styleContent.profileDetailsLabel}> {item.name} </Text></Col>
                                                 <Col style={styleContent.alignItemTOEnd}><Text style={styleContent.profileDetailsValue}>  {item.date} </Text></Col>
-                                    </Row>
-                                    <Row>
-                                        <Col>
+                                            </Row>
+                                            <Row>
+                                                <Col>
                                                     <Text style={[styleContent.cardViewSecondaryInfo, styleContent.profileDetailsInfo]}> {item.info} </Text>
                                                 </Col>
                                             </Row>
@@ -265,7 +300,7 @@ class MiDetailsPage extends React.Component {
 
     render() {
 
-        const { ADD_MORE_INFO = false, CONVERT_TO_LEAD = false, } = this.state;
+        const { ADD_MORE_INFO = false, CONVERT_TO_LEAD = false, miDetails } = this.state;
         const { navigation } = this.props;
         const item = {
             miId: "MI#779",
@@ -281,33 +316,83 @@ class MiDetailsPage extends React.Component {
                     <Grid style={commonStyle.gridWrapper}>
                         <Row style={commonStyle.gridCardWrapper}>
                             <Col>
-                                <Grid>
-                                    <Row>
-                                        <Col>
-                                            <Text style={styleContent.cardViewMainTitle} > {item.miId} </Text>
-                                        </Col>
-                                        <Col style={{ flexDirection: "row" }}>
-                                            <Text style={styleContent.cardViewSecondaryInfo}  > Type:  </Text>
-                                            <Text style={styleContent.cardViewPrimaryValue}  >  {item.type} </Text>
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col>
-                                            <Text style={styleContent.cardViewSecondaryInfo}  > {item.description} </Text>
-                                        </Col>
-                                    </Row>
-                                    <Row style={{ marginTop: 10, height: 50 }}>
-                                        <Col style={styleContent.colWidth30 } >
-                                            <Text style={styleContent.cardViewPrimaryLabel}  > Status: </Text>
+                                {
+                                    miDetails &&
+                                    miDetails.id &&
+                                    (<Grid>
+                                        <Row>
+                                            <Col>
+                                                <Text style={styleContent.cardViewMainTitle} > MI#{miDetails.id} </Text>
+                                            </Col>
+                                            <Col style={{ flexDirection: "row" }}>
+                                                <Text style={styleContent.cardViewSecondaryInfo}  > Type :  </Text>
+                                                <Text style={styleContent.cardViewPrimaryValue}  >  {miDetails.type} </Text>
+                                            </Col>
+                                        </Row>
+                                        {
+                                            miDetails.description && (
+                                                <Row>
+                                                    <Col>
+                                                        <Text style={styleContent.cardViewPrimaryLabel}  > Description : {miDetails.description} </Text>
+                                                    </Col>
+                                                </Row>
+                                            )
+                                        }
 
-                                        </Col>
-                                        <Col style={ styleContent.colWidth70} >
+                                        {
+                                            miDetails.status &&
+                                            (
+                                                <Row style={{ marginTop: 10, height: 50 }}>
+                                                    <Col style={styleContent.colWidth50} >
+                                                        <Text style={styleContent.cardViewPrimaryLabel}  > Status: </Text>
+                                                    </Col>
+                                                    <Col style={styleContent.colWidth50} >
+                                                        <Text style={this.getStatusStyle(miDetails.status)} > {miDetails.status}  </Text>
+                                                    </Col>
+                                                </Row>
+                                            )
+                                        }
 
-                                            <Text style={this.getStatusStyle(item.status)} > {item.status}  </Text>
-                                        </Col>
+                                        {
+                                            miDetails.creationDate &&
+                                            (
+                                                <Row style={{ marginTop: 10, height: 50 }}>
+                                                    <Col >
+                                                        <Text style={styleContent.cardViewPrimaryLabel}  > Creation Date: {miDetails.creationDate} </Text>
+                                                    </Col>
+                                                </Row>
+                                            )
+                                        }
 
-                                    </Row>
-                                </Grid>
+                                        {
+                                            miDetails.name &&
+                                            (
+                                                <Row style={{ marginTop: 10, height: 50 }}>
+                                                    <Col  >
+                                                        <Text style={styleContent.cardViewPrimaryLabel}  > Project Name : {miDetails.name} </Text>
+                                                    </Col>
+                                                </Row>
+                                            )
+                                        }
+                                        {
+                                            miDetails.investment &&
+                                            (
+                                                <Row style={{ marginTop: 10, height: 50 }}>
+                                                    <Col style={styleContent.colWidth30} >
+                                                        <Text style={styleContent.cardViewPrimaryLabel}  >Investment: </Text>
+
+                                                    </Col>
+                                                    <Col style={styleContent.colWidth70} >
+
+                                                        <Text style={styleContent.cardViewSecondaryInfo} > {miDetails.investment}  </Text>
+                                                    </Col>
+
+                                                </Row>
+                                            )
+                                        }
+                                    </Grid>
+                                    )}
+
 
                             </Col>
                         </Row>
@@ -315,18 +400,19 @@ class MiDetailsPage extends React.Component {
                     </Grid>
 
                     <Grid style={[styleContent.gridWrapper, {
-                       height: "auto"
+                        height: "auto"
                     }]} >
                         {this.getListedInfo()}
                     </Grid>
 
-               
-               
+
+
 
                     <Grid style={{ marginTop: 10 }}>
                         <Row>
                             <Col style={{ marginLeft: 10 }}>
                                 <CheckBoxComponent
+                                    currentState={ADD_MORE_INFO}
                                     checkBoxLabel={i18nMessages.lbl_mi_info_add_more_info}
                                     controlType={appConstant.MI_INFO.ADD_MORE_INFO}
                                     updateToParent={this.onCheckBoxChanged}
@@ -348,7 +434,7 @@ class MiDetailsPage extends React.Component {
                                 </Col>
                             </Row>
                         )}
-                       
+
                         <Row style={{ marginTop: 15 }}>
                             <Col style={{ marginLeft: 10 }}>
                                 <CheckBoxComponent
@@ -389,7 +475,7 @@ class MiDetailsPage extends React.Component {
                             </Row>
                         )}
                         {CONVERT_TO_LEAD && (
-                            <Row  style={{ marginBottom: 50 }}>
+                            <Row style={{ marginBottom: 50 }}>
                                 <Col>
                                     <Textarea
                                         style={commonStyle.dynamicComponentTextAreaStyle}
@@ -403,23 +489,23 @@ class MiDetailsPage extends React.Component {
                                 </Col>
                             </Row>
                         )}
-                        {CONVERT_TO_LEAD && (
-                             <Footer style={{
-                                backgroundColor: "yellow"
-                            }}>
-                                    <Button
-                                        style={styleContent.addFooter}
-                                        onPress={this.initiateMICreation}
-                                    >
-                                        <Text style={styleContent.addFooterText}>CONVERT TO LEAD </Text>
-                                        <Icon name="arrow-forward" style={{ color: "white", fontSize: 20 }} />
-                                    </Button >
-                                    </Footer>
-                        )}
-                    </Grid>
-                    </Content>
 
-               
+
+
+                    </Grid>
+                </Content>
+                <Footer style={{
+                    backgroundColor: "yellow"
+                }}>
+                    <Button
+                        style={styleContent.addFooter}
+                        onPress={this.initiateMICreation}
+                    >
+                        <Text style={styleContent.addFooterText}>UPDATE MI </Text>
+                        <Icon name="arrow-forward" style={{ color: "white", fontSize: 20 }} />
+                    </Button >
+                </Footer>
+
                 {this.overlayScreenView()}
                 {this.getSpinnerComponentView()}
             </Container>
@@ -432,12 +518,16 @@ class MiDetailsPage extends React.Component {
 // (send) an action so that the reducer can update the Redux state.
 function mapDispatchToProps(dispatch) {
     return {
-        createMI: (inputPayload) => {
-            return marketIntelligenceApi.createNewMI({
-                params: inputPayload
-            }).then((resp) => {
+        updateMarketIntelligence: (inputPayload) => {
+            return marketIntelligenceApi.updateMI(inputPayload).then((resp) => {
                 return resp;
             })
+        },
+        loadMIDetail: (inputParams) => {
+            return marketIntelligenceApi.getMIDetails(inputParams).then((resp) => {
+                return resp;
+            })
+
         },
         dispatchAction: (param) => {
             dispatch(param);
