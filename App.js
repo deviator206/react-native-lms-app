@@ -10,6 +10,7 @@ import { createAppContainer, createDrawerNavigator, createStackNavigator } from 
 import { Provider } from 'react-redux';
 import AddLeadPage from './pages/addlead/addLeadPage';
 import AppBootstrap from './pages/bootstrap/AppBootstrap';
+import CreateUserPage from './pages/createuser/createUserPage';
 import DashboardPage from './pages/dashboard/dashboard';
 import LeadDetailsPage from './pages/leaddetails/leadDetailsPage';
 import LoginPage from './pages/login/loginPage';
@@ -21,6 +22,7 @@ import SideMenuBar from './pages/sidemenu/sideMenu';
 import UserListPage from './pages/users/userListPage';
 import ViewLeadPage from './pages/viewlead/viewLeadPage';
 import { default as configureStore } from './storage/store/createAppStore';
+
 
 console.disableYellowBox = true;
 const SideDrawerNavigator = createDrawerNavigator(
@@ -75,6 +77,9 @@ const AppNavigator = createStackNavigator({
   },
   miadd: {
     screen: MiAddPage
+  },
+  createuser:{
+    screen: CreateUserPage
   },
   dashboard: {
     screen: SideDrawerNavigator

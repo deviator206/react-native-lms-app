@@ -73,7 +73,20 @@ const appconstant = {
         CONVERT_TO_LEAD:'CONVERT_TO_LEAD',
         CTL_CUSTOMER_NAME:'CTL_CUSTOMER_NAME',
         CTL_REQUIREMENT:'CTL_REQUIREMENT',
-    }
+    },
+    USER_TYPE_RADIO_GROUP: [
+        {
+          "name": "Sales Rep",
+          "code": "SR"
+        }, {
+          "name": "Business Development",
+          "code": "BD"
+        },
+        {
+          "name": "Buniess Head",
+          "code": "BH"
+        }
+      ] 
 
 }
 

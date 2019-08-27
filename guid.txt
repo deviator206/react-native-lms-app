@@ -91,6 +91,12 @@ spring.datasource.username=leadManagement
 spring.datasource.password=lms.App=Am2tek
 #spring.datasource.defaultAutoCommit=false
 
+replace 
+CHARSET=utf8mb4 
+CHARSET=utf8
+
+COLLATE=utf8mb4_0900_ai_ci
+COLLATE=utf8_general_ci
 
 
 
@@ -192,3 +198,11 @@ spring.datasource.password=lms.App=Am2tek
    95  mysql --user="leadManagement" --database="leadManagement" -p < "/home/ec2-user/db.sql";
    96  mysql --user=leadManagement --database=leadManagement -p < /home/ec2-user/db.sql;
    97  mysql --user='leadManagement' --database=leadManagement -p < /home/ec2-user/db.sql;
+
+
+
+Go to Dashbaord
+https://ap-south-1.console.aws.amazon.com/ec2/v2/home?region=ap-south-1#Instances:sort=instanceId
+
+Direct Security Grooups
+https://ap-south-1.console.aws.amazon.com/ec2/v2/home?region=ap-south-1#SecurityGroups:groupId=sg-08350b5a7381f7138;sort=tag:Name

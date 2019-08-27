@@ -259,7 +259,7 @@ class UserListPage extends React.Component {
                     style={styleContent.floatingButton}
                     button
                     onPress={() => {
-                        this.props.navigation.navigate('miadd');
+                        this.props.navigation.navigate('createuser');
                     }} >
                     <Icon name="add" style={{
                         color: "white",

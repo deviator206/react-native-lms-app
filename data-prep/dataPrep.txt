@@ -100,6 +100,18 @@ http://52.66.164.208:8080/lmsApp-0.1.0/rootlead
   "creationDate": "2019-06-04"
 }
 
+POST http://localhost:8080/marketIntelligence/{id}
+
+{
+"id" : 4,
+  "miInfoList" : [{
+    "info" : "info4"
+  }],
+  "rootLead" : {
+    "custName" : "shivashu4"
+  }
+}
+
 Create User 
 http://52.66.164.208:8080/lmsApp-0.1.0/user
 {
@@ -112,6 +124,9 @@ http://52.66.164.208:8080/lmsApp-0.1.0/user
   "ADMIN"
   ]
 }
+
+ "userName": "suresh@ametek.com", 
+  "password":"y",
 
 
 POST -- search capabilities
@@ -144,6 +159,39 @@ http://52.66.164.208:8080/lmsApp-0.1.0/lead/4
 
 COPY DATA FROM 1 TABLE TO ANOTHER
  insert into ref_data (code, name, type) select * from REF_DATA;
+
+ drop table LEADS;
+ drop table LEAD_CONTACT;
+ drop table MI;
+ drop table MI_INFO;
+ drop table REF_DATA;
+ drop table ROOT_LEAD;
+ drop table USERS;
+ drop table USER_ROLE;
+
+ALTER TABLE leads RENAME TO LEADS;
+ALTER TABLE lead_contact RENAME TO LEAD_CONTACT;
+ALTER TABLE mi RENAME TO MI;
+ALTER TABLE mi_info RENAME TO MI_INFO;
+ALTER TABLE ref_data RENAME TO REF_DATA;
+ALTER TABLE root_lead RENAME TO ROOT_LEAD;
+ALTER TABLE users RENAME TO USERS;
+ALTER TABLE user_role RENAME TO USER_ROLE;
+ 
+  
+  
+  
+  
+  
+  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
  
 
 

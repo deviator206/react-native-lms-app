@@ -40,6 +40,8 @@ const i18nMessages = {
     "lbl_filter_start_date":"Start Date",
     "lbl_filter_end_date":"End Date",
 
+    "lbl_employee_email":"Employee Email Id",
+
 }
 
 export default i18nMessages;
