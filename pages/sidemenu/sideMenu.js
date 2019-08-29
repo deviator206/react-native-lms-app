@@ -40,6 +40,9 @@ export default class SideMenuBar extends React.Component {
     }
 
     render() {
+        const { userInfo} = window.userInformation
+        const userDisplayName= (userInfo && userInfo.userDisplayName) ? userInfo.userDisplayName : "NO DISPLAY NAME"
+        
         return (
             <Container style={styleContent.container}>
                 <View style={styleContent.sideMenuSectionOne}>
@@ -47,7 +50,7 @@ export default class SideMenuBar extends React.Component {
                         <Icon style={styleContent.closeBtn} name="close" />
                     </Button >
                     <Image source={require('../images/profile_pic_logo_2.png')} style={styleContent.profilePic} />
-                    <Text style={styleContent.profileName}> Sunayna Rao </Text>
+                    <Text style={styleContent.profileName}> {userDisplayName} </Text>
                 </View>
                 <FlatList
                     style={styleContent.sideMenuSectionTwo}

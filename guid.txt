@@ -91,12 +91,6 @@ spring.datasource.username=leadManagement
 spring.datasource.password=lms.App=Am2tek
 #spring.datasource.defaultAutoCommit=false
 
-replace 
-CHARSET=utf8mb4 
-CHARSET=utf8
-
-COLLATE=utf8mb4_0900_ai_ci
-COLLATE=utf8_general_ci
 
 
 
@@ -206,3 +200,46 @@ https://ap-south-1.console.aws.amazon.com/ec2/v2/home?region=ap-south-1#Instance
 
 Direct Security Grooups
 https://ap-south-1.console.aws.amazon.com/ec2/v2/home?region=ap-south-1#SecurityGroups:groupId=sg-08350b5a7381f7138;sort=tag:Name
+
+
+
+
+
+replace 
+CHARSET=utf8mb4 
+CHARSET=utf8
+
+COLLATE=utf8mb4_0900_ai_ci
+COLLATE=utf8_general_ci
+
+
+replace 
+CHARSET=utf8mb4 
+CHARSET=utf8
+
+COLLATE=utf8mb4_0900_ai_ci
+COLLATE=utf8_general_ci
+
+
+
+------------------------------
+
+ ALTER TABLE lead_contact RENAME TO LEAD_CONTACT;
+  
+  ALTER TABLE user_role RENAME TO USER_ROLE;
+  
+  ALTER TABLE leads RENAME TO LEADS;
+  
+  ALTER TABLE ref_data RENAME TO REF_DATA;
+ 
+ 
+ ALTER TABLE root_lead RENAME TO ROOT_LEAD;
+ ALTER TABLE users RENAME TO USERS;
+ 
+ ALTER TABLE mi RENAME TO MI;
+ 
+ ALTER TABLE mi_info RENAME TO MI_INFO;
+ 
+ http://52.66.164.208:8080/lmsApp-0.1.0/users
+
+ 

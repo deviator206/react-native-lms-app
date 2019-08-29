@@ -16,6 +16,7 @@ const SERVICE_URL = {
     'UPDATE_LEAD': 'lead/',
     'UPDATE_MI':'marketIntelligence/',
     'CREATE_NEW_MI': 'marketIntelligence/',
+    'CREATE_NEW_USER':'user/',
     'SEARCH_MI': 'search/marketIntelligence/'
 }
 
@@ -93,6 +94,10 @@ class ServiceClass {
 
     static async searchMIList(filterPayload) {
         return await axiosInstance.post(SERVICE_URL['SEARCH_MI'], filterPayload);
+    }
+
+    static async createNewUser(params) {
+        return await axiosInstance.post(SERVICE_URL['CREATE_NEW_USER'], params);
     }
 }
 export default ServiceClass;

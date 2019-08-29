@@ -39,12 +39,12 @@ const appconstant = {
         CLOSED: 'CLOSED',
         OPEN: 'OPEN'
     },
-    MI_TYPE_CONST:{
-        PROJECT:'PROJECT',
-        INVESTMENT:'INVESTMENT',
-        NEWSITEM:'NEWSITEM'
+    MI_TYPE_CONST: {
+        PROJECT: 'PROJECT',
+        INVESTMENT: 'INVESTMENT',
+        NEWSITEM: 'NEWSITEM'
     },
-    MI_STATUS_DROP_DOWN:[
+    MI_STATUS_DROP_DOWN: [
         {
             name: 'Open For Discussion',
             code: 'open'
@@ -68,25 +68,31 @@ const appconstant = {
             code: 'newsitem'
         }
     ],
-    MI_INFO:{
-        ADD_MORE_INFO:'ADD_MORE_INFO',
-        CONVERT_TO_LEAD:'CONVERT_TO_LEAD',
-        CTL_CUSTOMER_NAME:'CTL_CUSTOMER_NAME',
-        CTL_REQUIREMENT:'CTL_REQUIREMENT',
+    MI_INFO: {
+        ADD_MORE_INFO: 'ADD_MORE_INFO',
+        CONVERT_TO_LEAD: 'CONVERT_TO_LEAD',
+        CTL_CUSTOMER_NAME: 'CTL_CUSTOMER_NAME',
+        CTL_REQUIREMENT: 'CTL_REQUIREMENT',
     },
     USER_TYPE_RADIO_GROUP: [
         {
-          "name": "Sales Rep",
-          "code": "SR"
-        }, {
-          "name": "Business Development",
-          "code": "BD"
+            "name": "Sales Rep",
+            "code": "SR"
         },
         {
-          "name": "Buniess Head",
-          "code": "BH"
+            "name": "Buniess Head",
+            "code": "BH"
+        },
+        {
+            "name": "Business Development",
+            "code": "BD"
         }
-      ] 
+    ],
+    ROLES_USER_TYPE_MAPPING:{
+        "SR":"SALES_REP",
+        "BD":"ADMIN",
+        "BH":"BU_HEAD"
+    }
 
 }
 

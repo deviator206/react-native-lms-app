@@ -61,7 +61,7 @@ Login
 http://52.66.164.208:8080/lmsApp-0.1.0/login
 { "userName" : "a", "password" : "a" }
 {"accessToken":"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyMiIsImlhdCI6MTU2NjYwODkzMCwiZXhwIjoxNTY3MjEzNzMwfQ.D_KjSIa5L18olEVW8gyywGdqOEGdAXcqcNLW451MYupmwHvZiGus4tvBgU3Z7lSmjnLW-82BSzO5wxQ2r6QFdQ","tokenType":"Bearer","userInfo":{"policies":{"salesRepList":"DISABLE","userList":"SHOW"},"userId":22,"userName":"y","userDisplayName":"Thomas","businessUnit":"SP","roles":["ADMIN"]}}
-
+userInfo.userDisplayName
 
 
 
