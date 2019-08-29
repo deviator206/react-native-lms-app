@@ -17,7 +17,8 @@ const SERVICE_URL = {
     'UPDATE_MI':'marketIntelligence/',
     'CREATE_NEW_MI': 'marketIntelligence/',
     'CREATE_NEW_USER':'user/',
-    'SEARCH_MI': 'search/marketIntelligence/'
+    'SEARCH_MI': 'search/marketIntelligence/',
+    'GET_LEAD_STATS': 'statistics/lead?'
 }
 
 const axiosInstance = axios.create({
@@ -98,6 +99,10 @@ class ServiceClass {
 
     static async createNewUser(params) {
         return await axiosInstance.post(SERVICE_URL['CREATE_NEW_USER'], params);
+    }
+
+    static async postLeadStats({payload, queryParams}) {
+        return await axiosInstance.post(SERVICE_URL['GET_LEAD_STATS']+queryParams, payload);
     }
 }
 export default ServiceClass;

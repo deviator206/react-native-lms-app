@@ -38,51 +38,6 @@ class UserListPage extends React.Component {
     }
 
     onResponseSuccess(resp) {
-        const resultSetLocal = [
-            {
-                miId: "MI#779",
-                type: "New Item",
-                description: "This is likely happening when upgrading React Native from below 0.60 to 0.60 or above. Going forward",
-                status: "OPEN"
-
-            }, {
-                miId: "MI#779",
-                type: "New Item",
-                description: "This is likely happening when upgrading React Native from below 0.60 to 0.60 or above. Going forward",
-                status: "CLOSED"
-
-            },
-            {
-                miId: "MI#779",
-                type: "New Item",
-                description: "This is likely happening when upgrading React Native from below 0.60 to 0.60 or above. Going forward",
-                status: "CLOSED"
-
-            },
-            {
-                miId: "MI#779",
-                type: "New Item",
-                description: "This is likely happening when upgrading React Native from below 0.60 to 0.60 or above. Going forward",
-                status: "CLOSED"
-            },
-            {
-                miId: "MI#779",
-                type: "New Item",
-                description: "This is likely happening when upgrading React Native from below 0.60 to 0.60 or above. Going forward",
-                status: "CLOSED"
-            },
-            {
-                miId: "MI#779",
-                type: "New Item",
-                description: "This is likely happening when upgrading React Native from below 0.60 to 0.60 or above. Going forward",
-                status: "CLOSED"
-            },
-            {
-                miId: "MI#779",
-                type: "New Item",
-                description: "This is likely happening when upgrading React Native from below 0.60 to 0.60 or above. Going forward",
-                status: "CLOSED"
-            }];
         this.setState({
             spinner: false,
             resultSet: resp

@@ -375,9 +375,7 @@ class MiListPage extends React.Component {
                         style={styleContent.floatingButton}
                         button
                         onPress={() => {
-                            this.props.navigation.navigate("midetails", {
-                                miId: item.id
-                            });
+                            this.props.navigation.navigate("miadd");
                         }} >
                         <Icon name="add" style={{
                             color: "white",

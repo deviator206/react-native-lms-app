@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import {default as AppConst} from '../common/consts';
+import { default as AppConst } from '../common/consts';
 const styleContent = StyleSheet.create({
     container: {
         flex: 1,
@@ -121,6 +121,12 @@ const styleContent = StyleSheet.create({
         height: 45,
         paddingHorizontal: "5%"
     },
+    datePickerStyle:{
+        color:"#616161",
+        fontSize:14,
+        fontFamily: 'Montserrat-SemiBold',
+        lineHeight: 15
+     },
     roundedButtonText: {
         color: "white",
         fontSize: 14,

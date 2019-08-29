@@ -1,14 +1,28 @@
-import { Button, Card, Col, Container, Content, Grid, Item, Picker, Row, Text, View } from 'native-base';
+import { Button, Card, Col, Container, Content, DatePicker, Grid, Row, Text, View } from 'native-base';
 import React from 'react';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import { connect } from 'react-redux';
+import LeadApi from '../../services/LeadApi';
+import RefDataApi from '../../services/RefDataApi';
+import UserApi from '../../services/UserApi';
 import { default as commonStyle } from '../common/commonStyling';
-import appConfig from '../common/config';
-import { default as AppConst } from '../common/consts';
+import { default as appConstant } from '../common/consts';
+import DropDownComponent from '../common/dropdownComponent';
 import FooterComponent from '../common/footerComponent';
 import HeaderComponent from '../common/headerComponent';
+import i18nMessages from '../common/i18n';
 import SpinnerComponent from '../common/spinnerComponent';
+import { default as Utils } from '../common/Util';
 import styleContent from './dashboardStyle';
-export default class DashboardPage extends React.Component {
+
+const refDataApi = new RefDataApi({ state: {} });
+const userApi = new UserApi({ state: {} });
+
+const leadApi = new LeadApi({ state: {} });
+
+
+
+
+class DashboardPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -18,8 +32,68 @@ export default class DashboardPage extends React.Component {
         this.getFooterTab = this.getFooterTab.bind(this);
         this.getDropdownFor = this.getDropdownFor.bind(this);
         this.sideMenuClicked = this.sideMenuClicked.bind(this);
-        this.getHeaderSection  =this.getHeaderSection.bind(this);
+        this.getHeaderSection = this.getHeaderSection.bind(this);
 
+        this.willFocusSubscription = null;
+        this.loadAllUsers = this.loadAllUsers.bind(this);
+        this.onResponseSuccess = this.onResponseSuccess.bind(this);
+        this.onResponseError = this.onResponseError.bind(this);
+        this.onDropDownChange = this.onDropDownChange.bind(this);
+        this.onResponseFromReferenceData = this.onResponseFromReferenceData.bind(this);
+        this.onErrorResponseFromReferenceData = this.onErrorResponseFromReferenceData.bind(this);
+        this.getDatePickerView = this.getDatePickerView.bind(this);
+        this.onDateSelected = this.onDateSelected.bind(this);
+        this.initiateRefineResult = this.initiateRefineResult.bind(this);
+        this.onStatsLoaded = this.onStatsLoaded.bind(this);
+    }
+
+    onStatsLoaded (resp) {
+        console.log(resp);
+        const {leadStatusCountMap} = resp;
+        const {APP = 0, DRAFT =0 ,NMI = 0 ,REJ = 0 } = leadStatusCountMap;
+        const totalLeads = APP + DRAFT + NMI + REJ;
+        const pending = DRAFT + NMI;
+        this.setState({
+            spinner: false,
+            totalLeads,
+            assignedLeads : 0,
+            pendingLeads : pending,
+            approvedLeads : APP,
+            rejectedLeads : REJ
+        });
+
+    }
+
+    initiateRefineResult() {
+        const {
+            ORIGINATOR_BU,
+            TARGET_BU,
+            SALES_REP,
+            START_DATE,
+            END_DATE,
+        } = this.state;
+
+        let payload = {};
+        if(ORIGINATOR_BU && ORIGINATOR_BU !== '' &&  TARGET_BU && TARGET_BU !== '') {
+            payload["fromBu"] = ORIGINATOR_BU;
+            payload["toBu"] = TARGET_BU;
+        }
+
+        if(START_DATE && START_DATE !== '' &&  END_DATE && END_DATE !== '') {
+            payload["startDate"] = Utils.getFormattedDate(START_DATE);
+            payload["endDate"] = Utils.getFormattedDate(END_DATE);
+        }
+
+        if(SALES_REP && SALES_REP !== '' && SALES_REP !== '#_SELECT_REP_#') {
+            payload["salesRepId"] = SALES_REP;
+        }
+        //const { userInfo} = window.userInformation
+        //const userId= (userInfo && userInfo.userId) ? userInfo.userId : ""
+        const queryParams = "busummary=true";
+        this.setState({
+            spinner: true
+        });
+        this.props.loadLeadStats({payload,queryParams}).then(this.onStatsLoaded).catch(this.onResponseError)
     }
 
     getSpinnerComponentView() {
@@ -37,59 +111,110 @@ export default class DashboardPage extends React.Component {
         return (<FooterComponent  {...this.props} disableHome={true} />)
     }
 
+    onResponseFromReferenceData(resp) {
+        this.setState({
+            referenceData: resp
+        });
+    }
+
+    onErrorResponseFromReferenceData(resp) {
+        alert("Error While fetching Business Unit", resp)
+    }
+
+
+    onResponseSuccess(resp) {
+        let userFetchedList = resp;
+        userFetchedList.unshift({
+            "userId": "#_SELECT_REP_#",
+            "userDisplayName": "NOT SELECTED",
+        });
+        this.setState({
+            spinner: false,
+            userList: userFetchedList
+        });
+    }
+
+    onResponseError() {
+        this.setState({
+            spinner: false
+        });
+    }
+
+
+    loadAllUsers() {
+        this.setState({
+            spinner: true
+        });
+        this.props.getUserList({}).then(this.onResponseSuccess).catch(this.onResponseError);
+    }
+
     componentDidMount() {
         this.setState({ spinner: false });
+        this.props.loadRefData().then(this.onResponseFromReferenceData).catch(this.onErrorResponseFromReferenceData);
+        this.willFocusSubscription = this.props.navigation.addListener('willFocus', this.loadAllUsers);
+    }
+
+    componentWillUnmount() {
+        if (this.willFocusSubscription) {
+            this.willFocusSubscription.remove();
+        }
+    }
+
+    onDropDownChange({ type, value }) {
+        this.setState({
+            [type]: value
+        });
     }
 
     getDropdownFor(type) {
-        let returnedView = '';
-        const pickerItemArr = [];
+        const { referenceData = {}, userList = [] } = this.state;
+        let returnedView = null;
+        let dataSource = [];
+        let showAttributeVal = 'name';
+        let returnAttributeVal = 'code';
         switch (type) {
-            case 'BU_NAME':
-                appConfig.BU_LIST.forEach(singleItem => {
-                    pickerItemArr.push(
-                        (<Picker.Item
-                            label={singleItem}
-                            style={{
-                                backgroundColor: "red"
-                            }}
-                            value={singleItem} />)
-                    )
-                });
-                returnedView = (
-                    <Item picker style={
-                        {
-                            borderRadius: 80,
-                            borderColor: '#393939',
-                            backgroundColor: "#393939",
-                            paddingLeft: "2%"                         
-                        }
-                    }
-                    >
-                        <Picker
-                            style={
-                                {
-                                    color: "#f0f3f7",
-                                    textTransform: "capitalize"
-                                }
-                            }
-                            mode="dropdown"
-                            textStyle={{ color: "#d3d3d3" }}
-                            itemTextStyle={{ color: '#d3d3d3' }}
-                            iosIcon={<Icon name="arrow-down" />}
-                        >
-                            {pickerItemArr}
-
-                        </Picker>
-                    </Item>);
+            case appConstant.DROP_DOWN_TYPE.SALES_REP:
+                dataSource = userList;
+                showAttributeVal = 'userDisplayName';
+                returnAttributeVal = 'userId';
                 break;
-
-            default:
-
+            case 'ORIGINATOR_BU':
+            case 'TARGET_BU':
+                dataSource = (referenceData && referenceData[appConstant.DROP_DOWN_TYPE.BU_NAME]) ? referenceData[appConstant.DROP_DOWN_TYPE.BU_NAME] : [];
                 break;
+        }
+        if (dataSource.length > 0) {
+            returnedView = <DropDownComponent
+                dataSource={dataSource}
+                updateToParent={this.onDropDownChange}
+                dropDownType={type}
+                showAttribute={showAttributeVal}
+                returnAttribute={returnAttributeVal}
+                roundedDropDown={true}
+            />;
         }
 
         return returnedView;
+
+    }
+
+    onDateSelected(type, newDate) {
+        this.setState({ [type]: newDate });
+    }
+
+    getDatePickerView(type) {
+        return (
+            <DatePicker
+                defaultDate={this.state.leadCreatedDate}
+                textStyle={styleContent.datePickerStyle}
+                placeHolderTextStyle={styleContent.datePickerStyle}
+                animationType={"fade"}
+                placeHolderText={i18nMessages.select_date_lbl}
+                onDateChange={(val) => {
+                    this.onDateSelected(type, val)
+                }}
+            />
+        )
     }
 
     sideMenuClicked() {
@@ -98,32 +223,17 @@ export default class DashboardPage extends React.Component {
 
     getHeaderSection() {
         const { navigation } = this.props;
-        return (<HeaderComponent navigation={navigation} title="Dashboard"  hamburger={true} sideMenuClickHandler={this.sideMenuClicked} />);
-
-        /*
-          return (
-            <Header style={styleContent.headerSection}>
-                <Left>
-                    <Button
-                        transparent
-                        style={styleContent.sideMenu}
-                        onPress={() => {
-                            this.props.navigation.openDrawer();
-                        }}>
-                        <Icon name='menu' style={{ color: "white",  fontSize:25 }} />
-                    </Button>
-                </Left>
-                <Body>
-                    <Title>Dashboard</Title>
-                </Body>
-                <Right />
-            </Header>
-
-        )*/
-
+        return (<HeaderComponent navigation={navigation} title="Dashboard" hamburger={true} sideMenuClickHandler={this.sideMenuClicked} />);
     }
 
     render() {
+        const {
+            totalLeads,
+            assignedLeads = 0,
+            pendingLeads = 0,
+            approvedLeads = 0,
+            rejectedLeads  = 0 
+        } = this.state;
         return (
             <Container >
                 {this.getHeaderSection()}
@@ -168,11 +278,11 @@ export default class DashboardPage extends React.Component {
                                     marginRight: "5%"
                                 }}>
                                     <Text note style={styleContent.labelStyling}  > Originator BU</Text>
-                                    {this.getDropdownFor('BU_NAME')}
+                                    {this.getDropdownFor('ORIGINATOR_BU')}
                                 </Col>
                                 <Col>
                                     <Text note style={styleContent.labelStyling}  >Target BU</Text>
-                                    {this.getDropdownFor('BU_NAME')}
+                                    {this.getDropdownFor('TARGET_BU')}
                                 </Col>
                             </Row>
 
@@ -184,7 +294,7 @@ export default class DashboardPage extends React.Component {
                             }}>
                                 <Col>
                                     <Text note style={styleContent.labelStyling}  > Representative</Text>
-                                    {this.getDropdownFor('BU_NAME')}
+                                    {this.getDropdownFor(appConstant.DROP_DOWN_TYPE.SALES_REP)}
                                 </Col>
                             </Row>
 
@@ -196,21 +306,22 @@ export default class DashboardPage extends React.Component {
                                     marginRight: "5%"
                                 }}>
                                     <Text note style={[styleContent.labelStyling, commonStyle.textUppercase]}  >Start Date</Text>
-                                    {this.getDropdownFor('BU_NAME')}
+                                    {this.getDatePickerView('START_DATE')}
                                 </Col>
                                 <Col>
                                     <Text note style={[styleContent.labelStyling, commonStyle.textUppercase]}  >End Date</Text>
-                                    {this.getDropdownFor('BU_NAME')}
+                                    {this.getDatePickerView('END_DATE')}
                                 </Col>
                             </Row>
                             <Row style={
-                                    {
-                                        marginTop: "10%"
-                                    }
-                                }>
+                                {
+                                    marginTop: "10%"
+                                }
+                            }>
                                 <Col >
                                     <Button transparent
-                                        style={styleContent.roundedButton}>
+                                        style={styleContent.roundedButton}
+                                        onPress={this.initiateRefineResult}>
                                         <Text style={styleContent.roundedButtonText}> REFINE RESULTS</Text>
                                     </Button>
                                 </Col>
@@ -225,14 +336,14 @@ export default class DashboardPage extends React.Component {
                                 >
                                     <Text style={
                                         {
-                                            color: AppConst.primaryBlue,
+                                            color: appConstant.primaryBlue,
                                             fontSize: 47,
                                             lineHeight: 50,
                                             marginTop: "3%",
                                             fontFamily: "Montserrat-Medium"
 
                                         }
-                                    }> 6752</Text>
+                                    }> {totalLeads} </Text>
                                     <Text style={
                                         {
                                             color: "#FFFFFF",
@@ -246,14 +357,14 @@ export default class DashboardPage extends React.Component {
                                 </Col>
                             </Row>
 
-                            <Row style={{ marginLeft: "4%"}}>
+                            <Row style={{ marginLeft: "4%" }}>
                                 <Col >
                                     <Card style={styleContent.cardStyling}>
                                         <View >
                                             <Text style={styleContent.cardHeader}>
                                                 Approved Lead</Text>
                                             <Text style={styleContent.approvedValue}>
-                                                131</Text>
+                                                {approvedLeads}</Text>
                                         </View>
                                     </Card>
 
@@ -265,7 +376,7 @@ export default class DashboardPage extends React.Component {
                                             <Text style={styleContent.cardHeader}>
                                                 Rejected Lead</Text>
                                             <Text style={styleContent.rejectedValue}>
-                                                78</Text>
+                                                {rejectedLeads}</Text>
                                         </View>
                                     </Card>
 
@@ -275,14 +386,14 @@ export default class DashboardPage extends React.Component {
 
 
 
-                            <Row style={{ marginLeft: "4%"}}>
+                            <Row style={{ marginLeft: "4%" }}>
                                 <Col >
                                     <Card style={styleContent.cardStyling}>
                                         <View >
                                             <Text style={styleContent.cardHeader}>
                                                 Assigned Lead</Text>
                                             <Text style={styleContent.closedValue}>
-                                                45</Text>
+                                                {assignedLeads}</Text>
                                         </View>
                                     </Card>
 
@@ -294,19 +405,19 @@ export default class DashboardPage extends React.Component {
                                             <Text style={styleContent.cardHeader}>
                                                 Pending Lead</Text>
                                             <Text style={styleContent.pendingValue}>
-                                                55</Text>
+                                                {pendingLeads} </Text>
                                         </View>
                                     </Card>
 
                                 </Col>
                             </Row>
                             <Row style={
-                                    {
-                                        marginTop: "5%"
-                                    }
-                                }>
+                                {
+                                    marginTop: "5%"
+                                }
+                            }>
                                 <Col >
-                                <Button transparent
+                                    <Button transparent
                                         style={styleContent.roundedButton}>
                                         <Text style={styleContent.roundedButtonText}> Extract RESULTS</Text>
                                     </Button>
@@ -326,3 +437,58 @@ export default class DashboardPage extends React.Component {
         );
     }
 }
+
+
+
+// This function provides a means of sending actions so that data in the Redux store
+// can be modified. In this example, calling this.props.addToCounter() will now dispatch
+// (send) an action so that the reducer can update the Redux state.
+function mapDispatchToProps(dispatch) {
+    return {
+        loadLeadStats: (inputPayload) => {
+            return leadApi.getStats(inputPayload).then((resp) => {
+                return resp;
+            })
+
+        },
+        getUserList: (inputParams) => {
+            return userApi.getUserList({
+                params: inputParams
+            }).then((resp) => {
+                return resp;
+            })
+        },
+        loadRefData: (inputParams) => {
+            return refDataApi.fetchRefData({
+                params: (inputParams) ? inputParams : "type=BU"
+            }).then(result => {
+                const refInfo = {};
+                if (result && result.data) {
+                    result.data.forEach((element) => {
+                        if (element && element.type) {
+                            if (!refInfo[element.type]) {
+                                refInfo[element.type] = [];
+                            }
+                            refInfo[element.type].push(element);
+                        }
+                    });
+                }
+                return refInfo;
+            });
+        },
+        dispatchAction: (param) => {
+            dispatch(param);
+        }
+    }
+}
+
+// This function provides access to data in the Redux state in the React component
+// In this example, the value of this.props.count will now always have the same value
+// As the count value in the Redux state
+function mapStateToProps(state) {
+    return {
+        count: state.count
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(DashboardPage)
