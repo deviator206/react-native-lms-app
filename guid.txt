@@ -242,4 +242,28 @@ COLLATE=utf8_general_ci
  
  http://52.66.164.208:8080/lmsApp-0.1.0/users
 
+
+
+
+ Dashboard -
+ ALL to ALL (Originator BU to Target BU)
+ Originator BU selection should give the Sales Rep of that Unit
+
+
+ Create Lead
+ Source > moreinformation
+ Country -> India (default)
+ Removed ->    Sales Rep
+ Sales Rep - add Photo provision 
+ MI photo provision 
+  - Push Notifications, for all pending (assigned leads to me or my BU ) every 2 weeks
+  -   Push Notifications, for all pending (BD ) every 2 weeks
+  - ALl rejected leads goes to BD
+
+
+ Olive 
+  -  BU & Sales Rep Names
+  - Customer enquiry report (Leads Sample, Sales Force Download)
+  -  Source , Tenure ( )
+
  

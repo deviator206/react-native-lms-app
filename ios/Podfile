@@ -30,7 +30,6 @@ target 'ametek_insight' do
 
 
 
-  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
   target 'ametek_insightTests' do
     inherit! :search_paths

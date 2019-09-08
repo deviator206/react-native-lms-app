@@ -3,11 +3,9 @@ import React, { Component } from 'react';
 import { Image } from "react-native";
 import AuthenticationApi from '../../services/AuthenticationApi';
 import { default as commonStyling } from '../common/commonStyling';
-import i18nMessages from '../common/i18n';
 import ModalComponent from '../common/modalComponent';
 import SpinnerComponent from '../common/spinnerComponent';
 import styleContent from './loginStyle';
-
 
 
 export default class LoginPage extends Component {
@@ -104,7 +102,8 @@ export default class LoginPage extends Component {
             spinner: false,
             showError: true,
             showForgotPasswordModal: false,
-            errMsg: i18nMessages['ERROR_MSG_' + (resp.error).toUpperCase()]
+            errMsg: resp.message
+            // errMsg: i18nMessages['ERROR_MSG_' + (resp.error).toUpperCase()]
         });
 
         // this.props.navigation.navigate('dashboard');
@@ -214,8 +213,8 @@ export default class LoginPage extends Component {
                             </View>
                         </View>
                     </View>
-
                     <View style={styleContent.versionView}>
+                        
                         <Text style={styleContent.versionContent}> v0.0.0.2 </Text>
                     </View>
 
